@@ -1,8 +1,9 @@
 #include <WScene.hpp>
 #include <GameObject.hpp>
 
-class BasicHandler : public sfs::GameObject {
-	public:
+class BasicHandler : public sfs::GameObject
+{
+      public:
 	void start(sfs::Scene &scene) noexcept
 	{
 		scene.subscribe(*this, sf::Event::Closed);
