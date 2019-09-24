@@ -16,8 +16,10 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wextra -O3")
 
 find_package(Boost)
 
+add_subdirectory(sfml-scene)
+
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 add_executable("cautious-fiesta" ${SRCS} ${HDRS})
-target_include_directories("cautious-fiesta" PRIVATE "./include" ${Boost_INCLUDE_DIRS})
-target_link_libraries("cautious-fiesta" ${Boost_LIBRARIES} stdc++fs sfml-scene) #discord-rpc dl
+target_include_directories("cautious-fiesta" PRIVATE "./include" ${Boost_INCLUDE_DIRS} "sfml-scene/include")
+target_link_libraries("cautious-fiesta" ${Boost_LIBRARIES} stdc++fs ${SFML_SCENE_LIB} sfml-graphics sfml-window sfml-audio sfml-system sfml-network) #discord-rpc dl
