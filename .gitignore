@@ -1,3 +1,6 @@
+sfml-scene/*
+build/*
+
 # Prerequisites
 *.d
 
