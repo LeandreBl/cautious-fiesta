@@ -11,10 +11,13 @@ set(CMAKE_AUTOUIC ON)
 file(GLOB_RECURSE SRCS "src/*.cpp")
 file(GLOB_RECURSE HDRS "include/*.hpp")
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-O3 -Wall -Wextra -Weffc++ -Wshadow -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wsign-conversion -Wlogical-op -Wuseless-cast -fsanitize=address")
-SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -Wextra -O3 -fsanitize=address")
+SET(CMAKE_CXX_FLAGS_DEBUG "-O3 -g3 -Wall -Wextra -Weffc++ -Wshadow -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wsign-conversion -Wlogical-op -Wuseless-cast -fsanitize=address")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -g3 -Wextra -O3 -fsanitize=address")
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
-find_package(Boost)
+conan_basic_setup()
+
+find_package(Boost 1.71)
 
 add_subdirectory(sfml-scene)
 add_subdirectory(discord-rpc)
