@@ -50,17 +50,15 @@ namespace cf
       errorLog("[Menu] The InputBox failed the loading of the font or the texture");
       scene.close();
     }
+    auto &button = addChild<sfs::Button>(scene, *texture, *font);
+    button.setScale(sf::Vector2f(1.5, 2.2));
+    button.addComponent<PadderW<sfs::Button>>(0, button);
+    button.addComponent<PadderH<sfs::Button>>(-100, button);
+
     auto &inputBox = addChild<sfs::InputBox>(scene, *font, sf::Vector2f(0, 0),
 					     "IP", sf::Color::White, 35);
-
-    /*auto &button = addChild<sfs::Button>(scene,
-					 sf::Vector2f(0, 0),
-					 *texture,
-					 *font);
-    button.setScale(sf::Vector2f(1.5, 2.2)); */
-    
     inputBox.addComponent<PadderW<sfs::InputBox>>(0, inputBox);
-    inputBox.addComponent<PadderH<sfs::InputBox>>(-100, inputBox);
+    inputBox.addComponent<PadderH<sfs::InputBox>>(-110, inputBox);
   }
   
   void MainMenu::start(sfs::Scene &scene) noexcept
