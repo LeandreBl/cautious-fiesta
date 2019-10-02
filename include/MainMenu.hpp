@@ -1,9 +1,11 @@
 #pragma once
 
+#include <iostream>
 #include <GameObject.hpp>
 #include <WScene.hpp>
 #include "PaddedSprite.hpp"
 #include "Button.hpp"
+#include "Hnavbar.hpp"
 
 namespace cf
 {
@@ -12,6 +14,24 @@ namespace cf
   class QuoteGenerator : public sfs::GameObject
   {
   public:
+    QuoteGenerator() noexcept
+    : _text(nullptr), _font(nullptr), _scale(1), _rev(1)
+    {};
+    void start(sfs::Scene &scene) noexcept;
+    void update(sfs::Scene &scene) noexcept;
+  protected:
+    sfs::Text *_text;
+    const sf::Font *_font;
+    float _scale;
+    int _rev;
+  };
+
+
+  class NavBar : public sfs::GameObject
+  {
+  public:
+    void start(sfs::Scene &scene) noexcept;
+    void update(sfs::Scene &scene) noexcept {};
   protected:
   };
 
@@ -21,9 +41,18 @@ namespace cf
   public:
     ExitButton() noexcept {};
     void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept {};
   protected:
     void closeScene(sfs::Scene &scene) const noexcept;
+  };
+
+  
+  class OptionsButton : public sfs::GameObject
+  {
+  public:
+    void start(sfs::Scene &scene) noexcept;
+    void update(sfs::Scene &scene) noexcept {};
+  protected:
+    void OptionScene() noexcept;
   };
 
   

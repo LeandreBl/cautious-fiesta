@@ -30,7 +30,7 @@ namespace cf
   public:
     PadderL(float offset, T &object) noexcept
       : _object(object), _offset(offset) {}
-    void display(sf::RenderWindow &window) noexcept
+    void display(sf::RenderWindow &window[[gnu::unused]]) noexcept
     {
       auto pos = _object.getPosition();
       pos.x = _offset;
@@ -48,7 +48,7 @@ namespace cf
   public:
     PadderT(float offset, T &object) noexcept
       : _object(object), _offset(offset) {}
-    void display(sf::RenderWindow &window) noexcept
+    void display(sf::RenderWindow &window[[gnu::unused]]) noexcept
     {
       auto pos = _object.getPosition();
       pos.y = _offset;
