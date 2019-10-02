@@ -60,7 +60,7 @@ void DiscordRP::update() noexcept
 	memset(&_discordPresence, 0, sizeof(_discordPresence));
 	snprintf(state, sizeof(state), "GameSessions");
 	_discordPresence.state = state;
-	//snprintf(details, sizeof(details), "Running on port %u",
+	// snprintf(details, sizeof(details), "Running on port %u",
 	//	 _server.getTcpPort());
 	_discordPresence.details = details;
 	_discordPresence.startTimestamp = time(NULL);
