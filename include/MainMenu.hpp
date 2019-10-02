@@ -3,12 +3,12 @@
 #include <iostream>
 #include <GameObject.hpp>
 #include <WScene.hpp>
+#include <Sound.hpp>
 #include "PaddedSprite.hpp"
 #include "Button.hpp"
 #include "Hnavbar.hpp"
 #include "InputBox.hpp"
 #include "MainMenuButtons.hpp"
-#include "Music.hpp"
 
 namespace cf
 {
