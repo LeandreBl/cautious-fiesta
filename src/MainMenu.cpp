@@ -35,11 +35,11 @@ namespace cf
   void NavBar::start(sfs::Scene &scene) noexcept
   {
     auto &navbar = addChild<sfs::Hnavbar>(scene, sf::Vector2f(0,0),
-    					  sf::Vector2f(150, 150),
+    					  sf::Vector2f(15, 200),
     					  sf::Color::White);
 
-    navbar.addComponent<PadderL<sfs::Hnavbar>>(150, navbar);
-    navbar.addComponent<PadderT<sfs::Hnavbar>>(150, navbar);
+    navbar.addComponent<PadderW<sfs::Hnavbar>>(-195, navbar);
+    navbar.addComponent<PadderH<sfs::Hnavbar>>(50, navbar);
   }
 
   void IpInputBox::start(sfs::Scene &scene) noexcept
@@ -64,17 +64,19 @@ namespace cf
   void MainMenu::start(sfs::Scene &scene) noexcept
   {
 
-    //auto backTexture = scene.getAssetTexture("assets/sprites/menu.png");
-    //_background = &addComponent<sfs::Sprite>(*backTexture);
-    //_background->setScale(1, 2);
+    auto backTexture = scene.getAssetTexture("assets/sprites/Nuages.jpg");
+    _background = &addComponent<sfs::Sprite>(*backTexture);
     
     addChild<QuoteGenerator>(scene);
     addChild<ExitButton>(scene);
     addChild<OptionsButton>(scene);
     addChild<PlayButton>(scene);
     addChild<IpInputBox>(scene);
-    //addChild<NavBar>(scene); padder fonctionne pas
+    addChild<NavBar>(scene);
     scene.subscribe(*this, sf::Event::Closed);
+
+    auto sound = scene.getAssetSoundBuffer("assets/musics/menuMusic.ogg");
+    addComponent<Sound>(*sound, true, true);
   }
 
   void MainMenu::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
@@ -85,5 +87,6 @@ namespace cf
   
   void MainMenu::update(sfs::Scene &scene) noexcept
   {
+    _background->setOffset(_background->getOffset() + sf::Vector2f(-2, 0));
   }
 } // namespace cf

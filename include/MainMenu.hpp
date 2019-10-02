@@ -8,6 +8,7 @@
 #include "Hnavbar.hpp"
 #include "InputBox.hpp"
 #include "MainMenuButtons.hpp"
+#include "Music.hpp"
 
 namespace cf
 {
@@ -29,7 +30,7 @@ namespace cf
   };
 
 
-  class NavBar : public sfs::GameObject
+  class NavBar : public sfs::UI
   {
   public:
     void start(sfs::Scene &scene) noexcept;
