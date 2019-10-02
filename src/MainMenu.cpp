@@ -14,6 +14,10 @@ namespace cf
   {
     setPosition(sf::Vector2f(200, 200));
     _font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+    if (_font == nullptr) {
+      errorLog("[Menu] The quote generator failed the loading of the font");
+      scene.close();
+    }
     std::srand(time(nullptr));
     _text = &addComponent<sfs::Text>(*_font, QUOTES[rand() % (sizeof(QUOTES) / sizeof(QUOTES[0]))], sf::Color::Yellow, 40);
   }
@@ -27,68 +31,7 @@ namespace cf
     }
     _text->setScale(_scale, _scale);
   }
-  
-  
-  void ExitButton::closeScene(sfs::Scene &scene) const noexcept
-  {
-    scene.close();
-  }
-
-  void ExitButton::start(sfs::Scene &scene) noexcept
-  {
-    auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-    auto texture = scene.getAssetTexture("assets/sprites/blank.png");
     
-    if (font == nullptr || texture == nullptr) {
-      errorLog("[Menu] could not load the font or the texture");
-      scene.close();
-    }
-
-    auto &button = addChild<sfs::Button>(scene,
-					 sf::Vector2f(0, 0),
-					 *texture,
-					 std::bind(&ExitButton::closeScene, this, std::ref(scene)),
-					 *font,
-					 "Quit",
-					 sf::Color::White,
-					 22);
-    
-    button.addComponent<PadderL<sfs::Button>>(25.f, button);
-    button.addComponent<PadderB<sfs::Button>>(25.f, button);
-    
-    button.setScale(sf::Vector2f(1, 1.5));
-  }
-
-  void OptionsButton::OptionScene() noexcept
-  {
-    std::cout << "options activées" << std::endl;
-  }
-  
-  void OptionsButton::start(sfs::Scene &scene) noexcept
-  {
-    auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-    auto texture = scene.getAssetTexture("assets/sprites/blank.png");
-    
-    if (font == nullptr || texture == nullptr) {
-      errorLog("[Menu] could not load the font or the texture");
-      scene.close();
-    }
-    
-    auto &button = addChild<sfs::Button>(scene,
-					 sf::Vector2f(0, 0),
-					 *texture,
-					 std::bind(&OptionsButton::OptionScene, this),
-					 *font,
-					 "Options",
-					 sf::Color::White,
-					 22);
-    
-    button.addComponent<PadderR<sfs::Button>>(25.f, button);
-    button.addComponent<PadderB<sfs::Button>>(25.f, button);
-    
-    button.setScale(sf::Vector2f(1, 1.5));
-  }
-  
   void NavBar::start(sfs::Scene &scene) noexcept
   {
     auto &navbar = addChild<sfs::Hnavbar>(scene, sf::Vector2f(0,0),
@@ -98,18 +41,40 @@ namespace cf
     navbar.addComponent<PadderL<sfs::Hnavbar>>(150, navbar);
     navbar.addComponent<PadderT<sfs::Hnavbar>>(150, navbar);
   }
-  
+
+  void IpInputBox::start(sfs::Scene &scene) noexcept
+  {
+    auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+    auto texture = scene.getAssetTexture("assets/sprites/blank.png");
+    if (font == nullptr || texture == nullptr) {
+      errorLog("[Menu] The InputBox failed the loading of the font or the texture");
+      scene.close();
+    }
+    auto &inputBox = addChild<sfs::InputBox>(scene, *font, sf::Vector2f(0, 0),
+					     "IP", sf::Color::White, 35);
+
+    /*auto &button = addChild<sfs::Button>(scene,
+					 sf::Vector2f(0, 0),
+					 *texture,
+					 *font);
+    button.setScale(sf::Vector2f(1.5, 2.2)); */
+    
+    inputBox.addComponent<PadderW<sfs::InputBox>>(0, inputBox);
+    inputBox.addComponent<PadderH<sfs::InputBox>>(-100, inputBox);
+  }
   
   void MainMenu::start(sfs::Scene &scene) noexcept
   {
 
-    //auto backTexture = scene.getAssetTexture("/home/jb/Projets/cautious-fiesta/assets/menu.png");
+    //auto backTexture = scene.getAssetTexture("assets/sprites/menu.png");
     //_background = &addComponent<sfs::Sprite>(*backTexture);
-    //_background->setScale(2, 4);
+    //_background->setScale(1, 2);
     
     addChild<QuoteGenerator>(scene);
     addChild<ExitButton>(scene);
     addChild<OptionsButton>(scene);
+    addChild<PlayButton>(scene);
+    addChild<IpInputBox>(scene);
     //addChild<NavBar>(scene); padder fonctionne pas
     scene.subscribe(*this, sf::Event::Closed);
   }
@@ -122,6 +87,5 @@ namespace cf
   
   void MainMenu::update(sfs::Scene &scene) noexcept
   {
-   
   }
 } // namespace cf

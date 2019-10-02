@@ -6,6 +6,8 @@
 #include "PaddedSprite.hpp"
 #include "Button.hpp"
 #include "Hnavbar.hpp"
+#include "InputBox.hpp"
+#include "MainMenuButtons.hpp"
 
 namespace cf
 {
@@ -35,26 +37,14 @@ namespace cf
   protected:
   };
 
-  
-  class ExitButton : public sfs::GameObject
-  {
-  public:
-    ExitButton() noexcept {};
-    void start(sfs::Scene &scene) noexcept;
-  protected:
-    void closeScene(sfs::Scene &scene) const noexcept;
-  };
 
-  
-  class OptionsButton : public sfs::GameObject
+  class IpInputBox : public sfs::GameObject
   {
   public:
     void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept {};
   protected:
-    void OptionScene() noexcept;
   };
-
+  
   
   class MainMenu : public sfs::GameObject
   {

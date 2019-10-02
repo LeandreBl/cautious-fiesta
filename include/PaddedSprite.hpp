@@ -75,4 +75,38 @@ namespace cf
     T &_object;
     float _offset;
     };
+
+  template <typename T>
+  class PadderH : public sfs::IComponent
+  {
+  public:
+    PadderH(float offset, T &object) noexcept
+      : _object(object), _offset(offset) {}
+    void display(sf::RenderWindow &window) noexcept
+    {
+      auto pos = _object.getPosition();
+      pos.y = (window.getSize().y / 2 ) - (_object.getGlobalBounds().height / 2) + _offset;
+      _object.setPosition(pos);
+    }
+  protected:
+    T &_object;
+    float _offset;
+    };
+
+  template <typename T>
+  class PadderW : public sfs::IComponent
+  {
+  public:
+    PadderW(float offset, T &object) noexcept
+      : _object(object), _offset(offset) {}
+    void display(sf::RenderWindow &window) noexcept
+    {
+      auto pos = _object.getPosition();
+      pos.x = (window.getSize().x / 2 ) - (_object.getGlobalBounds().width / 2) + _offset;
+      _object.setPosition(pos);
+    }
+  protected:
+    T &_object;
+    float _offset;
+    };
 }
