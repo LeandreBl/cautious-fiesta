@@ -21,7 +21,6 @@ namespace cf
   {
   public:
     void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept {};
   protected:
     void optionScene() noexcept;
   };

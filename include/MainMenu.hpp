@@ -9,12 +9,13 @@
 #include "Hnavbar.hpp"
 #include "InputBox.hpp"
 #include "MainMenuButtons.hpp"
+#include "MenuBackgrounds.hpp"
 
 namespace cf
 {
 
   
-  class QuoteGenerator : public sfs::GameObject
+  class QuoteGenerator : public sfs::UI
   {
   public:
     QuoteGenerator() noexcept
@@ -34,12 +35,11 @@ namespace cf
   {
   public:
     void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept {};
   protected:
   };
 
 
-  class IpInputBox : public sfs::GameObject
+  class IpInputBox : public sfs::UI
   {
   public:
     void start(sfs::Scene &scene) noexcept;
@@ -51,13 +51,12 @@ namespace cf
   {
   public:
     MainMenu() noexcept
-    : _background(nullptr)
+    : _scroller(nullptr)
     {};
     void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept;
     void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
   protected:
-    sfs::Sprite *_background;
+    sfs::GameObject *_scroller;
   };
   
   
