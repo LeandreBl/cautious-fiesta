@@ -7,7 +7,7 @@ namespace cf
     _texture = scene.getAssetTexture(_path);
     if (_texture == nullptr)
       scene.close();
-    addComponent<DrawLayers>(*_texture).setScale(1.2, 1);
-    addComponent<sfs::Velocity>(sf::Vector2f(-192, 0));
+    addComponent<DrawLayers>(*_texture, _origin).setScale(_scale);
+    addComponent<sfs::Velocity>(sf::Vector2f(_speed));
   }
 }
