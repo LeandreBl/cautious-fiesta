@@ -25,7 +25,8 @@ namespace cf
     void update(sfs::Scene &scene, sfs::GameObject &ob) noexcept
     {
       auto pos = ob.getPosition();
-      if (pos.x <=  (0 - getGlobalBounds().width)) {
+      if (pos.x <=  (0 - getGlobalBounds().width)
+	  || pos.x >= 1920 + getGlobalBounds().width) {
 	pos.x = _origin.x;
 	ob.setPosition(pos);
       }
