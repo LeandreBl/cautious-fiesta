@@ -45,7 +45,7 @@ namespace cf
     {
         public:
             DrawCharacterName(Character &charac, const sf::Font &font, sf::Vector2f pos) noexcept
-                : Text(font, charac.getName(), sf::Color::White, 25, pos)
+                : Text(font, charac.getName(), sf::Color::White, 20, pos)
                 {};
             void display(sf::RenderWindow &window) noexcept {window.draw(*this);}
         protected:
