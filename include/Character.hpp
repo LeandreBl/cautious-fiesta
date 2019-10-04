@@ -41,11 +41,21 @@ namespace cf
             struct stats _stats;
     };
 
+    class DrawCharacterName : public sfs::Text
+    {
+        public:
+            DrawCharacterName(Character &charac, const sf::Font &font, sf::Vector2f pos) noexcept
+                : Text(font, charac.getName(), sf::Color::White, 25, pos)
+                {};
+            void display(sf::RenderWindow &window) noexcept {window.draw(*this);}
+        protected:
+    };
+
     class CharacterSelector : public sfs::GameObject
     {
         public:
             CharacterSelector() noexcept
-                : _navbar(nullptr), _image(nullptr)
+                : _navbar(nullptr), _image(nullptr), _name(nullptr), _nameUi(nullptr)
                 {};
             void start(sfs::Scene &scene) noexcept;
             void update(sfs::Scene &scene) noexcept;
@@ -64,5 +74,7 @@ namespace cf
             std::vector<Character> _characters;
             sfs::Hnavbar *_navbar;
             sfs::Sprite *_image;
+            DrawCharacterName *_name;
+            sfs::Text *_nameUi;
     };
 }
