@@ -59,14 +59,6 @@ namespace cf
     _text->setScale(_scale, _scale);
   }
 
-  void NavBar::start(sfs::Scene &scene) noexcept
-  {
-    auto &navbar = addChild<sfs::Hnavbar>(scene, sf::Vector2f(0, 0), sf::Vector2f(15, 200), sf::Color::White);
-
-    navbar.addComponent<PadderW<sfs::Hnavbar>>(-195, navbar);
-    navbar.addComponent<PadderH<sfs::Hnavbar>>(50, navbar);
-  }
-
   void IpInputBox::start(sfs::Scene &scene) noexcept
   {
     auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
@@ -82,8 +74,8 @@ namespace cf
     button.addComponent<PadderW<sfs::Button>>(0, button);
     button.addComponent<PadderH<sfs::Button>>(-100, button);
 
-    auto &inputBox = addChild<sfs::InputBox>(scene, *font, sf::Vector2f(0, 0), "IP", sf::Color::White, 35);
-    inputBox.addComponent<PadderW<sfs::InputBox>>(0, inputBox);
-    inputBox.addComponent<PadderH<sfs::InputBox>>(-110, inputBox);
+    _input = &addChild<sfs::InputBox>(scene, *font, sf::Vector2f(0, 0), "IP", sf::Color::White, 35);
+    _input->addComponent<PadderW<sfs::InputBox>>(0, *_input);
+    _input->addComponent<PadderH<sfs::InputBox>>(-110, *_input);
   }
 }

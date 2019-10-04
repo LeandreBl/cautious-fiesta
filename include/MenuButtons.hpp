@@ -4,6 +4,8 @@
 #include <GameObject.hpp>
 #include <WScene.hpp>
 #include "Button.hpp"
+#include "MenuUi.hpp"
+#include "Character.hpp"
 
 namespace cf
 {
@@ -13,9 +15,11 @@ namespace cf
     ExitButton() noexcept {};
     void start(sfs::Scene &scene) noexcept;
   protected:
-    void closeScene(sfs::Scene &scene) const noexcept;
+    void closeScene(sfs::Scene &scene) const noexcept
+    {
+      scene.close();
+    };
   };
-
 
   class OptionsButton : public sfs::GameObject
   {
@@ -28,8 +32,13 @@ namespace cf
   class PlayButton : public sfs::GameObject
   {
   public:
+    PlayButton() noexcept
+    : _box(nullptr), _CSelection(nullptr)
+    {};
     void start(sfs::Scene &scene) noexcept;
   protected:
     void play() noexcept;
+    IpInputBox *_box;
+    CharacterSelector *_CSelection;
   };
 }

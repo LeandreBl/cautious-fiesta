@@ -18,8 +18,6 @@ namespace cf
     addChild<ExitButton>(scene);
     addChild<OptionsButton>(scene);
     addChild<PlayButton>(scene);
-    addChild<IpInputBox>(scene);
-    addChild<NavBar>(scene);
 
     scene.subscribe(*this, sf::Event::Closed);
     

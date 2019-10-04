@@ -8,45 +8,12 @@
 #include "Button.hpp"
 #include "Hnavbar.hpp"
 #include "InputBox.hpp"
-#include "MainMenuButtons.hpp"
+#include "MenuButtons.hpp"
 #include "MenuBackgrounds.hpp"
+#include "MenuUi.hpp"
 
 namespace cf
 {
-
-  
-  class QuoteGenerator : public sfs::UI
-  {
-  public:
-    QuoteGenerator() noexcept
-    : _text(nullptr), _font(nullptr), _scale(1), _rev(1)
-    {};
-    void start(sfs::Scene &scene) noexcept;
-    void update(sfs::Scene &scene) noexcept;
-  protected:
-    sfs::Text *_text;
-    const sf::Font *_font;
-    float _scale;
-    int _rev;
-  };
-
-
-  class NavBar : public sfs::UI
-  {
-  public:
-    void start(sfs::Scene &scene) noexcept;
-  protected:
-  };
-
-
-  class IpInputBox : public sfs::UI
-  {
-  public:
-    void start(sfs::Scene &scene) noexcept;
-  protected:
-  };
-  
-  
   class MainMenu : public sfs::GameObject
   {
   public:
@@ -57,7 +24,5 @@ namespace cf
     void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
   protected:
     sfs::GameObject *_scroller;
-  };
-  
-  
-} // namespace cf
+  };  
+}
