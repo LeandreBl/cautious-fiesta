@@ -4,6 +4,7 @@
 #include <vector>
 #include <GameObject.hpp>
 #include <Hnavbar.hpp>
+#include <InputBox.hpp>
 #include "Serializer.hpp"
 #include "PaddedSprite.hpp"
 
@@ -41,27 +42,34 @@ namespace cf
             struct stats _stats;
     };
 
-    class DrawCharacterName : public sfs::Text
+    class CharacterCreation : public sfs::UI
     {
         public:
-            DrawCharacterName(Character &charac, const sf::Font &font, sf::Vector2f pos) noexcept
-                : Text(font, charac.getName(), sf::Color::White, 20, pos)
+            CharacterCreation() noexcept
+                : _box(nullptr)
                 {};
-            void display(sf::RenderWindow &window) noexcept {window.draw(*this);}
+            void start(sfs::Scene &scene) noexcept
+            {
+                _box = &addChild<sfs::InputBox>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"), sf::Vector2f(0, 200), "[name]", sf::Color::White, 20);
+                _box->addComponent<PadderH<sfs::InputBox>>(57, *_box);
+                _box->addComponent<PadderW<sfs::InputBox>>(180, *_box);
+            }
         protected:
+            sfs::InputBox *_box;
+            std::string _name;
     };
 
     class CharacterSelector : public sfs::GameObject
     {
         public:
             CharacterSelector() noexcept
-                : _navbar(nullptr), _image(nullptr), _name(nullptr), _nameUi(nullptr)
+                : _navbar(nullptr), _image(nullptr), _name(nullptr), _creator(nullptr)
                 {};
             void start(sfs::Scene &scene) noexcept;
             void update(sfs::Scene &scene) noexcept;
             void addCharacter(Character &character) noexcept {_characters.push_back(character);};
             void loadCharactersFromFile(const std::string &path) noexcept;
-            void removeCharacter(const std::string &name) noexcept 
+            void removeCharacter(const std::string &name) noexcept
                 {
                     for (auto it = _characters.begin(); it != _characters.end(); ++it) {
                         if (name == it->getName()) {
@@ -74,7 +82,7 @@ namespace cf
             std::vector<Character> _characters;
             sfs::Hnavbar *_navbar;
             sfs::Sprite *_image;
-            DrawCharacterName *_name;
-            sfs::Text *_nameUi;
+            sfs::Text *_name;
+            CharacterCreation *_creator;
     };
 }

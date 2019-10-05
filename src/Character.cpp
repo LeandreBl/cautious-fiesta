@@ -11,14 +11,16 @@ namespace cf {
     _navbar->addComponent<PadderH<sfs::Hnavbar>>(46, *_navbar);
 	  _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/CharacterSelection.png"), sf::Vector2f(690, 510));
 	  _image->setScale(sf::Vector2f(1.2, 1.5));
-	  _nameUi = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "NAME", sf::Color::White, 20, sf::Vector2f(1110, 528));
+	  addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "NAME", sf::Color::White, 20, sf::Vector2f(1110, 528));
+    addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "STATS", sf::Color::White, 20, sf::Vector2f(885, 528));
+
     struct Character::stats stats;
     Character testPerso("bob", stats);
     Character leandre("leandre", stats);
     Character jb("jb", stats);
     addCharacter(testPerso);
     addCharacter(leandre);
-    //addCharacter(jb);
+    addCharacter(jb);
   }
   
   void CharacterSelector::update(sfs::Scene &scene) noexcept
@@ -27,10 +29,20 @@ namespace cf {
       float characterSelected = _characters.size() * _navbar->getValue();
       if (_navbar->getValue() < 1) {
           if (_name == nullptr) {
-	          _name = &addComponent<DrawCharacterName>(_characters.at((int)characterSelected), *scene.getAssetFont("assets/fonts/commodore-64.ttf"), sf::Vector2f(1082, 590));
+	          _name = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), _characters.at((int)characterSelected).getName(),
+                                             sf::Color::White, 20, sf::Vector2f(1082, 590));
           } else {
+            if (_creator != nullptr) {
+              _creator->destroy();
+              _creator = nullptr;
+            }
             _name->setString(_characters.at((int)characterSelected).getName());
           }
+      } else if (_navbar->getValue() == 1) {
+          if (_creator == nullptr) {
+            _creator = &addChild<CharacterCreation>(scene);
+          }
+          _name->setString("");
       }
     }
   }
