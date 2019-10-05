@@ -5,7 +5,7 @@ then
     mkdir -p build
     cd build
     cmake -DCMAKE_BUILD_TYPE=DEBUG ..
-    cmake --build .
+    cmake --build . -- -j
 elif [[ $1 == "rebuild" ]];
 then
     rm -rf build
@@ -14,5 +14,5 @@ else
     mkdir -p build
     cd build
     cmake -DCMAKE_BUILD_TYPE=RELEASE ..
-    cmake --build .
+    cmake --build . -- -j
 fi;
