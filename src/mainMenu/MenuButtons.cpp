@@ -68,6 +68,6 @@ void PlayButton::start(sfs::Scene &scene) noexcept
 	button.addComponent<PadderH<sfs::Button>>(-200, button);
 
 	_box = &addChild<IpInputBox>(scene);
-	_CSelection = &addChild<CharacterSelector>(scene);
+	_CSelection = &addChild<CharacterSelector>(scene, "config/.characters.dat");
 }
 } // namespace cf
