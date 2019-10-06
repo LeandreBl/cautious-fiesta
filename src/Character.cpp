@@ -4,6 +4,8 @@
 
 namespace cf {
 
+  static const char *_statsNames[] = {"life", "speed", "attack", "att speed", "armor"};
+
   void CharacterSelector::start(sfs::Scene &scene) noexcept
   {
     _navbar = &addChild<sfs::Hnavbar>(scene, sf::Vector2f(0,0), sf::Vector2f(16, 150), sf::Color::White);
@@ -13,6 +15,11 @@ namespace cf {
 	  _image->setScale(sf::Vector2f(1.2, 1.5));
 	  addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "NAME", sf::Color::White, 20, sf::Vector2f(1110, 528));
     addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "STATS", sf::Color::White, 20, sf::Vector2f(885, 528));
+    float height = 23;
+    for (int i = 0; i < 5; i += 1) {
+        addChild<CharacterStatName>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"), _statsNames[i], sf::Vector2f(770, 534 + height));
+        height += 18;
+    }
 
     struct Character::stats stats;
     Character testPerso("bob", stats);
