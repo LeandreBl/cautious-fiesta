@@ -1,7 +1,8 @@
 #include <fstream>
 #include "CharacterSelector.hpp"
 
-namespace cf {
+namespace cf
+{
 
 static const char *_statsNames[] = {"life", "speed", "attack", "att speed",
 				    "armor"};
@@ -29,7 +30,7 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 			*scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 			_statsNames[i], sf::Vector2f(770, 557 + 18 * i));
 	}
-	//	loadCharactersFromFile();
+	loadCharactersFromFile();
 }
 
 void CharacterSelector::update(sfs::Scene &scene) noexcept
@@ -58,47 +59,66 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 		} else if (_navbar->getValue() == 1) {
 			if (_creator == nullptr) {
 				_creator = &addChild<CharacterCreation>(scene);
-				auto button = &_creator->addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank.png"),
-			                                *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
-											sf::Vector2f(0, 0), std::bind(&CharacterSelector::addCharacterFromCreateButton, this),
-											"create", sf::Color::White, 15);
-				button->addComponent<PadderH<sfs::Button>>(150, *button);
-				button->addComponent<PadderW<sfs::Button>>(0, *button);
+				auto button = &_creator->addChild<sfs::Button>(
+					scene,
+					*scene.getAssetTexture(
+						"assets/sprites/blank.png"),
+					*scene.getAssetFont(
+						"assets/fonts/commodore-64.ttf"),
+					sf::Vector2f(0, 0),
+					std::bind(
+						&CharacterSelector::
+							addCharacterFromCreateButton,
+						this),
+					"create", sf::Color::White, 15);
+				button->addComponent<PadderH<sfs::Button>>(
+					150, *button);
+				button->addComponent<PadderW<sfs::Button>>(
+					0, *button);
 			}
 			_name->setString("");
 		}
 	} else {
 		if (_creator == nullptr) {
 			_creator = &addChild<CharacterCreation>(scene);
-			auto button = &_creator->addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank.png"),
-			                                *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
-											sf::Vector2f(0, 0), std::bind(&CharacterSelector::addCharacterFromCreateButton, this),
-											"create", sf::Color::White, 15);
-			button->addComponent<PadderH<sfs::Button>>(150, *button);
-			button->addComponent<PadderW<sfs::Button>>(0, *button);			
+			auto button = &_creator->addChild<sfs::Button>(
+				scene,
+				*scene.getAssetTexture(
+					"assets/sprites/blank.png"),
+				*scene.getAssetFont(
+					"assets/fonts/commodore-64.ttf"),
+				sf::Vector2f(0, 0),
+				std::bind(&CharacterSelector::
+						  addCharacterFromCreateButton,
+					  this),
+				"create", sf::Color::White, 15);
+			button->addComponent<PadderH<sfs::Button>>(150,
+								   *button);
+			button->addComponent<PadderW<sfs::Button>>(0, *button);
 		}
 	}
 }
 
-void CharacterSelector::writeCharacterInFile() noexcept 
+void CharacterSelector::writeCharacterInFile() noexcept
 {
 	std::ofstream myfile;
 
-  	myfile.open(_path);
+	myfile.open(_path, std::ios::binary);
 	if (!myfile.is_open())
-		return ;
+		return;
 	Serializer s;
 	s.set(_characters.back().getName());
 	s.set(_characters.back().getStats());
-	myfile.write(static_cast<const char *>(s.getNativeHandle()), s.getSize());
-  	myfile.close();
+	myfile.write(static_cast<const char *>(s.getNativeHandle()),
+		     s.getSize());
+	myfile.close();
 }
 
 void CharacterSelector::loadCharactersFromFile() noexcept
 {
 	std::ifstream stream;
 
-	stream.open(_path);
+	stream.open(_path, std::ios::binary);
 	if (!stream.is_open())
 		return;
 	char buffer[4096];
@@ -106,20 +126,17 @@ void CharacterSelector::loadCharactersFromFile() noexcept
 	std::streamsize size;
 	do {
 		size = stream.readsome(buffer, sizeof(buffer));
-		std::cout << size << std::endl;
 		if (size < 0)
 			return;
 		s.nativeSet(buffer, size);
 	} while (size == sizeof(buffer));
-	std::cout << s.getSize() << std::endl;
 	while (s.getSize() > 0) {
 		std::string name;
 		struct Character::stats stats;
+		s.get(name);
 		s.get(stats);
-		std::cout << name << std::endl;
 		_characters.emplace_back(name, stats);
 	}
 	stream.close();
 }
-}
-
+} // namespace cf
