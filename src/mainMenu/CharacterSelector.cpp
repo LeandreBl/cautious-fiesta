@@ -1,9 +1,7 @@
 #include <fstream>
-#include <iostream>
-#include "Character.hpp"
+#include "CharacterSelector.hpp"
 
-namespace cf
-{
+namespace cf {
 
 static const char *_statsNames[] = {"life", "speed", "attack", "att speed",
 				    "armor"};
@@ -32,13 +30,13 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 			_statsNames[i], sf::Vector2f(770, 557 + 18 * i));
 	}
 
-	// struct Character::stats stats;
-	// Character testPerso("bob", stats);
-	// Character leandre("leandre", stats);
-	// Character jb("jb", stats);
-	// addCharacter(testPerso);
-	// addCharacter(leandre);
-	// addCharacter(jb);
+	 struct Character::stats stats;
+	Character testPerso("bob", stats);
+	Character leandre("leandre", stats);
+	Character jb("jb", stats);
+	addCharacter(testPerso);
+	addCharacter(leandre);
+	addCharacter(jb);
 }
 
 void CharacterSelector::update(sfs::Scene &scene) noexcept
@@ -70,6 +68,9 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			}
 			_name->setString("");
 		}
+	} else {
+		if (_creator == nullptr)
+			_creator = &addChild<CharacterCreation>(scene);
 	}
 }
 
@@ -96,4 +97,5 @@ void CharacterSelector::loadCharactersFromFile(const std::string &path) noexcept
 		_characters.emplace_back(name, stats);
 	}
 }
-} // namespace cf
+}
+

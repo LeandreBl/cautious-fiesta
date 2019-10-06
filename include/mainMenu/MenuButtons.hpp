@@ -5,7 +5,7 @@
 #include <WScene.hpp>
 #include "Button.hpp"
 #include "MenuUi.hpp"
-#include "Character.hpp"
+#include "CharacterSelector.hpp"
 
 namespace cf
 {

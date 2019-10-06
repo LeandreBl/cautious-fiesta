@@ -48,6 +48,7 @@ void OptionsButton::start(sfs::Scene &scene) noexcept
 void PlayButton::play() noexcept
 {
 	std::cout << _box->getIp() << std::endl;
+	std::cout << _CSelection->charaterSelected().getName() << std::endl;
 }
 
 void PlayButton::start(sfs::Scene &scene) noexcept
