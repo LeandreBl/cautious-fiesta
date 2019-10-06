@@ -6,12 +6,12 @@ namespace cf {
 	{
 		scene.subscribe(*this, sf::Event::KeyPressed);
 		_boxName = &addChild<sfs::InputBox>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
-	                                    sf::Vector2f(0, 0), "< new >", sf::Color::White, 20);
+	                                    sf::Vector2f(-1000, 0), "< new >", sf::Color::White, 20);
 		_boxName->addComponent<PadderH<sfs::InputBox>>(56, *_boxName);
 		_boxName->addComponent<PadderW<sfs::InputBox>>(180, *_boxName);
 		for (int i = 0; i < 5; ++i) {
 			auto inputBox = &addChild<sfs::CustomBox>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
-				                                      sf::Vector2f(0, 0), "< ? >", sf::Color::White, 18, "0123456789");
+				                                      sf::Vector2f(-1000, 0), "< ? >", sf::Color::White, 18, "0123456789");
 			inputBox->addComponent<PadderH<sfs::CustomBox>>(23 + i * 18, *inputBox);
 			inputBox->addComponent<PadderL<sfs::CustomBox>>(910, *inputBox);
 			_stats.emplace_back(inputBox);

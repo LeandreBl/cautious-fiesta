@@ -78,8 +78,8 @@ void IpInputBox::start(sfs::Scene &scene) noexcept
 	button.addComponent<PadderW<sfs::Button>>(0, button);
 	button.addComponent<PadderH<sfs::Button>>(-100, button);
 
-	_input = &addChild<sfs::InputBox>(scene, *font, sf::Vector2f(0, 0),
-					  "IP", sf::Color::White, 35);
+	_input = &addChild<sfs::CustomBox>(scene, *font, sf::Vector2f(0, 0),
+					  "IP", sf::Color::White, 35, "1234567890.");
 	_input->addComponent<PadderW<sfs::InputBox>>(0, *_input);
 	_input->addComponent<PadderH<sfs::InputBox>>(-110, *_input);
 }

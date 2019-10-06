@@ -33,6 +33,6 @@ class IpInputBox : public sfs::UI
 	}
 
       protected:
-	sfs::InputBox *_input;
+	sfs::CustomBox *_input;
 };
 } // namespace cf

@@ -35,6 +35,8 @@ namespace cf
       if (_creator != nullptr) {
         _characters.emplace_back(_creator->createCharacter());
         writeCharacterInFile();
+        _creator->destroy();
+        _creator = nullptr;
       }
     }
   protected:
@@ -44,5 +46,6 @@ namespace cf
     sfs::Text *_name;
     CharacterCreation *_creator;
     std::string _path;
+    std::vector<CharacterStatName *> _stats;
   };
 }
