@@ -12,8 +12,13 @@ namespace cf {
                 : _image(nullptr), _velo(nullptr) {};
             void start(sfs::Scene &scene) noexcept 
             {
+                srand(time(nullptr));
                 setPosition(sf::Vector2f(0, 1400));
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/OptionBackground.png"));
+                int choice = std::rand() % 2;
+                if (choice == 0)
+                    _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/OptionBackground.png"));
+                else if (choice == 1)
+                    _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Metro.png"));
                 _velo = &addComponent<sfs::Velocity>(sf::Vector2f(0, -550));
             }
             void update(sfs::Scene &) noexcept
