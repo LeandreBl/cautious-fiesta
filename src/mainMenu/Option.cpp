@@ -29,7 +29,7 @@ namespace cf
 		return _image->getGlobalBounds();
 	}
 
-    void optionScene::lowerSound(sfs::Scene &scene) noexcept 
+    void optionSound::lowerSound(sfs::Scene &scene) noexcept 
     {
         float volume = scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
         if (volume <= 10)
@@ -39,7 +39,7 @@ namespace cf
         scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume); //TODO GAME MANAGER qui contient son
     }
 
-    void optionScene::augmentSound(sfs::Scene &scene) noexcept
+    void optionSound::augmentSound(sfs::Scene &scene) noexcept
     {
         float volume = scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
         if (volume >= 100)

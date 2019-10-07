@@ -86,9 +86,7 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 	if (_optionImage != nullptr) {
 		if (_optionImage->getPosition().y <= 0) {
 			if (_opS == nullptr) {
-				_opS = &addChild<optionScene>(scene);
-				_opS->addComponent<PadderW<optionScene>>(0, *_opS);
-				_opS->addComponent<PadderH<optionScene>>(0, *_opS);			
+				_opS = &addChild<optionScene>(scene);			
 			}
 		}
 	}
