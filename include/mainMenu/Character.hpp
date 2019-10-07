@@ -98,7 +98,10 @@ class CharacterStatName : public sfs::GameObject
 	{
 		_text->setString(str);
 	}
-
+	sf::FloatRect getGlobalBounds() noexcept 
+	{
+		return _text->getGlobalBounds();
+	}
       protected:
 	sfs::Text *_text;
 };
