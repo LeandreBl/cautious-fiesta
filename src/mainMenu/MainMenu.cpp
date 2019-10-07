@@ -33,7 +33,8 @@ void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 		_options = nullptr;
 	}
 	auto _layers = scene.getGameObjects<Layers>();
-	_optionImage = &addChild<optionBackground>(scene); // TODO modifier ça
+	_optionImage = &addChild<Background>(scene); // TODO modifier ça
+	_optionImage->addVelocity(sf::Vector2f(0, -650));
 	for (auto &i : _layers) {
 		auto velo = i->getComponents<sfs::Velocity>();
 		velo[0]->destroy();

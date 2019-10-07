@@ -6,37 +6,45 @@
 #include "MainMenu.hpp"
 
 namespace cf {
-    class optionBackground : public sfs::GameObject
+    class Background : public sfs::GameObject
     {
         public:
-            optionBackground() noexcept
-                : _image(nullptr), _velo(nullptr) {};
+            Background(const std::string &path = "") noexcept
+                : _image(nullptr), _velo(nullptr), _path(path)
+                {};
             void start(sfs::Scene &scene) noexcept;
             void update(sfs::Scene &) noexcept;
             sf::FloatRect getGlobalBounds() noexcept;
+            void addVelocity(sf::Vector2f speed) noexcept
+            {
+                _velo = &addComponent<sfs::Velocity>(speed);
+            }
         protected:
             sfs::Sprite *_image;
             sfs::Velocity *_velo;
+            std::string _path;
     };
 
     class optionSound : public sfs::UI
     {
         public:
-            optionSound() noexcept : _soundText(nullptr), _decreaseSound(nullptr), _augmentSound(nullptr) {};
+            optionSound() noexcept : _soundText(nullptr), _decreaseSound(nullptr), _augmentSound(nullptr), _soundBar(nullptr) {};
             void start(sfs::Scene &scene) noexcept {
                 _soundText = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "SOUND", sf::Color::White, 30);
                 _decreaseSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"), 
                                                         sf::Vector2f(-100, 0), std::bind(&optionSound::lowerSound, this, std::ref(scene)));
                _decreaseSound->setScale(sf::Vector2f(1.5, 1.5));
-               _decreaseSound->addComponent<PadderH<sfs::Button>>(0, *_decreaseSound);
-               _decreaseSound->addComponent<PadderW<sfs::Button>>(-100, *_decreaseSound);
+               _decreaseSound->addComponent<PadderH<sfs::Button>>(-96, *_decreaseSound);
+               _decreaseSound->addComponent<PadderW<sfs::Button>>(-86, *_decreaseSound);
 
                 _augmentSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"), 
                                                         sf::Vector2f(-100, 0), std::bind(&optionSound::augmentSound, this, std::ref(scene)));
                 _augmentSound->setScale(sf::Vector2f(1.5, 1.5));
                 _augmentSound->setRotate(180);
-                _augmentSound->addComponent<PadderH<sfs::Button>>(0, *_augmentSound);
-                _augmentSound->addComponent<PadderW<sfs::Button>>(100, *_augmentSound);
+                _augmentSound->addComponent<PadderH<sfs::Button>>(-69, *_augmentSound);
+                _augmentSound->addComponent<PadderW<sfs::Button>>(115, *_augmentSound);
+
+                _soundBar = &addComponent<sfs::Rectangle>(sf::Vector2f(-16, 50), sf::Vector2f(150, 30), sf::Color::White);
             }
             void lowerSound(sfs::Scene &scene) noexcept;
             void augmentSound(sfs::Scene &scnene) noexcept;
@@ -45,6 +53,7 @@ namespace cf {
             sfs::Text *_soundText;
             sfs::Button *_decreaseSound;
             sfs::Button *_augmentSound;
+            sfs::Rectangle *_soundBar;
     };
 
     class optionFrameRate : public sfs::UI
@@ -94,18 +103,40 @@ namespace cf {
     class optionScene : public sfs::UI
     {
         public:
-            optionScene() noexcept : _sound(nullptr), _frameRate(nullptr) {};
+            optionScene() noexcept : _menuBoxName(nullptr), _optionMenuBox(nullptr), _sound(nullptr), _frameRate(nullptr) {};
             void start(sfs::Scene &scene) noexcept {
+                _optionMenuBox = &addChild<Background>(scene, "assets/sprites/OptionWindow.png");
+                _optionMenuBox->addComponent<PadderW<Background>>(0, *_optionMenuBox);
+                _optionMenuBox->addComponent<PadderH<Background>>(0, *_optionMenuBox);
+
+                _menuBoxName = &addChild<Text>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"), "OPTIONS", sf::Vector2f(-100, -100), 30);
+                _menuBoxName->addComponent<PadderW<Text>>(0, *_menuBoxName);
+                _menuBoxName->addComponent<PadderH<Text>>(-204, *_menuBoxName);
+
                 _sound = &addChild<optionSound>(scene); //TODO bien place les buttons
                 _sound->addComponent<PadderW<optionSound>>(0, *_sound);
-				_sound->addComponent<PadderH<optionSound>>(0, *_sound);
+				_sound->addComponent<PadderH<optionSound>>(-150, *_sound);
+
                 _frameRate = &addChild<optionFrameRate>(scene); //TODO bien place les buttons
                 _frameRate->addComponent<PadderW<optionFrameRate>>(0, *_frameRate);
                 _frameRate->addComponent<PadderH<optionFrameRate>>(100, *_frameRate);
-                //TODO placer la box de background pour que ce soit generic a tout le jeu
+
+                _resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank2.png"), 
+                                                       *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+                                                       sf::Vector2f(0, 0), std::bind(&optionScene::closeOptions, this), "resume", sf::Color::White, 20);
+                _resumeButton->setScale(sf::Vector2f(0.5, 0.5));
+                _resumeButton->addComponent<PadderW<sfs::Button>>(0, *_resumeButton);
+                _resumeButton->addComponent<PadderH<sfs::Button>>(170, *_resumeButton);
+            }
+            void closeOptions() noexcept 
+            {
+                this->destroy();
             }
         protected:
+            Text *_menuBoxName;
+            Background *_optionMenuBox;
             optionSound *_sound;
             optionFrameRate *_frameRate;
+            sfs::Button *_resumeButton;
     };
 }

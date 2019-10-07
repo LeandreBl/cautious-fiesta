@@ -83,16 +83,16 @@ class Character
 	struct stats _stats;
 };
 
-class CharacterStatName : public sfs::GameObject
+class Text : public sfs::GameObject
 {
       public:
-	CharacterStatName(const sf::Font &font, const std::string &name,
-			  const sf::Vector2f &pos) noexcept
+	Text(const sf::Font &font, const std::string &name,
+			  const sf::Vector2f &pos, uint32_t size = 18) noexcept
 	    : _text(nullptr)
 	{
 		setPosition(pos);
 		_text = &addComponent<sfs::Text>(font, name, sf::Color::White,
-						 18);
+						 size);
 	}
 	void setString(const std::string &str) noexcept
 	{

@@ -32,7 +32,7 @@ namespace cf
     QuoteGenerator *_quotes;
     ExitButton *_exit;
     sfs::Button *_options;
-    optionBackground *_optionImage;
+    Background *_optionImage;
     optionScene *_opS;
   };  
 }

@@ -16,7 +16,7 @@ namespace cf {
     protected:
 		sfs::InputBox *_boxName;
 		std::vector<sfs::CustomBox *> _stats;
-  		CharacterStatName *_printTotal;
+  		Text *_printTotal;
 		float _total = 100;
 };
 }

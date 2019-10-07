@@ -5,7 +5,7 @@ namespace cf
 static const char *QUOTES[] = {"France number 1",
 			       "just ZIBoss117",
 			       "Better than Minecraft",
-			       "Lamout pd",
+			       "LaMout pd",
 			       "I like money",
 			       "I <3 Korea",
 			       "Better than Fortnite",

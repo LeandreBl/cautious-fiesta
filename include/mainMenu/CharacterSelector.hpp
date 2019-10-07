@@ -46,6 +46,6 @@ namespace cf
     sfs::Text *_name;
     CharacterCreation *_creator;
     std::string _path;
-    std::vector<CharacterStatName *> _stats;
+    std::vector<Text *> _stats;
   };
 }

@@ -25,11 +25,11 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 		*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "STATS",
 		sf::Color::White, 20, sf::Vector2f(885, 528));
 	for (int i = 0; i < 5; ++i) {
-		addChild<CharacterStatName>(
+		addChild<Text>(
 			scene,
 			*scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 			_statsNames[i], sf::Vector2f(770, 557 + 18 * i));
-		_stats.emplace_back(&addChild<CharacterStatName>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+		_stats.emplace_back(&addChild<Text>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 		                                                 "", sf::Vector2f(910, 557 + 18 * i)));
 	}
 	_name = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"),"",

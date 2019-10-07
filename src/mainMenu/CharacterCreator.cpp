@@ -16,7 +16,7 @@ namespace cf {
 			inputBox->addComponent<PadderL<sfs::CustomBox>>(910, *inputBox);
 			_stats.emplace_back(inputBox);
 		}
-		_printTotal = &addChild<CharacterStatName>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+		_printTotal = &addChild<Text>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 			                                       "total", sf::Vector2f(990, 555));
 	}
 
