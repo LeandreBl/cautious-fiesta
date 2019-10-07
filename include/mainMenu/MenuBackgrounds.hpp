@@ -51,6 +51,7 @@ class Layers : public sfs::GameObject
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &) noexcept;
   	void setVelocity(const sf::Vector2f &pos) noexcept;
+	sf::Vector2f getSpeed() const noexcept {return _speed;};
 	    protected:
 	const sf::Texture *_texture;
 	const std::string _path;
@@ -65,6 +66,7 @@ class Scroller : public sfs::GameObject
 	public:
 		Scroller() noexcept : _scroller(nullptr) {};
 		void start(sfs::Scene &scene) noexcept;
+		void restoreInitialSpeed(sfs::Scene &scene) noexcept;
 	protected:
 		Layers *_scroller;
 };
