@@ -22,15 +22,6 @@ class ExitButton : public sfs::GameObject
 	};
 };
 
-class OptionsButton : public sfs::GameObject
-{
-      public:
-	void start(sfs::Scene &scene) noexcept;
-
-      protected:
-	void optionScene() noexcept;
-};
-
 class PlayButton : public sfs::GameObject
 {
       public:

@@ -32,7 +32,6 @@ class DrawLayers : public sfs::Sprite
 		}
 		sfs::Sprite::update(scene, ob);
 	}
-
       protected:
 	sf::Vector2f _origin;
 };
@@ -45,17 +44,31 @@ class Layers : public sfs::GameObject
 	       const sf::Vector2f &speed = sf::Vector2f(0, 0),
 	       const sf::Vector2f &origin = sf::Vector2f(0, 0)) noexcept
 	    : _texture(nullptr), _path(path), _scale(scale), _speed(speed),
-	      _origin(origin)
+	      _origin(origin), _velo(nullptr)
 	{
 		setPosition(_origin);
 	};
 	void start(sfs::Scene &scene) noexcept;
-
-      protected:
+	void update(sfs::Scene &) noexcept
+	{
+		if (_velo != nullptr) {
+			auto pos = getPosition();
+			if (pos.y + (_texture->getSize().y * 2.5) <= 0) {
+				_velo->destroy();
+				_velo = nullptr;
+			}
+		}
+	}
+	void setVelocity(const sf::Vector2f &pos) noexcept
+	{
+		_velo = &addComponent<sfs::Velocity>(pos);
+	}
+	    protected:
 	const sf::Texture *_texture;
 	const std::string _path;
 	const sf::Vector2f _scale;
 	const sf::Vector2f _speed;
 	const sf::Vector2f _origin;
+	sfs::Velocity *_velo;
 };
 } // namespace cf

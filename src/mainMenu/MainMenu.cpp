@@ -3,10 +3,47 @@
 
 namespace cf
 {
+
+void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
+	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+	auto texture = scene.getAssetTexture("assets/sprites/blank.png");
+	if (font == nullptr || texture == nullptr) {
+		errorLog("[Menu] could not load the font or the texture");
+		destroy();
+		return;
+	}
+	_options = &addChild<sfs::Button>(
+		scene, *texture, *font, sf::Vector2f(0, 0),
+		std::bind(&MainMenu::OptionScene, this, std::ref(scene)), "Options",
+		sf::Color::White, 25);
+	_options->setScale(sf::Vector2f(1.2, 1.7));
+	_options->addComponent<PadderR<sfs::Button>>(25.f, *_options);
+	_options->addComponent<PadderB<sfs::Button>>(25.f, *_options);
+}
+
+void MainMenu::OptionScene(sfs::Scene &scene) noexcept
+{
+	std::cout << "options activées" << std::endl;
+	if (_play != nullptr && _quotes != nullptr && _options != nullptr) {
+		_play->destroy();
+		_play = nullptr;
+		_quotes->destroy();
+		_quotes = nullptr;
+		_options->destroy();
+		_options = nullptr;
+	}
+	auto _layers = scene.getGameObjects<Layers>();
+	addChild<optionBackground>(scene); // TODO modifier ça
+	for (auto &i : _layers) {
+		auto velo = i->getComponents<sfs::Velocity>();
+		velo[0]->destroy();
+		i->setVelocity(sf::Vector2f(0, -550));
+	}
+}
+
 void MainMenu::start(sfs::Scene &scene) noexcept
 {
-	_scroller = &addChild<sfs::GameObject>(scene);
-	_scroller->addChild<Layers>(scene, "assets/sprites/Nuages.jpg",
+	_scroller = &addChild<Layers>(scene, "assets/sprites/Nuages.jpg",
 				    sf::Vector2f(1.2, 1.2),
 				    sf::Vector2f(-150, 0));
 	_scroller->addChild<Layers>(scene, "assets/sprites/trainBackground.png",
@@ -33,10 +70,10 @@ void MainMenu::start(sfs::Scene &scene) noexcept
 				    sf::Vector2f(1, 2), sf::Vector2f(-550, 0),
 				    sf::Vector2f(0, 930));
 
-	addChild<QuoteGenerator>(scene);
-	addChild<ExitButton>(scene);
-	addChild<OptionsButton>(scene);
-	addChild<PlayButton>(scene);
+	_quotes = &addChild<QuoteGenerator>(scene);
+	_exit = &addChild<ExitButton>(scene);
+	_play = &addChild<PlayButton>(scene);
+	createOptionsButton(scene);
 
 	scene.subscribe(*this, sf::Event::Closed);
 
