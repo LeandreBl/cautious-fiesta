@@ -49,20 +49,8 @@ class Layers : public sfs::GameObject
 		setPosition(_origin);
 	};
 	void start(sfs::Scene &scene) noexcept;
-	void update(sfs::Scene &) noexcept
-	{
-		if (_velo != nullptr) {
-			auto pos = getPosition();
-			if (pos.y + (_texture->getSize().y * 2.5) <= 0) {
-				_velo->destroy();
-				_velo = nullptr;
-			}
-		}
-	}
-	void setVelocity(const sf::Vector2f &pos) noexcept
-	{
-		_velo = &addComponent<sfs::Velocity>(pos);
-	}
+	void update(sfs::Scene &) noexcept;
+  	void setVelocity(const sf::Vector2f &pos) noexcept;
 	    protected:
 	const sf::Texture *_texture;
 	const std::string _path;
@@ -70,5 +58,14 @@ class Layers : public sfs::GameObject
 	const sf::Vector2f _speed;
 	const sf::Vector2f _origin;
 	sfs::Velocity *_velo;
+};
+
+class Scroller : public sfs::GameObject
+{
+	public:
+		Scroller() noexcept : _scroller(nullptr) {};
+		void start(sfs::Scene &scene) noexcept;
+	protected:
+		Layers *_scroller;
 };
 } // namespace cf

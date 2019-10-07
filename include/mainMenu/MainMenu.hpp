@@ -27,7 +27,7 @@ namespace cf
     void createOptionsButton(sfs::Scene &scene) noexcept;
     void launchOptionScene(sfs::Scene &scene) noexcept;
   protected:
-    Layers *_scroller;
+    Scroller *_scroller;
     PlayButton *_play;
     QuoteGenerator *_quotes;
     ExitButton *_exit;

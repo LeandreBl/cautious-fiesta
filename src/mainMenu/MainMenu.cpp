@@ -43,33 +43,7 @@ void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 
 void MainMenu::start(sfs::Scene &scene) noexcept
 {
-	_scroller = &addChild<Layers>(scene, "assets/sprites/Nuages.jpg",
-				    sf::Vector2f(1.2, 1.2),
-				    sf::Vector2f(-150, 0));
-	_scroller->addChild<Layers>(scene, "assets/sprites/trainBackground.png",
-				    sf::Vector2f(1, 1), sf::Vector2f(-300, 0),
-				    sf::Vector2f(0, 930));
-	_scroller->addChild<Layers>(scene, "assets/sprites/test.png",
-				    sf::Vector2f(1, 2.5), sf::Vector2f(-250, 0),
-				    sf::Vector2f(0, 190));
-	_scroller->addChild<Layers>(scene, "assets/sprites/rangéImeubles.png",
-				    sf::Vector2f(1, 1), sf::Vector2f(-325, 0),
-				    sf::Vector2f(0, 600));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Mimeubles.png",
-				    sf::Vector2f(1, 2.5), sf::Vector2f(-350, 0),
-				    sf::Vector2f(0, 515));
-	//_scroller->addChild<Layers>(scene, "assets/sprites/imeubles.png",
-	//sf::Vector2f(1, 2.5), sf::Vector2f(-350, 0), sf::Vector2f(0, 800));
-	_scroller->addChild<Layers>(scene, "assets/sprites/traks.png",
-				    sf::Vector2f(1, 1), sf::Vector2f(-500, 0),
-				    sf::Vector2f(0, 1040));
-	_scroller->addChild<Layers>(scene, "assets/sprites/train.png",
-				    sf::Vector2f(0.5, 0.5),
-				    sf::Vector2f(550, 0), sf::Vector2f(0, 979));
-	_scroller->addChild<Layers>(scene, "assets/sprites/FirstLayer.png",
-				    sf::Vector2f(1, 2), sf::Vector2f(-550, 0),
-				    sf::Vector2f(0, 930));
-
+	_scroller = &addChild<Scroller>(scene);
 	_quotes = &addChild<QuoteGenerator>(scene);
 	_exit = &addChild<ExitButton>(scene);
 	_play = &addChild<PlayButton>(scene);
