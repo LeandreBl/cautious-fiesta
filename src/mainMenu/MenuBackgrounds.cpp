@@ -47,6 +47,9 @@ namespace cf
     _scroller = &addChild<Layers>(scene, "assets/sprites/Nuages.jpg",
 				    sf::Vector2f(1.2, 1.2),
 				    sf::Vector2f(-150, 0));
+	_scroller->addChild<Layers>(scene, "assets/sprites/Building.png",
+					sf::Vector2f(1, 1), sf::Vector2f(-150, 0),
+					sf::Vector2f(0, 360));
 	_scroller->addChild<Layers>(scene, "assets/sprites/trainBackground.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-300, 0),
 				    sf::Vector2f(0, 930));
