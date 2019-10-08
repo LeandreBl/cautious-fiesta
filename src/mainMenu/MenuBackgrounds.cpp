@@ -15,7 +15,7 @@ namespace cf
   {
     if (_velo != nullptr && lock == false) {
 			auto pos = getPosition();
-			if (pos.y <= -((int)_texture->getSize().y)) { //todo trouver une solution
+			if (pos.y <= ((-1300) + _origin.y)) {
 				_velo->destroy();
 				_velo = nullptr;
 				lock = true;

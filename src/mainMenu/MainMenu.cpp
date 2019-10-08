@@ -23,7 +23,6 @@ void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
 
 void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 {
-	std::cout << "options activées" << std::endl;
 	if (_play != nullptr && _quotes != nullptr && _options != nullptr) {
 		_play->destroy();
 		_play = nullptr;
@@ -31,6 +30,8 @@ void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 		_quotes = nullptr;
 		_options->destroy();
 		_options = nullptr;
+		_exit->destroy();
+		_exit = nullptr;
 	}
 	auto _layers = scene.getGameObjects<Layers>();
 	_optionImage = &addChild<Background>(scene);
@@ -74,12 +75,16 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 			}
 		}
 	}
-	if (lock == true && _optionImage->getPosition().y >= 1080) {
+	if (lock == true && _optionImage->getPosition().y >= 1350) {
 		_optionImage->destroy();
 		_optionImage = nullptr;
 		_opS = nullptr;
 		lock = false;
 		_scroller->restoreInitialSpeed(scene);
+		_quotes = &addChild<QuoteGenerator>(scene);
+		_play = &addChild<PlayButton>(scene);
+		_exit = &addChild<ExitButton>(scene);
+		createOptionsButton(scene);
 	}
 }
 
