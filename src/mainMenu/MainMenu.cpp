@@ -33,13 +33,10 @@ void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 		_options = nullptr;
 	}
 	auto _layers = scene.getGameObjects<Layers>();
-	_optionImage = &addChild<Background>(scene); // TODO modifier ça
+	_optionImage = &addChild<Background>(scene);
 	_optionImage->addVelocity(sf::Vector2f(0, -650));
-	for (auto &i : _layers) {
-		auto velo = i->getComponents<sfs::Velocity>();
-		velo[0]->destroy();
+	for (auto &i : _layers)
 		i->setVelocity(sf::Vector2f(0, -650));
-	}
 }
 
 void MainMenu::start(sfs::Scene &scene) noexcept
@@ -56,14 +53,33 @@ void MainMenu::start(sfs::Scene &scene) noexcept
 	addComponent<sfs::Sound>(*sound, true, true);
 }
 
+bool lock = false;
+
 void MainMenu::update(sfs::Scene &scene) noexcept
 {
 	if (_optionImage != nullptr) {
 		if (_optionImage->getPosition().y <= 0) {
 			if (_opS == nullptr) {
-				_opS = &addChild<optionScene>(scene);			
+				_opS = &addChild<optionScene>(scene);
+			}
+			if (_opS != nullptr && lock == false) {
+				auto check = scene.getGameObjects<optionScene>();
+				if (check.size() == 0) {
+					lock = true;
+					_optionImage->addVelocity(sf::Vector2f(0, 650));
+					auto _layers = scene.getGameObjects<Layers>();
+					for (auto &i : _layers)
+						i->setVelocity(sf::Vector2f(0, 650));
+				}
 			}
 		}
+	}
+	if (lock == true && _optionImage->getPosition().y >= 1080) {
+		_optionImage->destroy();
+		_optionImage = nullptr;
+		_opS = nullptr;
+		lock = false;
+		_scroller->restoreInitialSpeed(scene);
 	}
 }
 

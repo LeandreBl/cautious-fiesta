@@ -10,22 +10,34 @@ namespace cf
     addComponent<DrawLayers>(*_texture, _origin).setScale(_scale);
 	setVelocity(_speed);
   }
+
   void Layers::update(sfs::Scene &) noexcept 
   {
-    if (_velo != nullptr) {
+    if (_velo != nullptr && lock == false) {
 			auto pos = getPosition();
-			if (pos.y + (_texture->getSize().y) * 2.5 <= 0) {
+			if (pos.y <= -((int)_texture->getSize().y)) { //todo trouver une solution
 				_velo->destroy();
 				_velo = nullptr;
+				lock = true;
 			}
 		}
+	if (_velo != nullptr && lock == true) {
+			auto pos = getPosition();
+			if (pos.y >= _origin.y) {
+				_velo->destroy();
+				_velo = nullptr;
+				lock = false;
+			}
+  	}
   }
+
   void Layers::setVelocity(const sf::Vector2f &pos) noexcept
 	{
 		if (_velo == nullptr)
 			_velo = &addComponent<sfs::Velocity>(pos);
 		else {
 			_velo->destroy();
+			_velo = nullptr;
 			_velo = &addComponent<sfs::Velocity>(pos);			
 		}
 	}

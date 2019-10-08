@@ -59,6 +59,7 @@ class Layers : public sfs::GameObject
 	const sf::Vector2f _speed;
 	const sf::Vector2f _origin;
 	sfs::Velocity *_velo;
+	bool lock = false;
 };
 
 class Scroller : public sfs::GameObject

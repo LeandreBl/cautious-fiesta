@@ -17,12 +17,13 @@ namespace cf
     }
     void Background::update(sfs::Scene &) noexcept
     {
-        if (_velo != nullptr) {
+        if (_velo != nullptr && _lock == false) {
             auto pos = getPosition();
             if (pos.y <= 0) {
                 pos.y = 0;
                 _velo->destroy();
                 _velo = nullptr;
+                _lock = true;
             }
         }
     }
