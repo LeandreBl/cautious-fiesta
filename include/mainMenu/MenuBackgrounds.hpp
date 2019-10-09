@@ -1,9 +1,8 @@
 #pragma once
 
-#include <iostream>
 #include <GameObject.hpp>
+#include <BasicShape.hpp>
 #include <IComponent.hpp>
-#include <SFML/Graphics.hpp>
 #include <Velocity.hpp>
 
 namespace cf
@@ -67,8 +66,8 @@ class Scroller : public sfs::GameObject
 	public:
 		Scroller() noexcept : _scroller(nullptr) {};
 		void start(sfs::Scene &scene) noexcept;
-		void restoreInitialSpeed(sfs::Scene &scene) noexcept;
+		void setLayersSpeed(sfs::Scene &scene, bool initialSpeed, sf::Vector2f speed = sf::Vector2f(0, 0)) noexcept;
 	protected:
 		Layers *_scroller;
 };
-} // namespace cf
+}

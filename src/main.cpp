@@ -1,13 +1,13 @@
 #include <WScene.hpp>
-#include <GameObject.hpp>
-
-#include "MainMenu.hpp"
+#include "MenuManager.hpp"
+#include "GameManager.hpp"
 
 int main()
 {
 	sfs::WScene scene("cautious_fiesta", 120);
 
-	scene.addGameObject<cf::MainMenu>();
+	scene.addGameObject<cf::GameManager>();
+	scene.addGameObject<cf::MenuManager>();
 	scene.run();
 	return 0;
 }

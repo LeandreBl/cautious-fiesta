@@ -19,6 +19,9 @@ class Character
 		float attackSpeed = 0;
 		float armor = 0;
 	};
+	Character() noexcept {
+		_name = "noName";
+	};
 	Character(const std::string &name, const struct stats &stats) noexcept
 	    : _name(name), _stats(stats){};
 	void setName(const std::string &name) noexcept

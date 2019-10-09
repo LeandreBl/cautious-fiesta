@@ -127,13 +127,13 @@ namespace cf {
                 _menuBoxName->addComponent<PadderW<Text>>(0, *_menuBoxName);
                 _menuBoxName->addComponent<PadderH<Text>>(-204, *_menuBoxName);
 
-                _sound = &addChild<optionSound>(scene);
+               /* _sound = &addChild<optionSound>(scene);
                 _sound->addComponent<PadderW<optionSound>>(0, *_sound);
 				_sound->addComponent<PadderH<optionSound>>(-150, *_sound);
 
                 _frameRate = &addChild<optionFrameRate>(scene);
                 _frameRate->addComponent<PadderW<optionFrameRate>>(0, *_frameRate);
-                _frameRate->addComponent<PadderH<optionFrameRate>>(-50, *_frameRate);
+                _frameRate->addComponent<PadderH<optionFrameRate>>(-50, *_frameRate); */
 
                 _resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank2.png"),
                                                        *scene.getAssetFont("assets/fonts/commodore-64.ttf"),

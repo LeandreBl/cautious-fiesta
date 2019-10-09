@@ -1,8 +1,16 @@
-#include <iostream>
 #include "MainMenu.hpp"
 
 namespace cf
 {
+
+void MainMenu::start(sfs::Scene &scene) noexcept
+{
+	_quotes = &addChild<QuoteGenerator>(scene);
+	_exit = &addChild<ExitButton>(scene);
+	_play = &addChild<PlayButton>(scene);
+	createOptionsButton(scene);
+	scene.subscribe(*this, sf::Event::Closed);
+}
 
 void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
 	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
@@ -12,8 +20,7 @@ void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
 		destroy();
 		return;
 	}
-	_options = &addChild<sfs::Button>(
-		scene, *texture, *font, sf::Vector2f(0, 0),
+	_options = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(0, 0),
 		std::bind(&MainMenu::launchOptionScene, this, std::ref(scene)), "Options",
 		sf::Color::White, 25);
 	_options->setScale(sf::Vector2f(1.2, 1.7));
@@ -23,35 +30,17 @@ void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
 
 void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 {
-	if (_play != nullptr && _quotes != nullptr && _options != nullptr) {
-		_play->destroy();
-		_play = nullptr;
-		_quotes->destroy();
-		_quotes = nullptr;
-		_options->destroy();
-		_options = nullptr;
-		_exit->destroy();
-		_exit = nullptr;
-	}
-	auto _layers = scene.getGameObjects<Layers>();
+	_play->destroy();
+	_play = nullptr;
+	_quotes->destroy();
+	_quotes = nullptr;
+	_options->destroy();
+	_options = nullptr;
+	_exit->destroy();
+	_exit = nullptr;
 	_optionImage = &addChild<Background>(scene);
 	_optionImage->addVelocity(sf::Vector2f(0, -650));
-	for (auto &i : _layers)
-		i->setVelocity(sf::Vector2f(0, -650));
-}
-
-void MainMenu::start(sfs::Scene &scene) noexcept
-{
-	_scroller = &addChild<Scroller>(scene);
-	_quotes = &addChild<QuoteGenerator>(scene);
-	_exit = &addChild<ExitButton>(scene);
-	_play = &addChild<PlayButton>(scene);
-	createOptionsButton(scene);
-
-	scene.subscribe(*this, sf::Event::Closed);
-
-	auto *sound = scene.getAssetSoundBuffer("assets/musics/menuMusic.ogg");
-	addComponent<sfs::Sound>(*sound, true, true);
+	_scroller->setLayersSpeed(scene, false, sf::Vector2f(0, -650));
 }
 
 bool lock = false;
@@ -68,9 +57,7 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 				if (check.size() == 0) {
 					lock = true;
 					_optionImage->addVelocity(sf::Vector2f(0, 650));
-					auto _layers = scene.getGameObjects<Layers>();
-					for (auto &i : _layers)
-						i->setVelocity(sf::Vector2f(0, 650));
+					_scroller->setLayersSpeed(scene, false, sf::Vector2f(0, 650));
 				}
 			}
 		}
@@ -80,7 +67,7 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 		_optionImage = nullptr;
 		_opS = nullptr;
 		lock = false;
-		_scroller->restoreInitialSpeed(scene);
+		_scroller->setLayersSpeed(scene, true);
 		_quotes = &addChild<QuoteGenerator>(scene);
 		_play = &addChild<PlayButton>(scene);
 		_exit = &addChild<ExitButton>(scene);
@@ -93,4 +80,4 @@ void MainMenu::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 	if (event.type == sf::Event::Closed)
 		scene.close();
 }
-} // namespace cf
+}

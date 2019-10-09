@@ -1,3 +1,4 @@
+#include <Sound.hpp>
 #include "MainMenu.hpp"
 
 namespace cf

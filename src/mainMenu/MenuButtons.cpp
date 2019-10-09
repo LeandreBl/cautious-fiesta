@@ -22,10 +22,11 @@ void ExitButton::start(sfs::Scene &scene) noexcept
 	button.addComponent<PadderB<sfs::Button>>(25.f, button);
 }
 
-void PlayButton::play() noexcept
+void PlayButton::play(sfs::Scene &scene) noexcept
 {
-	std::cout << _box->getIp() << std::endl;
-	std::cout << _CSelection->charaterSelected().getName() << std::endl;
+	auto gameManager = scene.getGameObjects<GameManager>();
+	gameManager[0]->_character = _CSelection->charaterSelected();
+	gameManager[0]->_ip = _box->getIp();
 }
 
 void PlayButton::start(sfs::Scene &scene) noexcept
@@ -38,7 +39,7 @@ void PlayButton::start(sfs::Scene &scene) noexcept
 	}
 	auto &button = addChild<sfs::Button>(scene, *texture, *font,
 					     sf::Vector2f(0, 0),
-					     std::bind(&PlayButton::play, this),
+					     std::bind(&PlayButton::play, this, std::ref(scene)),
 					     "Play", sf::Color::White, 35);
 	button.setScale(sf::Vector2f(1.5, 2.2));
 	button.addComponent<PadderW<sfs::Button>>(0, button);

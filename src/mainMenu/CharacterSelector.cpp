@@ -14,9 +14,8 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 					  sf::Color::White);
 	_navbar->addComponent<PadderW<sfs::Hnavbar>>(-285, *_navbar);
 	_navbar->addComponent<PadderH<sfs::Hnavbar>>(46, *_navbar);
-	_image = &addComponent<sfs::Sprite>(
-		*scene.getAssetTexture("assets/sprites/CharacterSelection.png"),
-		sf::Vector2f(690, 510));
+	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/CharacterSelection.png"),
+										sf::Vector2f(690, 510));
 	_image->setScale(sf::Vector2f(1.2, 1.5));
 	addComponent<sfs::Text>(
 		*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "NAME",

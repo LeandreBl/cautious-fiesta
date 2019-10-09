@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include <GameObject.hpp>
-#include <WScene.hpp>
 #include "Button.hpp"
 #include "MenuUi.hpp"
 #include "CharacterSelector.hpp"
+#include "GameManager.hpp"
 
 namespace cf
 {
@@ -29,7 +29,7 @@ class PlayButton : public sfs::GameObject
 	void start(sfs::Scene &scene) noexcept;
 
       protected:
-	void play() noexcept;
+	void play(sfs::Scene &scene) noexcept;
 	IpInputBox *_box;
 	CharacterSelector *_CSelection;
 };

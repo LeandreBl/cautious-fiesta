@@ -1,8 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-#include <WScene.hpp>
-#include <GameObject.hpp>
 #include <Hnavbar.hpp>
 
 namespace cf

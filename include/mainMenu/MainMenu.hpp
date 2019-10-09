@@ -2,8 +2,6 @@
 
 #include <iostream>
 #include <GameObject.hpp>
-#include <WScene.hpp>
-#include <Sound.hpp>
 #include "PaddedSprite.hpp"
 #include "Button.hpp"
 #include "Hnavbar.hpp"
@@ -18,8 +16,8 @@ namespace cf
   class MainMenu : public sfs::GameObject
   {
   public:
-    MainMenu() noexcept
-    : _scroller(nullptr), _play(nullptr), _quotes(nullptr), _exit(nullptr), _options(nullptr), _optionImage(nullptr), _opS(nullptr)
+    MainMenu(Scroller *scroller) noexcept
+    : _scroller(scroller), _play(nullptr), _quotes(nullptr), _exit(nullptr), _options(nullptr), _optionImage(nullptr), _opS(nullptr)
     {};
     void start(sfs::Scene &scene) noexcept;
     void update(sfs::Scene &scene) noexcept;

@@ -33,10 +33,13 @@ namespace cf
     void addCharacterFromCreateButton() noexcept
     {
       if (_creator != nullptr) {
-        _characters.emplace_back(_creator->createCharacter());
-        writeCharacterInFile();
-        _creator->destroy();
-        _creator = nullptr;
+        auto _new = _creator->createCharacter();
+        if (_new.getName() != "noName") {
+          _characters.emplace_back(_new);
+          writeCharacterInFile();
+          _creator->destroy();
+          _creator = nullptr;
+        }
       }
     }
   protected:

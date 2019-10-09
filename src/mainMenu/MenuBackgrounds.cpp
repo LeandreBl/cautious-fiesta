@@ -1,4 +1,4 @@
-#include "MainMenu.hpp"
+#include "MenuBackgrounds.hpp"
 
 namespace cf
 {
@@ -76,11 +76,14 @@ namespace cf
 				    sf::Vector2f(0, 930));
   }
 
-  void Scroller::restoreInitialSpeed(sfs::Scene &scene) noexcept
+  void Scroller::setLayersSpeed(sfs::Scene &scene, bool initialSpeed, sf::Vector2f speed) noexcept
   {
-	  auto layers = scene.getGameObjects<Layers>();
-	  for (auto &i : layers) {
-		  i->setVelocity(i->getSpeed());
-	  }
+	auto layers = scene.getGameObjects<Layers>();
+	if (initialSpeed == true)
+	  	for (auto &i : layers)
+			i->setVelocity(i->getSpeed());
+	else if (initialSpeed == false)
+		for (auto &i : layers)
+			i->setVelocity(speed);
   }
 }
