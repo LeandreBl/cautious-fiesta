@@ -14,7 +14,7 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 					  sf::Color::White);
 	_navbar->addComponent<PadderW<sfs::Hnavbar>>(-285, *_navbar);
 	_navbar->addComponent<PadderH<sfs::Hnavbar>>(46, *_navbar);
-	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/CharacterSelection.png"),
+	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/ui/CharacterSelection.png"),
 										sf::Vector2f(690, 510));
 	_image->setScale(sf::Vector2f(1.2, 1.5));
 	addComponent<sfs::Text>(
@@ -58,7 +58,7 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			if (_creator == nullptr) {
 				_creator = &addChild<CharacterCreation>(scene);
 				auto button = &_creator->addChild<sfs::Button>(scene,
-					*scene.getAssetTexture("assets/sprites/blank.png"),
+					*scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png"),
 					*scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 					sf::Vector2f(-1000, 0),
 					std::bind(&CharacterSelector::addCharacterFromCreateButton, this),
@@ -76,7 +76,7 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			auto button = &_creator->addChild<sfs::Button>(
 				scene,
 				*scene.getAssetTexture(
-					"assets/sprites/blank.png"),
+					"assets/sprites/Menu/ui/BlankButton1.png"),
 				*scene.getAssetFont(
 					"assets/fonts/commodore-64.ttf"),
 				sf::Vector2f(0, 0),

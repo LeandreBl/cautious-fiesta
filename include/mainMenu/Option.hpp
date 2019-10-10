@@ -18,13 +18,13 @@ namespace cf {
             optionSound() noexcept : _soundText(nullptr), _decreaseSound(nullptr), _augmentSound(nullptr), _soundBar(nullptr) {};
             void start(sfs::Scene &scene) noexcept {
                 _soundText = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "SOUND", sf::Color::White, 30);
-                _decreaseSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+                _decreaseSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/Menu/ui/ArrowButton.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-100, -100), std::bind(&optionSound::lowerSound, this, std::ref(scene)));
                 _decreaseSound->setScale(sf::Vector2f(1.5, 1.5));
                 _decreaseSound->addComponent<PadderH<sfs::Button>>(-96, *_decreaseSound);
                 _decreaseSound->addComponent<PadderW<sfs::Button>>(-86, *_decreaseSound);
 
-                _augmentSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+                _augmentSound = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/Menu/ui/ArrowButton.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-1000, -1000), std::bind(&optionSound::augmentSound, this, std::ref(scene)));
                 _augmentSound->setScale(sf::Vector2f(1.5, 1.5));
                 _augmentSound->setRotate(180);
@@ -50,13 +50,13 @@ namespace cf {
             optionFrameRate() noexcept : _frameRateText(nullptr), _decreaseFrameRate(nullptr), _augmentFrameRate(nullptr) {};
             void start(sfs::Scene &scene) noexcept {
                 _frameRateText = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "FRAME RATE", sf::Color::White, 30);
-                _decreaseFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+                _decreaseFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/Menu/ui/ArrowButton.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-1000, -1000), std::bind(&optionFrameRate::lowerFrame, this, std::ref(scene)));
                _decreaseFrameRate->setScale(sf::Vector2f(1.5, 1.5));
                _decreaseFrameRate->addComponent<PadderH<sfs::Button>>(9, *_decreaseFrameRate);
                _decreaseFrameRate->addComponent<PadderW<sfs::Button>>(-45, *_decreaseFrameRate);
 
-                _augmentFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+                _augmentFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/Menu/ui/ArrowButton.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-1000, -1000), std::bind(&optionFrameRate::augmentFrame, this, std::ref(scene)));
                 _augmentFrameRate->setScale(sf::Vector2f(1.5, 1.5));
                 _augmentFrameRate->setRotate(180);
@@ -83,7 +83,7 @@ namespace cf {
         public:
             optionScene() noexcept : _menuBoxName(nullptr), _optionMenuBox(nullptr), _sound(nullptr), _frameRate(nullptr) {};
             void start(sfs::Scene &scene) noexcept {
-                _optionMenuBox = &addChild<Background>(scene, "assets/sprites/OptionWindow.png");
+                _optionMenuBox = &addChild<Background>(scene, "assets/sprites/Menu/ui/OptionWindow.png");
                 _optionMenuBox->addComponent<PadderW<Background>>(0, *_optionMenuBox);
                 _optionMenuBox->addComponent<PadderH<Background>>(0, *_optionMenuBox);
 
@@ -99,7 +99,7 @@ namespace cf {
                 _frameRate->addComponent<PadderW<optionFrameRate>>(0, *_frameRate);
                 _frameRate->addComponent<PadderH<optionFrameRate>>(-50, *_frameRate);
 
-                _resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank2.png"),
+                _resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png"),
                                                        *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                        sf::Vector2f(-1000, -1000), std::bind(&optionScene::closeOptions, this), "resume", sf::Color::White, 20);
                 _resumeButton->setScale(sf::Vector2f(0.5, 0.5));

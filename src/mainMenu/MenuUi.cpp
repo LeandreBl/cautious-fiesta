@@ -65,7 +65,7 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 void IpInputBox::start(sfs::Scene &scene) noexcept
 {
 	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture("assets/sprites/blank.png");
+	auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
 		errorLog(
 			"[Menu] The InputBox failed the loading of the font or the texture");

@@ -9,9 +9,9 @@ namespace cf
             setPosition(sf::Vector2f(0, 1400));
             int choice = std::rand() % 2;
             if (choice == 0)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/OptionBackground.png"));
+                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/optionBackgrounds/Background1.png"));
             else if (choice == 1)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Metro.png"));
+                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/optionBackgrounds/Background2.png"));
         } else if (_path != "") 
             _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture(_path));
     }

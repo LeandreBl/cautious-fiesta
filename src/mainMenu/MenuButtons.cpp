@@ -6,7 +6,7 @@ namespace cf
 void ExitButton::start(sfs::Scene &scene) noexcept
 {
 	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture("assets/sprites/blank.png");
+	auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
 		errorLog(
 			"[Menu] Quit button couldn't load the font or the texture");
@@ -32,7 +32,7 @@ void PlayButton::play(sfs::Scene &scene) noexcept
 void PlayButton::start(sfs::Scene &scene) noexcept
 {
 	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture("assets/sprites/blank.png");
+	auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
 		errorLog("[Menu] could not load the font or the texture");
 		scene.close();

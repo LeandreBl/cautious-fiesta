@@ -44,34 +44,34 @@ namespace cf
 
   void Scroller::start(sfs::Scene &scene) noexcept
   {
-    _scroller = &addChild<Layers>(scene, "assets/sprites/Nuages.jpg",
+    _scroller = &addChild<Layers>(scene, "assets/sprites/Menu/scroller/sky.jpg",
 				    sf::Vector2f(1.2, 1.5),
 				    sf::Vector2f(-150, 0));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Building.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/Building1.png",
 					sf::Vector2f(1, 1), sf::Vector2f(-300, 0),
 					sf::Vector2f(0, 360));
-	_scroller->addChild<Layers>(scene, "assets/sprites/trainBackground.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/trainBackground.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-350, 0),
 				    sf::Vector2f(0, 930));
-	_scroller->addChild<Layers>(scene, "assets/sprites/test.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/Building2.png",
 				    sf::Vector2f(1, 2.5), sf::Vector2f(-400, 0),
 				    sf::Vector2f(0, 190));
-	_scroller->addChild<Layers>(scene, "assets/sprites/BuildingsFuture.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings1.png",
 				    sf::Vector2f(1, 1.2), sf::Vector2f(-450, 0),
 				    sf::Vector2f(0, 600));
-	_scroller->addChild<Layers>(scene, "assets/sprites/rangéImeubles.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings3.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-500, 0),
 				    sf::Vector2f(0, 600));
-   	_scroller->addChild<Layers>(scene, "assets/sprites/Mimeubles.png",
+   	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings2.png",
 				    sf::Vector2f(1, 2.5), sf::Vector2f(-550, 0),
 				    sf::Vector2f(0, 515));
-	_scroller->addChild<Layers>(scene, "assets/sprites/traks.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/traks.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-600, 0),
 				    sf::Vector2f(0, 1040));
-	_scroller->addChild<Layers>(scene, "assets/sprites/train.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/trainFirstground.png",
 				    sf::Vector2f(0.5, 0.5),
 				    sf::Vector2f(550, 0), sf::Vector2f(0, 979));
-	_scroller->addChild<Layers>(scene, "assets/sprites/FirstLayer.png",
+	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/FirstLayer.png",
 				    sf::Vector2f(1, 2), sf::Vector2f(-650, 0),
 				    sf::Vector2f(0, 930));
   }
