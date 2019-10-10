@@ -21,7 +21,6 @@ namespace cf
     {};
     void start(sfs::Scene &scene) noexcept;
     void update(sfs::Scene &scene) noexcept;
-    void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
     void createOptionsButton(sfs::Scene &scene) noexcept;
     void launchOptionScene(sfs::Scene &scene) noexcept;
   protected:

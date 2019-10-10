@@ -9,7 +9,6 @@ void MainMenu::start(sfs::Scene &scene) noexcept
 	_exit = &addChild<ExitButton>(scene);
 	_play = &addChild<PlayButton>(scene);
 	createOptionsButton(scene);
-	scene.subscribe(*this, sf::Event::Closed);
 }
 
 void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
@@ -73,11 +72,5 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 		_exit = &addChild<ExitButton>(scene);
 		createOptionsButton(scene);
 	}
-}
-
-void MainMenu::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
-{
-	if (event.type == sf::Event::Closed)
-		scene.close();
 }
 }

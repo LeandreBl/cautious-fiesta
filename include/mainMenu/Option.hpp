@@ -1,9 +1,13 @@
 #pragma once
 
 #include <GameObject.hpp>
+#include <Sound.hpp>
 #include <BasicShape.hpp>
+#include <Button.hpp>
 #include <Velocity.hpp>
-#include "MainMenu.hpp"
+#include "PaddedSprite.hpp"
+#include "Character.hpp"
+#include "SoundManager.hpp"
 
 namespace cf {
     class Background : public sfs::GameObject
@@ -51,7 +55,8 @@ namespace cf {
                 _augmentSound->addComponent<PadderH<sfs::Button>>(-69, *_augmentSound);
                 _augmentSound->addComponent<PadderW<sfs::Button>>(115, *_augmentSound);
 
-                _soundBar = &addComponent<sfs::Rectangle>(sf::Vector2f(-16, 50), sf::Vector2f(150, 30), sf::Color::White);
+                float volume = scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
+                _soundBar = &addComponent<sfs::Rectangle>(sf::Vector2f(-16, 50), sf::Vector2f((150 * volume) / 100, 30), sf::Color::White);
             }
             void lowerSound(sfs::Scene &scene) noexcept;
             void augmentSound(sfs::Scene &scnene) noexcept;
@@ -72,18 +77,18 @@ namespace cf {
                 _decreaseFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-1000, -1000), std::bind(&optionFrameRate::lowerFrame, this, std::ref(scene)));
                _decreaseFrameRate->setScale(sf::Vector2f(1.5, 1.5));
-               _decreaseFrameRate->addComponent<PadderH<sfs::Button>>(100, *_decreaseFrameRate);
-               _decreaseFrameRate->addComponent<PadderW<sfs::Button>>(-86, *_decreaseFrameRate);
+               _decreaseFrameRate->addComponent<PadderH<sfs::Button>>(9, *_decreaseFrameRate);
+               _decreaseFrameRate->addComponent<PadderW<sfs::Button>>(-45, *_decreaseFrameRate);
 
                 _augmentFrameRate = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/ButtonArrow.png"), *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
                                                         sf::Vector2f(-1000, -1000), std::bind(&optionFrameRate::augmentFrame, this, std::ref(scene)));
                 _augmentFrameRate->setScale(sf::Vector2f(1.5, 1.5));
                 _augmentFrameRate->setRotate(180);
-                _augmentFrameRate->addComponent<PadderH<sfs::Button>>(100, *_augmentFrameRate);
-                _augmentFrameRate->addComponent<PadderW<sfs::Button>>(115, *_augmentFrameRate);
+                _augmentFrameRate->addComponent<PadderH<sfs::Button>>(35, *_augmentFrameRate);
+                _augmentFrameRate->addComponent<PadderW<sfs::Button>>(80, *_augmentFrameRate);
 
                 framerate = scene.framerate();
-                _frameNumber= &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), std::to_string(framerate), sf::Color::White, 30, sf::Vector2f(42, 50));
+                _frameNumber= &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), std::to_string(framerate), sf::Color::White, 30, sf::Vector2f(85, 50));
             }
             void update(sfs::Scene &) noexcept
             {
@@ -91,8 +96,8 @@ namespace cf {
             }
             void lowerFrame(sfs::Scene &scene) noexcept
             {
-                if (framerate - 20 <= 20)
-                    framerate = 20;
+                if (framerate - 20 <= 40)
+                    framerate = 40;
                 else
                     framerate -= 20;
                 scene.framerate(framerate);
@@ -127,13 +132,13 @@ namespace cf {
                 _menuBoxName->addComponent<PadderW<Text>>(0, *_menuBoxName);
                 _menuBoxName->addComponent<PadderH<Text>>(-204, *_menuBoxName);
 
-               /* _sound = &addChild<optionSound>(scene);
+                _sound = &addChild<optionSound>(scene);
                 _sound->addComponent<PadderW<optionSound>>(0, *_sound);
 				_sound->addComponent<PadderH<optionSound>>(-150, *_sound);
 
                 _frameRate = &addChild<optionFrameRate>(scene);
                 _frameRate->addComponent<PadderW<optionFrameRate>>(0, *_frameRate);
-                _frameRate->addComponent<PadderH<optionFrameRate>>(-50, *_frameRate); */
+                _frameRate->addComponent<PadderH<optionFrameRate>>(-50, *_frameRate);
 
                 _resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("assets/sprites/blank2.png"),
                                                        *scene.getAssetFont("assets/fonts/commodore-64.ttf"),

@@ -1,5 +1,4 @@
-#include <Sound.hpp>
-#include "MainMenu.hpp"
+#include "Option.hpp"
 
 namespace cf
 {
@@ -13,8 +12,8 @@ namespace cf
                 _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/OptionBackground.png"));
             else if (choice == 1)
                 _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Metro.png"));
-        }
-        _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture(_path));
+        } else if (_path != "") 
+            _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture(_path));
     }
     void Background::update(sfs::Scene &) noexcept
     {
@@ -35,7 +34,7 @@ namespace cf
 
     void optionSound::lowerSound(sfs::Scene &scene) noexcept 
     {
-        float volume = scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
+        float volume = scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
         if (volume <= 10) {
             volume = 0;
             _soundBar->setSize(sf::Vector2f(0, 30));
@@ -45,12 +44,12 @@ namespace cf
             size.x = (150 * volume) / 100;
             _soundBar->setSize(size);
         }
-        scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume); //TODO GAME MANAGER qui contient son
+        scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume);
     }
 
     void optionSound::augmentSound(sfs::Scene &scene) noexcept
     {
-        float volume = scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
+        float volume = scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
         if (volume >= 95) {
             volume = 100;
             _soundBar->setSize(sf::Vector2f(150, 30));
@@ -60,6 +59,6 @@ namespace cf
             size.x = (150 * volume) / 100;
             _soundBar->setSize(size);
         }
-        scene.getGameObjects<MainMenu>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume); //TODO GAME MANAGER qui contient son
+        scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume);
     }
 }

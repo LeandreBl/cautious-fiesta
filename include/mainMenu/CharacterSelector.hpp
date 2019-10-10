@@ -19,7 +19,12 @@ namespace cf
     void update(sfs::Scene &scene) noexcept;
     Character charaterSelected() noexcept {
       if (_creator != nullptr) {
-        return _creator->createCharacter();
+        auto newCharacter = _creator->createCharacter();
+        if (newCharacter.getName() != "noName") {
+          addCharacter(newCharacter);
+          writeCharacterInFile();
+        }
+        return newCharacter;
       }
       float characterSelected = _characters.size() * _navbar->getValue();
       return _characters.at((int)characterSelected);
