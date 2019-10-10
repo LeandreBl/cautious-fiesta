@@ -6,6 +6,7 @@
 #include <Button.hpp>
 #include "Character.hpp"
 #include "CharacterCreator.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {

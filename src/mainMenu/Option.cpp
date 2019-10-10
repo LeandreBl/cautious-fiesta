@@ -2,36 +2,7 @@
 
 namespace cf
 {
-    void Background::start(sfs::Scene &scene) noexcept 
-    {
-        if (_path == "") {
-            srand(time(nullptr));
-            setPosition(sf::Vector2f(0, 1400));
-            int choice = std::rand() % 2;
-            if (choice == 0)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/OptionBackground.png"));
-            else if (choice == 1)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Metro.png"));
-        } else if (_path != "") 
-            _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture(_path));
-    }
-    void Background::update(sfs::Scene &) noexcept
-    {
-        if (_velo != nullptr && _lock == false) {
-            auto pos = getPosition();
-            if (pos.y <= 0) {
-                pos.y = 0;
-                _velo->destroy();
-                _velo = nullptr;
-                _lock = true;
-            }
-        }
-    }
-    sf::FloatRect Background::getGlobalBounds() noexcept 
-	{
-		return _image->getGlobalBounds();
-	}
-
+    
     void optionSound::lowerSound(sfs::Scene &scene) noexcept 
     {
         float volume = scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->getVolume();
@@ -60,5 +31,28 @@ namespace cf
             _soundBar->setSize(size);
         }
         scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>()[0]->setVolume(volume);
+    }
+
+    void optionFrameRate::update(sfs::Scene &) noexcept
+    {
+        _frameNumber->setString(std::to_string(framerate));
+    }
+
+    void optionFrameRate::lowerFrame(sfs::Scene &scene) noexcept
+    {
+        if (framerate - 20 <= 40)
+            framerate = 40;
+        else
+            framerate -= 20;
+        scene.framerate(framerate);
+    }
+
+    void optionFrameRate::augmentFrame(sfs::Scene &scene) noexcept
+    {
+        if (framerate + 20 >= 200)
+            framerate = 200;
+        else
+            framerate += 20;
+        scene.framerate(framerate);
     }
 }

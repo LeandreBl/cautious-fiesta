@@ -1,11 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include <GameObject.hpp>
-#include <InputBox.hpp>
-#include "Serializer.hpp"
-#include "PaddedSprite.hpp"
 
 namespace cf
 {
@@ -84,28 +79,5 @@ class Character
       protected:
 	std::string _name;
 	struct stats _stats;
-};
-
-class Text : public sfs::GameObject
-{
-      public:
-	Text(const sf::Font &font, const std::string &name,
-			  const sf::Vector2f &pos, uint32_t size = 18) noexcept
-	    : _text(nullptr)
-	{
-		setPosition(pos);
-		_text = &addComponent<sfs::Text>(font, name, sf::Color::White,
-						 size);
-	}
-	void setString(const std::string &str) noexcept
-	{
-		_text->setString(str);
-	}
-	sf::FloatRect getGlobalBounds() noexcept 
-	{
-		return _text->getGlobalBounds();
-	}
-      protected:
-	sfs::Text *_text;
 };
 } // namespace cf

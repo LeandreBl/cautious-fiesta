@@ -8,33 +8,9 @@
 #include "PaddedSprite.hpp"
 #include "Character.hpp"
 #include "SoundManager.hpp"
+#include "Utils.hpp"
 
 namespace cf {
-    class Background : public sfs::GameObject
-    {
-        public:
-            Background(const std::string &path = "") noexcept
-                : _image(nullptr), _velo(nullptr), _path(path)
-                {};
-            void start(sfs::Scene &scene) noexcept;
-            void update(sfs::Scene &) noexcept;
-            sf::FloatRect getGlobalBounds() noexcept;
-            void addVelocity(sf::Vector2f speed) noexcept
-            {
-                if (_velo != nullptr) {
-                    _velo->destroy();
-                    _velo = nullptr;
-                    _velo = &addComponent<sfs::Velocity>(speed);
-                } else if (_velo == nullptr) {
-                    _velo = &addComponent<sfs::Velocity>(speed);
-                }
-            }
-        protected:
-            sfs::Sprite *_image;
-            sfs::Velocity *_velo;
-            std::string _path;
-            bool _lock = false;
-    };
 
     class optionSound : public sfs::UI
     {
@@ -90,26 +66,9 @@ namespace cf {
                 framerate = scene.framerate();
                 _frameNumber= &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"), std::to_string(framerate), sf::Color::White, 30, sf::Vector2f(85, 50));
             }
-            void update(sfs::Scene &) noexcept
-            {
-                _frameNumber->setString(std::to_string(framerate));
-            }
-            void lowerFrame(sfs::Scene &scene) noexcept
-            {
-                if (framerate - 20 <= 40)
-                    framerate = 40;
-                else
-                    framerate -= 20;
-                scene.framerate(framerate);
-            }
-            void augmentFrame(sfs::Scene &scene) noexcept
-            {
-                if (framerate + 20 >= 200)
-                    framerate = 200;
-                else
-                    framerate += 20;
-                scene.framerate(framerate);
-            }
+            void update(sfs::Scene &scene) noexcept;
+            void lowerFrame(sfs::Scene &scene) noexcept;
+            void augmentFrame(sfs::Scene &scene) noexcept;
             sf::FloatRect getGlobalBounds() noexcept {return _frameRateText->getGlobalBounds();}
         protected:
             sfs::Text *_frameRateText;

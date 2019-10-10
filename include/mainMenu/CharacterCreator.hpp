@@ -3,6 +3,9 @@
 #include <vector>
 #include <InputBox.hpp>
 #include "Character.hpp"
+#include "Utils.hpp"
+#include "PaddedSprite.hpp"
+#include "Serializer.hpp"
 
 namespace cf {
     class CharacterCreation : public sfs::UI
