@@ -3,7 +3,7 @@
 namespace cf {
 
     MenuManager::MenuManager() noexcept
-        : _mainMenu(nullptr), _scroller(nullptr), _gameManager(nullptr), _soundManager(nullptr)
+        : _mainMenu(nullptr), _scroller(nullptr), _gameManager(nullptr), _soundManager(nullptr), _roomScene(nullptr)
         {}
     
     void MenuManager::start(sfs::Scene &scene) noexcept
@@ -16,12 +16,17 @@ namespace cf {
         _mainMenu = &addChild<MainMenu>(scene, _scroller);
     }
 
-    void MenuManager::update(sfs::Scene &) noexcept
+    void MenuManager::update(sfs::Scene &scene) noexcept
     {
         if (_gameManager->_character.getName() != "noName" && _gameManager->_ip != "" && _mainMenu != nullptr) {
-            std::cout << "J'ai mon player" << std::endl;
             _mainMenu->destroy();
             _mainMenu = nullptr;
+            _roomScene = &addChild<roomScene>(scene);
+        }
+        if (_gameManager->_character.getName() == "noName" && _gameManager->_ip == "" && _roomScene != nullptr) {
+            _roomScene->destroy();
+            _roomScene = nullptr;
+            _mainMenu = &addChild<MainMenu>(scene, _scroller);
         }
     }
 

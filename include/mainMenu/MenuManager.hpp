@@ -6,6 +6,7 @@
 #include "MenuBackgrounds.hpp"
 #include "GameManager.hpp"
 #include "SoundManager.hpp"
+#include "RoomScene.hpp"
 
 namespace cf {
     class MenuManager : public sfs::GameObject
@@ -20,5 +21,6 @@ namespace cf {
             Scroller *_scroller;
             GameManager *_gameManager;
             SoundManager *_soundManager;
+            roomScene *_roomScene;
     };
 }
