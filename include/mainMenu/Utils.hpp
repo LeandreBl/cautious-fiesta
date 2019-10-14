@@ -16,6 +16,10 @@ namespace cf
             void update(sfs::Scene &) noexcept;
             sf::FloatRect getGlobalBounds() noexcept;
             void addVelocity(sf::Vector2f speed) noexcept;
+            void scale(sf::Vector2f scale) noexcept {
+                if (_image != nullptr)
+                    _image->setScale(scale);
+            }
         protected:
             sfs::Sprite *_image;
             sfs::Velocity *_velo;

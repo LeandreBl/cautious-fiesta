@@ -16,6 +16,8 @@ class TcpConnect : public sfs::GameObject
                 auto room = scene.getGameObjects<roomScene>()[0];
                 autoBind(cf::LOGIN, &roomScene::handleConnect, room);
                 autoBind(cf::LOGOUT, &roomScene::handleDisconnect, room);
+                autoBind(cf::CREATE_GAMEROOM, &roomScene::handleCreateRoom, room);
+                autoBind(cf::GET_GAMEROOMS_LIST, &roomScene::handleRoomList, room);
             }
             void connect(const std::string &name, const std::string &ip) noexcept
             {
@@ -36,6 +38,14 @@ class TcpConnect : public sfs::GameObject
             {
                 Serializer packet;
                 packet.setHeader(pktType_e::LOGOUT);
+                if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)
+                    return ; //TODO ERROR CO
+            }
+            void createRoom(const std::string &roomName) noexcept
+            {
+                Serializer packet;
+                packet.set(roomName);
+                packet.setHeader(pktType_e::CREATE_GAMEROOM);
                 if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)
                     return ; //TODO ERROR CO
             }

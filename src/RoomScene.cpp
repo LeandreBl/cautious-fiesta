@@ -16,12 +16,13 @@ namespace cf
 		                                    std::bind(&roomScene::deleteScene, this),
 		                                    "Back", sf::Color::White, 25);
 	    _backToMenu->setScale(sf::Vector2f(1.2, 1.7));
-	    _backToMenu->addComponent<PadderL<sfs::Button>>(25.f, *_backToMenu);
+	    _backToMenu->addComponent<PadderR<sfs::Button>>(25.f, *_backToMenu);
 	    _backToMenu->addComponent<PadderB<sfs::Button>>(25.f, *_backToMenu);
 
 		_gameManager = scene.getGameObjects<GameManager>()[0];
 		_gameManager->_tcp->bind(scene);
 		_gameManager->_tcp->connect(_gameManager->_character.getName(), "192.168.0.9"); //TODO mettre la bonne ip et gérer le cas ou c'est mauvaise ip depuis le fail co de Connect
+		_RSelector = &addChild<RoomSelector>(scene);
     }
 
     void roomScene::deleteScene() noexcept
