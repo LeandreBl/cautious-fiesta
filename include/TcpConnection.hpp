@@ -3,6 +3,7 @@
 #include <GameObject.hpp>
 #include <SFML/Network.hpp>
 #include "Serializer.hpp"
+#include "Character.hpp"
 
 namespace cf {
 
@@ -11,7 +12,7 @@ class TcpConnect : public sfs::GameObject
         public:
             void bind(sfs::Scene &scene) noexcept;
             void send(const Serializer &packet) noexcept;
-            void connect(const std::string &name, const std::string &ip) noexcept;
+            void connect(Character charac, const std::string &ip) noexcept;
             void disconnect() noexcept;
             void createRoom(const std::string &roomName) noexcept;
             void getRooms() noexcept;

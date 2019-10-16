@@ -21,7 +21,7 @@ namespace cf
 
 		_gameManager = scene.getGameObjects<GameManager>()[0];
 		_gameManager->_tcp->bind(scene);
-		_gameManager->_tcp->connect(_gameManager->_character.getName(), "192.168.0.9"); //TODO mettre la bonne ip et gérer le cas ou c'est mauvaise ip depuis le fail co de Connect
+		_gameManager->_tcp->connect(_gameManager->_character, "192.168.0.9"); //TODO mettre la bonne ip et gérer le cas ou c'est mauvaise ip depuis le fail co de Connect
 		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
 		_gameManager->_tcp->getRooms();
     }

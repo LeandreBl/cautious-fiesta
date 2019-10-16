@@ -21,7 +21,7 @@ namespace cf
                 return ; //TODO ERROR CO
     }
 
-    void TcpConnect::connect(const std::string &name, const std::string &ip) noexcept
+    void TcpConnect::connect(Character charac, const std::string &ip) noexcept
     {
         Serializer packet;
         if (lock == false) {
@@ -31,7 +31,8 @@ namespace cf
             _socket.setBlocking(false);
             lock = true;
         }
-        packet.set(name);
+        packet.set(charac.getName());
+        packet.set(charac.getStats());
         packet.setHeader(pktType_e::LOGIN);
         send(packet);
     }
