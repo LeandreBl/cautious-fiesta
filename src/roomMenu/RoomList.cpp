@@ -15,6 +15,11 @@ namespace cf
         _room->setScale(sf::Vector2f(1.5, 1.5));
         _room->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(50, 0));
 
+        _deleteRoom = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(-1000, -1000),
+		                                std::bind(&roomList::deleteRoom, this),
+		                                "delete room", sf::Color::White, 20);
+        _deleteRoom->setScale(sf::Vector2f(0.7, 0.7));
+
         _selectedRoom = &addChild<Room>(scene);
         _gameManager = scene.getGameObjects<GameManager>()[0];
     }
@@ -73,7 +78,7 @@ namespace cf
     void roomList::joinRoom(const std::string &name) noexcept
     {
         std::cout << name << std::endl;
-        _gameManager->_tcp->joinRoom(name);
+        _gameManager->_tcp->joinRoom(name); //TODO faire verif du join
         _selectedRoom->setImage(name);
         setPosition(sf::Vector2f(-1000, getPosition().y));
     }
@@ -102,6 +107,24 @@ namespace cf
     {
         _selectedRoom->hideImage();
         setPosition(sf::Vector2f(0, getPosition().y));
+        _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
         _gameManager->_tcp->leaveRoom();
+    }
+
+    void roomList::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players) noexcept
+    {
+        _selectedRoom->updatePlayerInRoom(players);
+        if (players.size() > 0 && players[0].second == _gameManager->_character.getName()) {
+            auto pos = (_selectedRoom->getImageWidth() / 2) - (_deleteRoom->getGlobalBounds().width / 2);
+            _deleteRoom->setPosition(sf::Vector2f(pos, 1012));
+        }
+    }
+
+    void roomList::deleteRoom() noexcept
+    {
+        _selectedRoom->hideImage();
+        setPosition(sf::Vector2f(0, getPosition().y));
+        _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
+        _gameManager->_tcp->deleteRoom();
     }
 }

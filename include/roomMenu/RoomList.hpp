@@ -20,9 +20,12 @@ namespace cf
             void destroyRooms() noexcept;
             float getHeight() noexcept;
             void HideRoom() noexcept;
+            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players) noexcept;
+            void deleteRoom() noexcept;
         protected:
             sfs::Button *_room;
             sfs::Button *_createRoom;
+            sfs::Button *_deleteRoom;
             sfs::InputBox *_box;
             sfs::Sprite *_imageCreationRoom;
             Room *_selectedRoom;

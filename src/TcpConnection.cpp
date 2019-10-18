@@ -12,7 +12,9 @@ namespace cf
         autoBind(cf::CREATE_GAMEROOM, &roomScene::handleCreateRoom, room);
         autoBind(cf::GET_GAMEROOMS_LIST, &roomScene::handleRoomList, room);
         autoBind(cf::JOIN_GAMEROOM, &roomScene::handleJoinRoom, room);
+        autoBind(cf::DELETE_GAMEROOM, &roomScene::handleDeleteRoom, room);
         autoBind(cf::LEAVE_GAMEROOM, &roomScene::handleLeaveRoom, room);
+        autoBind(cf::GET_GAMEROOM_PLAYERS_LIST, &roomScene::handlePlayerList, room);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept
@@ -21,13 +23,13 @@ namespace cf
                 return ; //TODO ERROR CO
     }
 
-    void TcpConnect::connect(Character charac, const std::string &ip) noexcept
+    int TcpConnect::connect(Character charac, const std::string &ip) noexcept
     {
         Serializer packet;
         if (lock == false) {
             _status = _socket.connect(ip, 2121);
             if (_status != sf::Socket::Done)
-                return ; //TODO ERROR CO POPUP 
+                return -84; 
             _socket.setBlocking(false);
             lock = true;
         }
@@ -35,6 +37,7 @@ namespace cf
         packet.set(charac.getStats());
         packet.setHeader(pktType_e::LOGIN);
         send(packet);
+        return 0;
     }
 
     void TcpConnect::disconnect() noexcept 
@@ -52,6 +55,13 @@ namespace cf
         send(packet);
     }
 
+    void TcpConnect::deleteRoom() noexcept
+    {
+        Serializer packet;
+        packet.setHeader(pktType_e::DELETE_GAMEROOM);
+        send(packet);
+    }
+
     void TcpConnect::getRooms() noexcept
     {
         Serializer packet;
@@ -62,8 +72,9 @@ namespace cf
     void TcpConnect::joinRoom(const std::string &roomName) noexcept
     {
         Serializer packet;
-        packet.setHeader(pktType_e::JOIN_GAMEROOM);
         packet.set(roomName);
+        packet.setHeader(pktType_e::JOIN_GAMEROOM);
+        std::cout << roomName << std::endl;
         send(packet);
     }
 
@@ -91,14 +102,13 @@ namespace cf
                 _serializer.nativeSet(buffer, rd);
         } while (rd == sizeof(buffer));
         TcpPacketHeader header;
-        if (_serializer.getSize() >= sizeof(header)) {
+        while (_serializer.getSize() >= sizeof(header)) {
             _serializer.get(header);
             header.display();
             if (_serializer.getSize() >= header.getLen() && header.isCorrect() == true)
                 _callbacks[header.getType()](_serializer);
             else
                 return; //TODO ERROR
-        } else
-            return; //TODO ERROR
+        }
     }
 }

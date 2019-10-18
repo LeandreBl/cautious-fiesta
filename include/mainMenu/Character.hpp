@@ -80,4 +80,4 @@ class Character
 	std::string _name;
 	struct stats _stats;
 };
-} // namespace cf
+}

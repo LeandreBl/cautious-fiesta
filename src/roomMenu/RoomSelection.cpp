@@ -9,7 +9,7 @@ namespace cf
 
     void RoomSelector::start(sfs::Scene &scene) noexcept
     {
-        _createButton = &addChild<roomList>(scene, std::ref(scene));             
+        _createButton = &addChild<roomList>(scene, std::ref(scene));
     }
 
     void RoomSelector::drawRooms(std::vector<std::pair<uint64_t, std::string>> rooms) noexcept
@@ -41,6 +41,11 @@ namespace cf
     void RoomSelector::destroyRoom() noexcept
     {
         _createButton->HideRoom();
+    }
+
+    void RoomSelector::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players) noexcept
+    {
+        _createButton->updatePlayerInRoom(players);
     }
 
     sf::Vector2f RoomSelector::RoomListPos() noexcept

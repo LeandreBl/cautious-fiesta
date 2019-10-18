@@ -21,30 +21,46 @@ namespace cf
 
 		_gameManager = scene.getGameObjects<GameManager>()[0];
 		_gameManager->_tcp->bind(scene);
-		_gameManager->_tcp->connect(_gameManager->_character, "192.168.0.9"); //TODO mettre la bonne ip et gérer le cas ou c'est mauvaise ip depuis le fail co de Connect
+		if (_gameManager->_tcp->connect(_gameManager->_character, _gameManager->_ip) == -84) {
+            _gameManager->_popup->push("Connection fail, invalid IP");
+            Character character;
+	        _gameManager->_character = character;
+	        _gameManager->_ip = "";
+        }
 		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
-		_gameManager->_tcp->getRooms();
     }
 
 	void roomScene::handleConnect(Serializer &toread) noexcept
 	{
-        uint8_t test = 0;
-        toread.get(test); //TODO popUP
-        std::cout << "login" << (int)test << std::endl;
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 0) {
+            _gameManager->_popup->push("Connection fail, Player already exist");
+            Character character;
+	        _gameManager->_character = character;
+	        _gameManager->_ip = "";
+        }
+        _gameManager->_tcp->getRooms();
     }
 
     void roomScene::handleDisconnect(Serializer &toread) noexcept
 	{
-        uint8_t test = 0;
-        toread.get(test);
-        std::cout << "logout" << (int)test << std::endl;
+        uint8_t isOk = 0;
+        toread.get(isOk);
     }
 
     void roomScene::handleCreateRoom(Serializer &toread) noexcept
 	{
-        uint8_t test = 0;
-        toread.get(test);
-        std::cout << "create room" << (int)test << std::endl;
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 0)
+            _gameManager->_popup->push("The gameroom already exist");
+    }
+
+    void roomScene::handleDeleteRoom(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
     }
 
 	void roomScene::handleRoomList(Serializer &toread) noexcept
@@ -63,7 +79,7 @@ namespace cf
         _RSelector->drawRooms(_rooms);
     }
 
-    void roomScene::handleJoinRoom(Serializer &toread) noexcept
+    void roomScene::handleJoinRoom(Serializer &toread) noexcept // TODO GESTION ERREUR
     {
         uint8_t test = 0;
         toread.get(test);
@@ -75,6 +91,29 @@ namespace cf
         uint8_t test = 0;
         toread.get(test);
         std::cout << "leave room" << (int)test << std::endl;
+    }
+
+    void roomScene::handlePlayerList(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 0) {
+            _gameManager->_popup->push("No player list");
+            return ;
+        }
+        std::string roomName;
+        toread.get(roomName);
+        uint64_t size;
+        toread.get(size);
+        std::string name;
+        std::vector<std::pair<uint64_t, std::string>> players;
+        for (uint64_t i = 0; i != size; i+= 1) {
+            toread.get(isOk);
+            toread.get(name);
+            std::cout << roomName << " : " << name << " state : " << (int)isOk << std::endl;
+            players.emplace_back(std::make_pair(isOk, name));
+        }
+        _RSelector->updatePlayerInRoom(players);
     }
 
     void roomScene::deleteScene() noexcept

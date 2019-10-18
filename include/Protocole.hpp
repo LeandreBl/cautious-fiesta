@@ -50,6 +50,6 @@ class TcpPacketHeader
       private:
 	pktTcpHeader_t _header;
 };
-} // namespace cf
+}
 
 #endif /* !_CF_PROTOCOLE_HPP_ */

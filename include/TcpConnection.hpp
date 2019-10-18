@@ -12,9 +12,10 @@ class TcpConnect : public sfs::GameObject
         public:
             void bind(sfs::Scene &scene) noexcept;
             void send(const Serializer &packet) noexcept;
-            void connect(Character charac, const std::string &ip) noexcept;
+            int connect(Character charac, const std::string &ip) noexcept;
             void disconnect() noexcept;
             void createRoom(const std::string &roomName) noexcept;
+            void deleteRoom() noexcept;
             void getRooms() noexcept;
             void joinRoom(const std::string &roomName) noexcept;
             void leaveRoom() noexcept;
