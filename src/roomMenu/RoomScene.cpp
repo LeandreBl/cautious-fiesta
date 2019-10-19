@@ -88,9 +88,10 @@ namespace cf
 
     void roomScene::handleLeaveRoom(Serializer &toread) noexcept
     {
-        uint8_t test = 0;
-        toread.get(test);
-        std::cout << "leave room" << (int)test << std::endl;
+        uint8_t isLeaving = 0;
+        toread.get(isLeaving);
+        if ((int)isLeaving == 1)
+            _RSelector->destroyRoom();
     }
 
     void roomScene::handlePlayerList(Serializer &toread) noexcept
@@ -119,7 +120,7 @@ namespace cf
     void roomScene::deleteScene() noexcept
     {
         if (_RSelector->RoomListPos().x <= -1000) {
-            _RSelector->destroyRoom();
+            _gameManager->_tcp->leaveRoom();
             return;
         }
         Character character;

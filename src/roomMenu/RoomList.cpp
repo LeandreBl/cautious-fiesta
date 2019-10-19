@@ -108,7 +108,6 @@ namespace cf
         _selectedRoom->hideImage();
         setPosition(sf::Vector2f(0, getPosition().y));
         _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
-        _gameManager->_tcp->leaveRoom();
     }
 
     void roomList::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players) noexcept
