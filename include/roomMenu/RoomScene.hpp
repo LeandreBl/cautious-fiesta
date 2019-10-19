@@ -21,6 +21,7 @@ namespace cf
             void handleJoinRoom(Serializer &toread) noexcept;
             void handleLeaveRoom(Serializer &toread) noexcept;
             void handlePlayerList(Serializer &toread) noexcept;
+            void handleToggleReadyState(Serializer &toread) noexcept;
         protected:
             sfs::Button *_backToMenu;
             GameManager *_gameManager;

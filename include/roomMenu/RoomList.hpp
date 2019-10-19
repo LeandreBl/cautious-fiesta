@@ -20,7 +20,7 @@ namespace cf
             void destroyRooms() noexcept;
             float getHeight() noexcept;
             void HideRoom() noexcept;
-            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players) noexcept;
+            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept;
             void deleteRoom() noexcept;
         protected:
             sfs::Button *_room;

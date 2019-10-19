@@ -117,6 +117,14 @@ namespace cf
         _RSelector->updatePlayerInRoom(players);
     }
 
+    void roomScene::handleToggleReadyState(Serializer &toread) noexcept
+    {
+        uint8_t state = 0;
+        toread.get(state);
+        std::vector<std::pair<uint64_t, std::string>> players;
+        _RSelector->updatePlayerInRoom(players, state);
+    }
+
     void roomScene::deleteScene() noexcept
     {
         if (_RSelector->RoomListPos().x <= -1000) {
