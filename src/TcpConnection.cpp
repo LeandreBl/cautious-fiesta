@@ -16,6 +16,7 @@ namespace cf
         autoBind(cf::LEAVE_GAMEROOM, &roomScene::handleLeaveRoom, room);
         autoBind(cf::GET_GAMEROOM_PLAYERS_LIST, &roomScene::handlePlayerList, room);
         autoBind(cf::TOGGLE_READY, &roomScene::handleToggleReadyState, room);
+        autoBind(cf::GAME_STARTED, &roomScene::handleGameStart, room);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept

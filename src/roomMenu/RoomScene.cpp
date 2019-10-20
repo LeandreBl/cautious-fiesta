@@ -39,6 +39,7 @@ namespace cf
             Character character;
 	        _gameManager->_character = character;
 	        _gameManager->_ip = "";
+            return ;
         }
         _gameManager->_tcp->getRooms();
     }
@@ -123,6 +124,14 @@ namespace cf
         toread.get(state);
         std::vector<std::pair<uint64_t, std::string>> players;
         _RSelector->updatePlayerInRoom(players, state);
+    }
+
+    void roomScene::handleGameStart(Serializer &toread) noexcept
+	{
+        uint16_t port = 0;
+        toread.get(port);
+        _gameManager->_udp->setPort(port);
+        _gameManager->_gameStarted = true;
     }
 
     void roomScene::deleteScene() noexcept
