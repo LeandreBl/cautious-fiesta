@@ -134,6 +134,22 @@ namespace cf
         _gameManager->_gameStarted = true;
     }
 
+    void roomScene::handleSendMessage(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
+    }
+
+    void roomScene::handleReceiveMessage(Serializer &toread) noexcept
+    {
+        std::string name;
+        toread.get(name);
+        std::string message;
+        toread.get(message);
+        auto chat = _scene.getGameObjects<Chat>()[0];
+        chat->receiveMessage(name + " : " + message);
+    }
+
     void roomScene::deleteScene() noexcept
     {
         if (_RSelector->RoomListPos().x <= -1000) {

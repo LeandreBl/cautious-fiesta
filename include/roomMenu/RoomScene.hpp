@@ -11,6 +11,7 @@ namespace cf
     class roomScene : public sfs::GameObject
     {
         public:
+            roomScene(sfs::Scene &scene) noexcept : _scene(scene) {};
             void start(sfs::Scene &scene) noexcept;
             void deleteScene() noexcept;
             void handleConnect(Serializer &toread) noexcept;
@@ -23,9 +24,12 @@ namespace cf
             void handlePlayerList(Serializer &toread) noexcept;
             void handleToggleReadyState(Serializer &toread) noexcept;
             void handleGameStart(Serializer &toread) noexcept;
+            void handleSendMessage(Serializer &toread) noexcept;
+            void handleReceiveMessage(Serializer &toread) noexcept;
         protected:
             sfs::Button *_backToMenu;
             GameManager *_gameManager;
             RoomSelector *_RSelector;
+            sfs::Scene &_scene;
     };    
 }

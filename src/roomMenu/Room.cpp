@@ -19,6 +19,11 @@ namespace cf
 		                                "ready", sf::Color::White, 20);
         auto pos = (_image->getGlobalBounds().width / 2) - (_toggleReady->getGlobalBounds().width / 2);
         _toggleReady->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(pos, 150));
+
+        _players = &addComponent<sfs::Text>(*_font, "", sf::Color::White, 50, sf::Vector2f(200, 250));
+
+        _chat = &addChild<Chat>(scene);
+        _chat->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(0, 0));
     }
 
     void Room::setImage(const std::string &name) noexcept
@@ -32,6 +37,7 @@ namespace cf
     void Room::hideImage() noexcept
     {
         setPosition(sf::Vector2f(-1500, -1500));
+        _chat->eraseChat();
     }
 
     void Room::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept //TODO FINIR
@@ -41,7 +47,14 @@ namespace cf
         else if ((int)ready == 1)
             isready = true;
         else if ((int)ready == 2) {
-            addComponent<sfs::Text>(*_font, players[0].second, sf::Color::White, 50, sf::Vector2f(200, 200));
+            std::string text;
+            for (auto &i : players) {
+                text += i.second;
+                text += " state : ";
+                text += std::to_string(i.first);
+                text += "\n\n";
+            }
+            _players->setString(text);
         }
     }
 

@@ -20,7 +20,8 @@ class TcpConnect : public sfs::GameObject
             void joinRoom(const std::string &roomName) noexcept;
             void leaveRoom() noexcept;
             void toggleReadyState() noexcept;
-            void update(sfs::Scene &) noexcept;   
+            void sendMessage(const std::string &message) noexcept;
+            void update(sfs::Scene &) noexcept;  
             template <typename... Args>
             void autoBind(size_t index, Args... args) noexcept;
         protected:

@@ -21,7 +21,7 @@ namespace cf {
         if (_gameManager->_character.getName() != "noName" && _gameManager->_ip != "" && _mainMenu != nullptr) {
             _mainMenu->destroy();
             _mainMenu = nullptr;
-            _roomScene = &addChild<roomScene>(scene);
+            _roomScene = &addChild<roomScene>(scene, std::ref(scene));
         }
         if (_gameManager->_character.getName() == "noName" && _gameManager->_ip == "" && _roomScene != nullptr) {
             _roomScene->destroy();

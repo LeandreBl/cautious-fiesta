@@ -17,6 +17,8 @@ namespace cf
         autoBind(cf::GET_GAMEROOM_PLAYERS_LIST, &roomScene::handlePlayerList, room);
         autoBind(cf::TOGGLE_READY, &roomScene::handleToggleReadyState, room);
         autoBind(cf::GAME_STARTED, &roomScene::handleGameStart, room);
+        autoBind(cf::SEND_MESSAGE, &roomScene::handleSendMessage, room);
+        autoBind(cf::RECEIVE_MESSAGE, &roomScene::handleReceiveMessage, room);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept
@@ -91,6 +93,14 @@ namespace cf
     {
         Serializer packet;
         packet.setHeader(pktType_e::TOGGLE_READY);
+        send(packet);
+    }
+
+    void TcpConnect::sendMessage(const std::string &message) noexcept
+    {
+        Serializer packet;
+        packet.set(message);
+        packet.setHeader(pktType_e::SEND_MESSAGE);
         send(packet);
     }
 

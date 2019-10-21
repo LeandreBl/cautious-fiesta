@@ -3,6 +3,7 @@
 #include <vector>
 #include <Button.hpp>
 #include <BasicShape.hpp>
+#include "Chat.hpp"
 
 namespace cf
 {
@@ -19,6 +20,8 @@ namespace cf
             sfs::Sprite *_image = nullptr;
             sfs::Text *_roomName = nullptr;
             sfs::Button *_toggleReady = nullptr;
+            sfs::Text *_players = nullptr;
+            Chat *_chat;
             const sf::Font *_font;
             bool isready = false;
     };
