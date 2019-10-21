@@ -3,6 +3,7 @@
 #include <GameObject.hpp>
 #include <InputBox.hpp>
 #include <Offset.hpp>
+#include <SFML/Graphics.hpp>
 #include "GameManager.hpp"
 
 namespace cf

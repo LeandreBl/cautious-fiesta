@@ -45,7 +45,7 @@ namespace cf
     void Chat::onEvent(sfs::Scene &, const sf::Event &event) noexcept
     {
         if (event.type == sf::Event::KeyPressed) {
-		    if (event.key.code == sf::Keyboard::Enter && _chatBox->getSelected() == true) {
+		    if (event.key.code == sf::Keyboard::Return && _chatBox->getSelected() == true) {
                 _chatBox->toggle(false);
                _gameManager->_tcp->sendMessage(_chatBox->string());
                 _chatBox->string("");
