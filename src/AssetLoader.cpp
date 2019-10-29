@@ -1,28 +1,38 @@
 #include "AssetLoader.hpp"
+#include "Chat.hpp"
 
 namespace cf
 {
 
-    assetDisplay::assetDisplay(const std::string &path) noexcept
+    assetDisplay::assetDisplay(sfs::Scene &scene, const std::string &path) noexcept
         : _path(path)
-        {
-            _rectangle = &addComponent<sfs::Rectangle>(sf::Vector2f(0, 0), sf::Vector2f(500, 75), sf::Color(255, 0, 0));
-        };
+    {
+        setPosition(sf::Vector2f(-1000, -1000));
+        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+        auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
+        _image = &addComponent<sfs::Sprite>(*texture);
+        _image->setScale(sf::Vector2f(1.2, 1.2));
+
+        _text = &addComponent<sfs::Text>(*font, _path.substr(_path.find_last_of("/\\") + 1), sf::Color::White, 15);
+        _text->setOffset(sf::Vector2f(_image->getPosition().x, _image->getPosition().y - 20));
+
+        _rectangle = &addComponent<sfs::Rectangle>(sf::Vector2f(0, 0), sf::Vector2f(420, 50), sf::Color(255, 0, 0));
+        auto posX = (_image->getGlobalBounds().width / 2) - (_rectangle->getGlobalBounds().width / 2);
+        auto posY = (_image->getGlobalBounds().height / 2) - (_rectangle->getGlobalBounds().height / 2);
+        _rectangle->setOffset(sf::Vector2f(posX, posY));
+    };
 
     void assetDisplay::start(sfs::Scene &scene) noexcept
     {
         auto displayVec = scene.getGameObjects<assetDisplay>();
         addComponent<PadderR<assetDisplay>>(170, *this);
-        addComponent<PadderT<assetDisplay>>(displayVec.size() * 100, *this);
-        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-        auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
-        _text = &addComponent<sfs::Text>(*font, _path.substr(_path.find_last_of("/\\") + 1), sf::Color::Black, 25);
-        auto posX = (_rectangle->getGlobalBounds().width / 2) - (_text->getGlobalBounds().width / 2);
-        auto posY = (_rectangle->getGlobalBounds().height / 2) - (_text->getGlobalBounds().height / 2);        
-        _text->setOffset(sf::Vector2f(posX, posY));
+        addComponent<PadderT<assetDisplay>>(displayVec.size() * 110, *this);
+    }
 
-        _image = &addComponent<sfs::Sprite>(*texture);
-        _image->setScale(sf::Vector2f(2, 2));
+    void assetDisplay::changeRec(const sf::Color &color, const int &percentage) noexcept
+    {
+        _rectangle->setFillColor(color);
+        _rectangle->setSize(sf::Vector2f((420 * percentage) / 100, 50));
     }
 
     assetLoader::assetLoader(sfs::Scene &scene, const std::string &path, 
@@ -33,6 +43,7 @@ namespace cf
     {
         _status = _socket.connect(ip, port);
         if (_status != sf::Socket::Done) {
+            std::cout << "fail to connect" << std::endl;
             destroy();
             return ;
         }
@@ -53,24 +64,35 @@ namespace cf
         if (!file.is_open())
             std::cerr << "" << std::endl;// TODO error
 
-        auto display = &addChild<assetDisplay>(scene, path);
+        auto display = &addChild<assetDisplay>(scene, std::ref(scene), path);
 
         do {
-            if (_socket.receive(buffer, sizeof(buffer), rd) != sf::Socket::Done)
-                std::cerr << "" << std::endl;// TODO error
+            if (sizeof(buffer) > size - dl) {
+                if (_socket.receive(buffer, size - dl, rd) != sf::Socket::Done)
+                    std::cerr << "" << std::endl;// TODO error
+           } else
+                if (_socket.receive(buffer, sizeof(buffer), rd) != sf::Socket::Done)
+                    std::cerr << "" << std::endl;// TODO error
             file.write(buffer, rd);
             dl += rd;
             colorGreen = (float)dl / size * 255;
             colorRed = 255 - colorGreen;
-            display->changeRecColor(sf::Color(colorRed, colorGreen, 0));
-        } while (rd);
+            display->changeRec(sf::Color(colorRed, colorGreen, 0), (dl * 100) / size);
+        } while (dl < size); //avant c'était juste rd
         file.close();
         _socket.disconnect();
         if (std::filesystem::exists(path) == true && std::filesystem::file_size(path) == size && easyCheckSum(path) == checksum) {
             std::cout << "\nBIEN COPIER\n" << std::endl;
+            auto chat = scene.getGameObjects<Chat>()[0];
+            chat->receiveMessage("server : " + path.substr(path.find_last_of("/\\") + 1) + " correctly downloaded");
             assetsPath.erase(std::remove(assetsPath.begin(), assetsPath.end(), path));
-        } else
+        } else { //TODO trouver une solution quand c'est pas bon car du coup le vecteur de path est pas vidé
+            std::cout << "NEIN" << std::endl;
+            std::cout << "file exits ? : " << std::filesystem::exists(path)
+            << "\nfile size : " << std::filesystem::file_size(path) << " true size : " << size 
+            << "\ncheckSum : " << easyCheckSum(path) << " true checkSum : " << checksum << std::endl;
             std::filesystem::remove(path);
-        //destroy();
+        }
+        destroy();
     }
 }

@@ -83,7 +83,6 @@ namespace cf
         for (uint64_t i = 0; i != size; i += 1) {
             toread.get(nbPlayers);
             toread.get(roomName);
-            std::cout << "il y a "<< nbPlayers << " joueurs dans la room: " << roomName << std::endl;
             _rooms.emplace_back(std::make_pair(nbPlayers, roomName));
         }
         _RSelector->drawRooms(_rooms);
@@ -91,9 +90,8 @@ namespace cf
 
     void roomScene::handleJoinRoom(Serializer &toread) noexcept // TODO GESTION ERREUR
     {
-        uint8_t test = 0;
-        toread.get(test);
-        std::cout << "join room" << (int)test << std::endl;
+        uint8_t isOk = 0;
+        toread.get(isOk);
     }
 
     void roomScene::handleLeaveRoom(Serializer &toread) noexcept
@@ -121,7 +119,6 @@ namespace cf
         for (uint64_t i = 0; i != size; i+= 1) {
             toread.get(isOk);
             toread.get(name);
-            std::cout << roomName << " : " << name << " state : " << (int)isOk << std::endl;
             players.emplace_back(std::make_pair(isOk, name));
         }
         _RSelector->updatePlayerInRoom(players);

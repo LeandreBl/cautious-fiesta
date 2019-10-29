@@ -77,7 +77,6 @@ namespace cf
 
     void roomList::joinRoom(const std::string &name) noexcept
     {
-        std::cout << name << std::endl;
         _gameManager->_tcp->joinRoom(name); //TODO faire verif du join
         _selectedRoom->setImage(name);
         setPosition(sf::Vector2f(-1000, getPosition().y));

@@ -80,7 +80,6 @@ namespace cf
         Serializer packet;
         packet.set(roomName);
         packet.setHeader(pktType_e::JOIN_GAMEROOM);
-        std::cout << roomName << std::endl;
         send(packet);
     }
 

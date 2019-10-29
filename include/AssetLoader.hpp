@@ -16,10 +16,10 @@ namespace cf
     class assetDisplay : public sfs::GameObject
     {
         public:
-            assetDisplay(const std::string &path) noexcept;
+            assetDisplay(sfs::Scene &scene, const std::string &path) noexcept;
             void start(sfs::Scene &scene) noexcept;
-            void changeRecColor(const sf::Color &color) noexcept {_rectangle->setFillColor(color);};
-            sf::FloatRect getGlobalBounds() noexcept {return _rectangle->getGlobalBounds();};
+            void changeRec(const sf::Color &color, const int &percentage) noexcept;
+            sf::FloatRect getGlobalBounds() noexcept {return _image->getGlobalBounds();};
         protected:
             sfs::Rectangle *_rectangle;
             sfs::Text *_text;

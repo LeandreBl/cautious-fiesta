@@ -42,10 +42,14 @@ namespace cf
 
     void Room::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept //TODO FINIR
     {
-        if ((int)ready == 0)
+        if ((int)ready == 0) {
             isready = false;
-        else if ((int)ready == 1)
+            _toggleReady->setText("ready");
+        }
+        else if ((int)ready == 1) {
             isready = true;
+            _toggleReady->setText("unready");
+        }
         else if ((int)ready == 2) {
             std::string text;
             for (auto &i : players) {
@@ -62,9 +66,5 @@ namespace cf
     {
         auto gameManager = scene.getGameObjects<GameManager>()[0];
         gameManager->_tcp->toggleReadyState();
-        if (isready == false)
-            _toggleReady->setText("unready");
-        else if (isready == true)
-            _toggleReady->setText("ready");
     }
 }
