@@ -19,6 +19,8 @@ namespace cf
         autoBind(cf::GAME_STARTED, &roomScene::handleGameStart, room);
         autoBind(cf::SEND_MESSAGE, &roomScene::handleSendMessage, room);
         autoBind(cf::RECEIVE_MESSAGE, &roomScene::handleReceiveMessage, room);
+        autoBind(cf::ASSETS_REQUIREMENT, &roomScene::handleAssetRequirement, room);
+        autoBind(cf::ASSETS_SEND, &roomScene::handleLoadAsset, room);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept
@@ -101,6 +103,22 @@ namespace cf
         Serializer packet;
         packet.set(message);
         packet.setHeader(pktType_e::SEND_MESSAGE);
+        send(packet);
+    }
+
+    void TcpConnect::loadAsset(const std::string &asset) noexcept
+    {
+        Serializer packet;
+        packet.set(asset);
+        packet.setHeader(pktType_e::ASSETS_SEND);
+        send(packet);
+    }
+
+    void TcpConnect::AssetRequirementIsDone() noexcept
+    {
+        Serializer packet;
+        packet.set(true);
+        packet.setHeader(pktType_e::ASSETS_REQUIREMENT);
         send(packet);
     }
 

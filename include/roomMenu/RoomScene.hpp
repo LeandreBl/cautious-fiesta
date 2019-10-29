@@ -5,6 +5,7 @@
 #include "Serializer.hpp"
 #include "GameManager.hpp"
 #include "RoomSelection.hpp"
+#include "AssetLoader.hpp"
 
 namespace cf
 {
@@ -13,6 +14,7 @@ namespace cf
         public:
             roomScene(sfs::Scene &scene) noexcept : _scene(scene) {};
             void start(sfs::Scene &scene) noexcept;
+            void update(sfs::Scene &scene) noexcept;
             void deleteScene() noexcept;
             void handleConnect(Serializer &toread) noexcept;
             void handleDisconnect(Serializer &toread) noexcept;
@@ -26,10 +28,14 @@ namespace cf
             void handleGameStart(Serializer &toread) noexcept;
             void handleSendMessage(Serializer &toread) noexcept;
             void handleReceiveMessage(Serializer &toread) noexcept;
+            void handleAssetRequirement(Serializer &toread) noexcept;
+            void handleLoadAsset(Serializer &toread) noexcept;
         protected:
             sfs::Button *_backToMenu;
             GameManager *_gameManager;
             RoomSelector *_RSelector;
             sfs::Scene &_scene;
-    };    
+            std::vector<std::string> _assetsPath;
+            bool _checkAssets = false;
+    };
 }

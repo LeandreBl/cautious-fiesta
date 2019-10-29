@@ -23,4 +23,4 @@ add_subdirectory(discord-rpc)
 
 add_executable("cautious-fiesta" ${SRCS} ${HDRS} ${MENUSRCS} ${MENUHDRS} ${ROOMSRCS} ${ROOMHDRS})
 target_include_directories("cautious-fiesta" PRIVATE "./include" "./include/mainMenu" "./include/roomMenu" "sfml-scene/include" "discord-rpc/include")
-target_link_libraries("cautious-fiesta" sfml-graphics sfml-system sfml-window sfml-network sfml-audio asan stdc++fs sfml-scene discord-rpc)
+target_link_libraries("cautious-fiesta" sfml-graphics sfml-system sfml-window sfml-network sfml-audio asan stdc++fs sfml-scene discord-rpc stdc++fs)

@@ -22,6 +22,8 @@ class TcpConnect : public sfs::GameObject
             void leaveRoom() noexcept;
             void toggleReadyState() noexcept;
             void sendMessage(const std::string &message) noexcept;
+            void loadAsset(const std::string &asset) noexcept;
+            void AssetRequirementIsDone() noexcept;
             void update(sfs::Scene &) noexcept;  
             template <typename... Args>
             void autoBind(size_t index, Args... args) noexcept;

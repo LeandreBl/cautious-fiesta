@@ -30,6 +30,15 @@ namespace cf
 		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
     }
 
+    void roomScene::update(sfs::Scene &) noexcept
+    {
+        if (_checkAssets == true && _assetsPath.empty() == true)
+        {
+            _gameManager->_tcp->AssetRequirementIsDone();
+            _checkAssets = false;
+        }
+    }
+
 	void roomScene::handleConnect(Serializer &toread) noexcept
 	{
         uint8_t isOk = 0;
@@ -150,6 +159,48 @@ namespace cf
         chat->receiveMessage(name + " : " + message);
     }
 
+    void roomScene::handleAssetRequirement(Serializer &toread) noexcept
+    {
+        uint64_t size;
+        toread.get(size);
+        std::string fileName;
+        uint64_t fileSize;
+        uint64_t checkSum;
+        for (uint64_t i = 0; i != size; i += 1) {
+            toread.get(fileName);
+            toread.get(fileSize);
+            toread.get(checkSum);
+            if (std::filesystem::exists(fileName) == true) {
+                if (std::filesystem::file_size(fileName) == fileSize && easyCheckSum(fileName) == checkSum)
+                    std::cout << "exist and correct" << std::endl;
+                else {
+                    std::filesystem::remove(fileName);
+                    std::cout << "exist but invalid" << std::endl;
+                    _assetsPath.push_back(fileName);
+                    _gameManager->_tcp->loadAsset(fileName);
+                }
+            } else {
+                std::cout << "doesn't exist" << std::endl;
+                _assetsPath.push_back(fileName);
+                _gameManager->_tcp->loadAsset(fileName);
+            }
+        }
+        _checkAssets = true;
+    }
+
+    void roomScene::handleLoadAsset(Serializer &toread) noexcept
+    {
+        uint16_t tcpPort;
+        uint64_t fileSize;
+        std::string fileName;
+        uint64_t checkSum;
+        toread.get(tcpPort);
+        toread.get(fileSize);
+        toread.get(fileName);
+        toread.get(checkSum);
+        addChild<assetLoader>(_scene, std::ref(_scene), fileName, tcpPort, _gameManager->_ip, fileSize, checkSum, std::ref(_assetsPath));
+    }
+
     void roomScene::deleteScene() noexcept
     {
         if (_RSelector->RoomListPos().x <= -1000) {
@@ -160,5 +211,23 @@ namespace cf
 	    _gameManager->_character = character;
 	    _gameManager->_ip = "";
 		_gameManager->_tcp->disconnect();
+    }
+
+    uint64_t easyCheckSum(const std::string &filename) noexcept
+    {
+ 	    std::ifstream file;
+	    char buffer[4096];
+	    uint64_t chk = 0;
+
+	    file.open(filename);
+	    if (!file.is_open())
+	        return 0;
+	    std::streamsize rd;
+	    do {
+	        rd = file.readsome(buffer, sizeof(buffer));
+	        for (std::streamsize i = 0; i < rd; ++i)
+	                chk += ~buffer[i] & 0xF0F0F0F0F;
+	    } while (rd == sizeof(buffer));
+	    return chk;
     }
 }
