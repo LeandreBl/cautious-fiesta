@@ -5,11 +5,27 @@
 #include <algorithm>
 #include <fstream>
 #include <filesystem>
+#include <BasicShape.hpp>
+#include "PaddedSprite.hpp"
 
 namespace cf
 {
 
     uint64_t easyCheckSum(const std::string &fileName) noexcept;
+
+    class assetDisplay : public sfs::GameObject
+    {
+        public:
+            assetDisplay(const std::string &path) noexcept;
+            void start(sfs::Scene &scene) noexcept;
+            void changeRecColor(const sf::Color &color) noexcept {_rectangle->setFillColor(color);};
+            sf::FloatRect getGlobalBounds() noexcept {return _rectangle->getGlobalBounds();};
+        protected:
+            sfs::Rectangle *_rectangle;
+            sfs::Text *_text;
+            sfs::Sprite *_image;
+            const std::string &_path;
+    };
 
     class assetLoader : public sfs::GameObject
     {
