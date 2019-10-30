@@ -53,7 +53,11 @@ void QuoteGenerator::start(sfs::Scene &scene) noexcept
 
 void QuoteGenerator::update(sfs::Scene &scene) noexcept
 {
-	_scale += 0.5 * scene.deltaTime() * _rev;
+	auto dt = scene.deltaTime();
+	auto max = 1.f / scene.framerate();
+	if (dt > max)
+		dt = max;
+	_scale += 0.5 * dt * _rev;
 	if (_scale > 1 || _scale < 0.3) {
 		_rev *= -1;
 		_text->setString(std::string(
