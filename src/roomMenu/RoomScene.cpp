@@ -57,6 +57,11 @@ namespace cf
 	{
         uint8_t isOk = 0;
         toread.get(isOk);
+        if ((int)isOk == 1) {
+            Character character;
+            _gameManager->_character = character;
+            _gameManager->_ip = "";
+        }
     }
 
     void roomScene::handleCreateRoom(Serializer &toread) noexcept
@@ -204,9 +209,6 @@ namespace cf
             _gameManager->_tcp->leaveRoom();
             return;
         }
-        Character character;
-	    _gameManager->_character = character;
-	    _gameManager->_ip = "";
 		_gameManager->_tcp->disconnect();
     }
 
