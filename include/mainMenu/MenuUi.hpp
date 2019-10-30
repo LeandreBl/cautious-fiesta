@@ -32,4 +32,4 @@ class IpInputBox : public sfs::UI
       protected:
 	sfs::CustomBox *_input;
 };
-}
+} // namespace cf

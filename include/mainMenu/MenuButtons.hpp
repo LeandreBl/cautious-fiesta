@@ -33,4 +33,4 @@ class PlayButton : public sfs::GameObject
 	IpInputBox *_box;
 	CharacterSelector *_CSelection;
 };
-}
+} // namespace cf

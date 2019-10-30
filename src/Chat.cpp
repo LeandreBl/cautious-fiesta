@@ -4,7 +4,7 @@ namespace cf
 {
     void Chat::start(sfs::Scene &scene) noexcept
     {
-        _font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+        _font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
         _chatBox = &addChild<sfs::InputBox>(scene, *_font, sf::Vector2f(0, 0), "send message");
         _chatBox->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(25, 970));
 

@@ -39,7 +39,7 @@ static const char *QUOTES[] = {"France number 1",
 void QuoteGenerator::start(sfs::Scene &scene) noexcept
 {
 	setPosition(sf::Vector2f(200, 200));
-	_font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
+	_font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	if (_font == nullptr) {
 		errorLog("Required font not found.");
 		destroy();
@@ -68,8 +68,8 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 
 void IpInputBox::start(sfs::Scene &scene) noexcept
 {
-	auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png");
+	auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+	auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
 		errorLog(
 			"[Menu] The InputBox failed the loading of the font or the texture");

@@ -14,24 +14,24 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 					  sf::Color::White);
 	_navbar->addComponent<PadderW<sfs::Hnavbar>>(-285, *_navbar);
 	_navbar->addComponent<PadderH<sfs::Hnavbar>>(46, *_navbar);
-	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/ui/CharacterSelection.png"),
+	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/ui/CharacterSelection.png"),
 										sf::Vector2f(690, 510));
 	_image->setScale(sf::Vector2f(1.2, 1.5));
 	addComponent<sfs::Text>(
-		*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "NAME",
+		*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"), "NAME",
 		sf::Color::White, 20, sf::Vector2f(1110, 528));
 	addComponent<sfs::Text>(
-		*scene.getAssetFont("assets/fonts/commodore-64.ttf"), "STATS",
+		*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"), "STATS",
 		sf::Color::White, 20, sf::Vector2f(885, 528));
 	for (int i = 0; i < 5; ++i) {
 		addChild<Text>(
 			scene,
-			*scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+			*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
 			_statsNames[i], sf::Vector2f(770, 557 + 18 * i));
-		_stats.emplace_back(&addChild<Text>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+		_stats.emplace_back(&addChild<Text>(scene, *scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
 		                                                 "", sf::Vector2f(910, 557 + 18 * i)));
 	}
-	_name = &addComponent<sfs::Text>(*scene.getAssetFont("assets/fonts/commodore-64.ttf"),"",
+	_name = &addComponent<sfs::Text>(*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),"",
 									sf::Color::White, 20, sf::Vector2f(1082, 590));
 	loadCharactersFromFile();
 }
@@ -58,8 +58,8 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			if (_creator == nullptr) {
 				_creator = &addChild<CharacterCreation>(scene);
 				auto button = &_creator->addChild<sfs::Button>(scene,
-					*scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png"),
-					*scene.getAssetFont("assets/fonts/commodore-64.ttf"),
+					*scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png"),
+					*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
 					sf::Vector2f(-1000, 0),
 					std::bind(&CharacterSelector::addCharacterFromCreateButton, this),
 					"create", sf::Color::White, 15);
@@ -76,9 +76,9 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			auto button = &_creator->addChild<sfs::Button>(
 				scene,
 				*scene.getAssetTexture(
-					"assets/sprites/Menu/ui/BlankButton1.png"),
+					"local-assets/sprites/Menu/ui/BlankButton1.png"),
 				*scene.getAssetFont(
-					"assets/fonts/commodore-64.ttf"),
+					"local-assets/fonts/commodore-64.ttf"),
 				sf::Vector2f(0, 0),
 				std::bind(&CharacterSelector::
 						  addCharacterFromCreateButton,

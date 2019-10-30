@@ -1,14 +1,14 @@
 #include "RoomList.hpp"
 
-namespace cf 
+namespace cf
 {
 
-    roomList::roomList(sfs::Scene &scene) noexcept 
+    roomList::roomList(sfs::Scene &scene) noexcept
         : _room(nullptr), _createRoom(nullptr), _box(nullptr), _imageCreationRoom(nullptr), _selectedRoom(nullptr), _gameManager(nullptr)
     {
         setPosition(sf::Vector2f(0, 30));
-        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	    auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
+        auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
         _room = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(50, 0),
 		                                std::bind(&roomList::drawButtonCreateRoom, this, std::ref(scene)),
 		                                "create room", sf::Color::White, 25);
@@ -24,13 +24,13 @@ namespace cf
         _gameManager = scene.getGameObjects<GameManager>()[0];
     }
 
-    void roomList::addRoom(sfs::Scene &scene, const std::string &name, int mul, int players) noexcept 
+    void roomList::addRoom(sfs::Scene &scene, const std::string &name, int mul, int players) noexcept
     {
         auto pos = this->getPosition();
         pos.y += 132;
         this->setPosition(pos);
-        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	    auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
+        auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
         auto &Button = _room->addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(50, 0),
 		                                std::bind(&roomList::joinRoom, this, name),
 		                                name + " " + std::to_string(players) + " players", sf::Color::White, 25);
@@ -38,7 +38,7 @@ namespace cf
         Button.addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(50, -132 * mul));
     }
 
-    void roomList::drawButtonCreateRoom(sfs::Scene &scene) noexcept 
+    void roomList::drawButtonCreateRoom(sfs::Scene &scene) noexcept
     {
         if (_box != nullptr) {
             _box->destroy();
@@ -48,8 +48,8 @@ namespace cf
             _imageCreationRoom->destroy();
             _imageCreationRoom = nullptr;
         } else if (_box == nullptr) {
-            auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-            auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
+            auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+            auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
             _imageCreationRoom = &addComponent<sfs::Sprite>(*texture, sf::Vector2f(605, 0));
             _imageCreationRoom->setScale(sf::Vector2f(0.75, 0.75));
             _createRoom = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(605, 50),

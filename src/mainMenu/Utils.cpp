@@ -2,17 +2,17 @@
 
 namespace cf
 {
-    void Background::start(sfs::Scene &scene) noexcept 
+    void Background::start(sfs::Scene &scene) noexcept
     {
         if (_path == "") {
             srand(time(nullptr));
             setPosition(sf::Vector2f(0, 1400));
             int choice = std::rand() % 2;
             if (choice == 0)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/optionBackgrounds/Background1.png"));
+                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/optionBackgrounds/Background1.png"));
             else if (choice == 1)
-                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/sprites/Menu/optionBackgrounds/Background2.png"));
-        } else if (_path != "") 
+                _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/optionBackgrounds/Background2.png"));
+        } else if (_path != "")
             _image = &addComponent<sfs::Sprite>(*scene.getAssetTexture(_path));
     }
 
@@ -29,10 +29,10 @@ namespace cf
         }
     }
 
-    sf::FloatRect Background::getGlobalBounds() noexcept 
+    sf::FloatRect Background::getGlobalBounds() noexcept
 	{
 		return _image->getGlobalBounds();
-	}   
+	}
 
     void Background::addVelocity(sf::Vector2f speed) noexcept
     {
@@ -56,8 +56,8 @@ namespace cf
 	{
 		_text->setString(str);
 	}
-    
-	sf::FloatRect Text::getGlobalBounds() noexcept 
+
+	sf::FloatRect Text::getGlobalBounds() noexcept
 	{
 		return _text->getGlobalBounds();
 	}

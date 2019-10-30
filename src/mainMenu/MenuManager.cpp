@@ -5,14 +5,14 @@ namespace cf {
     MenuManager::MenuManager() noexcept
         : _mainMenu(nullptr), _scroller(nullptr), _gameManager(nullptr), _soundManager(nullptr), _roomScene(nullptr)
         {}
-    
+
     void MenuManager::start(sfs::Scene &scene) noexcept
     {
 	    scene.subscribe(*this, sf::Event::Closed);
         _gameManager = scene.getGameObjects<GameManager>()[0];
         _scroller = &addChild<Scroller>(scene);
         _soundManager = &addChild<SoundManager>(scene);
-        _soundManager->addSound(scene, "assets/musics/menuMusic.ogg");
+        _soundManager->addSound(scene, "local-assets/musics/menuMusic.ogg");
         _mainMenu = &addChild<MainMenu>(scene, _scroller);
     }
 

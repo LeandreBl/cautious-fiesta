@@ -3,10 +3,10 @@
 
 namespace cf
 {
-    void roomScene::start(sfs::Scene &scene) noexcept 
+    void roomScene::start(sfs::Scene &scene) noexcept
     {
-        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-	    auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton1.png");
+        auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
 	    if (font == nullptr || texture == nullptr) {
 		    errorLog("[RoomScene] Quit button couldn't load the font or the texture");
 		    destroy();

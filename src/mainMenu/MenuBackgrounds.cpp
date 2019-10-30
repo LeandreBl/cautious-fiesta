@@ -11,7 +11,7 @@ namespace cf
 	setVelocity(_speed);
   }
 
-  void Layers::update(sfs::Scene &) noexcept 
+  void Layers::update(sfs::Scene &) noexcept
   {
     if (_velo != nullptr && lock == false) {
 			auto pos = getPosition();
@@ -38,44 +38,44 @@ namespace cf
 		else {
 			_velo->destroy();
 			_velo = nullptr;
-			_velo = &addComponent<sfs::Velocity>(pos);			
+			_velo = &addComponent<sfs::Velocity>(pos);
 		}
 	}
 
   void Scroller::start(sfs::Scene &scene) noexcept
   {
-    _scroller = &addChild<Layers>(scene, "assets/sprites/Menu/scroller/sky.png",
+    _scroller = &addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/sky.png",
 				    sf::Vector2f(7.15, 6), sf::Vector2f(-50, 0));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/moutains.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/moutains.png",
 				    sf::Vector2f(2.5, 2.6), sf::Vector2f(-150, 0),
 					sf::Vector2f(0, 775));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/city.png",
-					sf::Vector2f(1, 0.67), sf::Vector2f(-150, 0)); 
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/Building1.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/city.png",
+					sf::Vector2f(1, 0.67), sf::Vector2f(-150, 0));
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/Building1.png",
 					sf::Vector2f(1, 1), sf::Vector2f(-200, 0),
 					sf::Vector2f(0, 360));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/trainBackground.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/trainBackground.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-225, 0),
 				    sf::Vector2f(0, 930));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/Building2.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/Building2.png",
 				    sf::Vector2f(1, 2.5), sf::Vector2f(-275, 0),
 				    sf::Vector2f(0, 190));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings3.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/MBuildings3.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-300, 0),
-				    sf::Vector2f(0, 600)); 
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings1.png",
+				    sf::Vector2f(0, 600));
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/MBuildings1.png",
 				    sf::Vector2f(1, 1.2), sf::Vector2f(-325, 0),
 				    sf::Vector2f(0, 600));
-   	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/MBuildings2.png",
+   	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/MBuildings2.png",
 				    sf::Vector2f(1, 2.5), sf::Vector2f(-350, 0),
 				    sf::Vector2f(0, 515));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/traks.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/traks.png",
 				    sf::Vector2f(1, 1), sf::Vector2f(-400, 0),
 				    sf::Vector2f(0, 1040));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/trainFirstground.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/trainFirstground.png",
 				    sf::Vector2f(0.5, 0.5),
 				    sf::Vector2f(400, 0), sf::Vector2f(0, 979));
-	_scroller->addChild<Layers>(scene, "assets/sprites/Menu/scroller/FirstLayer.png",
+	_scroller->addChild<Layers>(scene, "local-assets/sprites/Menu/scroller/FirstLayer.png",
 				    sf::Vector2f(1, 2), sf::Vector2f(-450, 0),
 				    sf::Vector2f(0, 930));
   }

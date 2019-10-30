@@ -8,8 +8,8 @@ namespace cf
         : _path(path)
     {
         setPosition(sf::Vector2f(-1000, -1000));
-        auto font = scene.getAssetFont("assets/fonts/commodore-64.ttf");
-        auto texture = scene.getAssetTexture("assets/sprites/Menu/ui/BlankButton2.png");
+        auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+        auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
         _image = &addComponent<sfs::Sprite>(*texture);
         _image->setScale(sf::Vector2f(1.2, 1.2));
 
@@ -35,8 +35,8 @@ namespace cf
         _rectangle->setSize(sf::Vector2f((420 * percentage) / 100, 50));
     }
 
-    assetLoader::assetLoader(sfs::Scene &scene, const std::string &path, 
-                            const uint16_t &port, const std::string &ip, 
+    assetLoader::assetLoader(sfs::Scene &scene, const std::string &path,
+                            const uint16_t &port, const std::string &ip,
                             const uint64_t &size, const uint64_t &checksum,
                             std::vector<std::string> &assetsPaths) noexcept
         : _dlThread(std::bind(&assetLoader::dlAsset, this, std::ref(scene), path, size, checksum, std::ref(assetsPaths)))
@@ -89,7 +89,7 @@ namespace cf
         } else { //TODO trouver une solution quand c'est pas bon car du coup le vecteur de path est pas vidé
             std::cout << "NEIN" << std::endl;
             std::cout << "file exits ? : " << std::filesystem::exists(path)
-            << "\nfile size : " << std::filesystem::file_size(path) << " true size : " << size 
+            << "\nfile size : " << std::filesystem::file_size(path) << " true size : " << size
             << "\ncheckSum : " << easyCheckSum(path) << " true checkSum : " << checksum << std::endl;
             std::filesystem::remove(path);
         }
