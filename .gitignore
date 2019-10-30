@@ -1,6 +1,7 @@
 sfml-scene/*
 discord-rpc/*
 build/*
+assets/*
 
 # Prerequisites
 *.d
