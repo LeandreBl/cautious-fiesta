@@ -1,0 +1,12 @@
+src/roomMenu/RoomList.cpp:68:            _gameManager->_tcp->createRoom(_box->string());
+src/roomMenu/RoomList.cpp:80:        _gameManager->_tcp->joinRoom(name);
+src/roomMenu/RoomList.cpp:126:        _gameManager->_tcp->deleteRoom();
+src/roomMenu/RoomScene.cpp:23:		_gameManager->_tcp->bind(scene);
+src/roomMenu/RoomScene.cpp:24:		if (_gameManager->_tcp->connect(_gameManager->_character, _gameManager->_ip) == -84) {
+src/roomMenu/RoomScene.cpp:37:            _gameManager->_tcp->AssetRequirementIsDone();
+src/roomMenu/RoomScene.cpp:55:        _gameManager->_tcp->getRooms();
+src/roomMenu/RoomScene.cpp:181:                _gameManager->_tcp->loadAsset(fileName);
+src/roomMenu/RoomScene.cpp:203:            _gameManager->_tcp->leaveRoom();
+src/roomMenu/RoomScene.cpp:206:		_gameManager->_tcp->disconnect();
+src/roomMenu/Room.cpp:70:        gameManager->_tcp->toggleReadyState();
+src/Chat.cpp:50:               _gameManager->_tcp->sendMessage(_chatBox->string());

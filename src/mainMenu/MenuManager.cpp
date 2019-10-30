@@ -34,7 +34,8 @@ namespace cf {
 
     void MenuManager::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
     {
-	    if (event.type == sf::Event::Closed)
+	    if (event.type == sf::Event::Closed) {
 		    scene.close();
+        }
     }
 }

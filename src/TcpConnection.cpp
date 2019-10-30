@@ -25,10 +25,8 @@ namespace cf
 
     void TcpConnect::send(const Serializer &packet) noexcept
     {
-        if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done) {
-            disconnect();
+        if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)
             return;
-        }
     }
 
     int TcpConnect::connect(Character charac, const std::string &ip) noexcept

@@ -30,11 +30,13 @@ namespace cf
 		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
     }
 
-    void roomScene::update(sfs::Scene &) noexcept
+    void roomScene::update(sfs::Scene &scene) noexcept
     {
         if (_checkAssets == true && _assetsPath.empty() == true)
         {
             _gameManager->_tcp->AssetRequirementIsDone();
+            auto chat = scene.getGameObjects<Chat>()[0];
+            chat->receiveMessage("server : all assets are corrects, you can start the game");
             _checkAssets = false;
         }
     }
@@ -172,17 +174,9 @@ namespace cf
             toread.get(fileName);
             toread.get(fileSize);
             toread.get(checkSum);
-            if (std::filesystem::exists(fileName) == true) {
-                if (std::filesystem::file_size(fileName) == fileSize && easyCheckSum(fileName) == checkSum)
-                    std::cout << "exist and correct" << std::endl;
-                else {
+            if (std::filesystem::exists(fileName) == false || std::filesystem::file_size(fileName) != fileSize || easyCheckSum(fileName) != checkSum) {
+                if (std::filesystem::exists(fileName) == true)
                     std::filesystem::remove(fileName);
-                    std::cout << "exist but invalid" << std::endl;
-                    _assetsPath.push_back(fileName);
-                    _gameManager->_tcp->loadAsset(fileName);
-                }
-            } else {
-                std::cout << "doesn't exist" << std::endl;
                 _assetsPath.push_back(fileName);
                 _gameManager->_tcp->loadAsset(fileName);
             }
