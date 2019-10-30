@@ -23,6 +23,13 @@ namespace cf
         autoBind(cf::ASSETS_SEND, &roomScene::handleLoadAsset, room);
     }
 
+    void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
+    {
+        auto _gameManager = scene.getGameObjects<GameManager>()[0];
+        autoBind(cf::LEAVE_GAMEROOM, &GameManager::leaveRoomAfterTheGameStarted, _gameManager);
+        autoBind(cf::LOGOUT, &GameManager::leaveRoomAfterTheGameStarted, _gameManager);
+    }
+
     void TcpConnect::send(const Serializer &packet) noexcept
     {
         if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)

@@ -28,8 +28,10 @@ namespace cf {
             _roomScene = nullptr;
             _mainMenu = &addChild<MainMenu>(scene, _scroller);
         }
-        if (_gameManager->_gameStarted == true)
+        if (_gameManager->_gameStarted == true) {
+            _gameManager->_tcp->bindAfterGameStarted(std::ref(scene));
             this->destroy();
+        }
     }
 
     void MenuManager::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept

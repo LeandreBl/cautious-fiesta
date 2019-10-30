@@ -12,6 +12,7 @@ class TcpConnect : public sfs::GameObject
     {
         public:
             void bind(sfs::Scene &scene) noexcept;
+            void bindAfterGameStarted(sfs::Scene &scene) noexcept;
             void send(const Serializer &packet) noexcept;
             int connect(Character charac, const std::string &ip) noexcept;
             void disconnect() noexcept;
