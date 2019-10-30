@@ -20,7 +20,7 @@ namespace cf
         auto pos = (_image->getGlobalBounds().width / 2) - (_toggleReady->getGlobalBounds().width / 2);
         _toggleReady->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(pos, 150));
 
-        _players = &addComponent<sfs::Text>(*_font, "", sf::Color::White, 50, sf::Vector2f(200, 250));
+        _players = &addComponent<sfs::Text>(*_font, "", sf::Color::White, 50, sf::Vector2f(200, 300));
 
         _chat = &addChild<Chat>(scene);
         _chat->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(0, 0));
@@ -40,7 +40,7 @@ namespace cf
         _chat->eraseChat();
     }
 
-    void Room::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept //TODO FINIR
+    void Room::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept
     {
         if ((int)ready == 0) {
             isready = false;
@@ -59,6 +59,8 @@ namespace cf
                 text += "\n\n";
             }
             _players->setString(text);
+            auto pos = (_image->getGlobalBounds().width / 2) - (_players->getGlobalBounds().width / 2);
+            _players->setOffset(sf::Vector2f(pos, _players->getOffset().y));
         }
     }
 

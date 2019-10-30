@@ -25,8 +25,10 @@ namespace cf
 
     void TcpConnect::send(const Serializer &packet) noexcept
     {
-        if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)
-                return ; //TODO ERROR CO
+        if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done) {
+            disconnect();
+            return;
+        }
     }
 
     int TcpConnect::connect(Character charac, const std::string &ip) noexcept
@@ -133,7 +135,7 @@ namespace cf
         std::size_t rd;
         do {
             if (_socket.receive(buffer, sizeof(buffer), rd) != sf::Socket::Done)
-                return; //TODO error
+                return;
             else
                 _serializer.nativeSet(buffer, rd);
         } while (rd == sizeof(buffer));
@@ -143,8 +145,10 @@ namespace cf
             header.display();
             if (_serializer.getSize() >= header.getLen() && header.isCorrect() == true)
                 _callbacks[header.getType()](_serializer);
-            else
-                return; //TODO ERROR
+            else {
+                disconnect();
+                return;
+            }
         }
     }
 }

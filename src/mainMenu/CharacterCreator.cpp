@@ -18,6 +18,8 @@ namespace cf {
 		}
 		_printTotal = &addChild<Text>(scene, *scene.getAssetFont("assets/fonts/commodore-64.ttf"),
 			                                       "total", sf::Vector2f(990, 555));
+
+		_gameMananger = scene.getGameObjects<GameManager>()[0];
 	}
 
     void CharacterCreation::update(sfs::Scene &) noexcept
@@ -81,7 +83,7 @@ namespace cf {
 			Character newCharacter(name, stat);
 			return newCharacter;
 		}
-		//TODO popup
+		_gameMananger->_popup->push("Character name invalid");
 		Character newCharacter("noName", stat);
 		return newCharacter;
 	};

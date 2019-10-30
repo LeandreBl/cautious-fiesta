@@ -6,12 +6,13 @@
 #include "Utils.hpp"
 #include "PaddedSprite.hpp"
 #include "Serializer.hpp"
+#include "GameManager.hpp"
 
 namespace cf {
     class CharacterCreation : public sfs::UI
 {
     public:
-		CharacterCreation() noexcept : _boxName(nullptr), _printTotal(nullptr) {};
+		CharacterCreation() noexcept : _boxName(nullptr), _printTotal(nullptr), _gameMananger(nullptr) {};
     	void start(sfs::Scene &scene) noexcept;	
     	void update(sfs::Scene &scene) noexcept;		
     	void onEvent(sfs::Scene &, const sf::Event &event) noexcept;
@@ -21,5 +22,6 @@ namespace cf {
 		std::vector<sfs::CustomBox *> _stats;
   		Text *_printTotal;
 		float _total = 100;
+		GameManager *_gameMananger;
 };
 }
