@@ -143,7 +143,7 @@ namespace cf
 	{
         uint16_t port = 0;
         toread.get(port);
-        _gameManager->_udp->setPort(port);
+        _gameManager->_udp->setPort(port, _gameManager->_ip);
         _gameManager->_gameStarted = true;
     }
 

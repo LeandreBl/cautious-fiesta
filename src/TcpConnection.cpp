@@ -32,8 +32,11 @@ namespace cf
 
     void TcpConnect::send(const Serializer &packet) noexcept
     {
-        if (_socket.send(packet.getNativeHandle(), packet.getSize()) != sf::Socket::Done)
+        std::size_t sent = 0;
+        if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent) != sf::Socket::Done)
             return;
+        if (sent != packet.getSize())
+            std::cout << "data mal envoyée\n";
     }
 
     int TcpConnect::connect(Character charac, const std::string &ip) noexcept
