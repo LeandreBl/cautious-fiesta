@@ -34,7 +34,8 @@ static const char *QUOTES[] = {"France number 1",
 			       "Sard AYAYA",
 			       "FBI OPEN UP !",
 			       "This is a random quote",
-			       "Girls, I'm single"};
+			       "Girls, I'm single",
+			       "Acmée de la vie"};
 
 void QuoteGenerator::start(sfs::Scene &scene) noexcept
 {
@@ -57,7 +58,7 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 	auto max = 1.f / scene.framerate();
 	if (dt > max)
 		dt = max;
-	_scale += 0.5 * dt * _rev;
+	_scale += 0.35 * dt * _rev;
 	if (_scale > 1 || _scale < 0.3) {
 		_rev *= -1;
 		_text->setString(std::string(
@@ -69,7 +70,8 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 void IpInputBox::start(sfs::Scene &scene) noexcept
 {
 	auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
+	auto texture = scene.getAssetTexture(
+		"local-assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
 		errorLog(
 			"[Menu] The InputBox failed the loading of the font or the texture");
@@ -83,7 +85,8 @@ void IpInputBox::start(sfs::Scene &scene) noexcept
 	button.addComponent<PadderH<sfs::Button>>(-100, button);
 
 	_input = &addChild<sfs::CustomBox>(scene, *font, sf::Vector2f(0, 0),
-					  "IP", sf::Color::White, 35, "1234567890.");
+					   "IP", sf::Color::White, 35,
+					   "1234567890.");
 	_input->addComponent<PadderW<sfs::InputBox>>(0, *_input);
 	_input->addComponent<PadderH<sfs::InputBox>>(-110, *_input);
 }
