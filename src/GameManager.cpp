@@ -18,6 +18,8 @@ namespace cf
         if (_gameFinished == true)
         {
             _gameStarted = false;
+            _game->destroy();
+            _game = nullptr;
             _tcp->disconnect();
             scene.addGameObject<MenuManager>();
             _gameFinished = false;

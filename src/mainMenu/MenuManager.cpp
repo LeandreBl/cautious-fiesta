@@ -30,6 +30,7 @@ namespace cf {
         }
         if (_gameManager->_gameStarted == true) {
             _gameManager->_tcp->bindAfterGameStarted(std::ref(scene));
+            _gameManager->_game = &scene.addGameObject<Game>();
             this->destroy();
         }
     }

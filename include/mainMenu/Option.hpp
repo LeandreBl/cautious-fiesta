@@ -56,9 +56,13 @@ class optionSound : public sfs::UI
 		_augmentSound->addComponent<PadderW<sfs::Button>>(
 			115, *_augmentSound);
 
-		float volume = scene.getGameObjects<SoundManager>()[0]
-				       ->getComponents<sfs::Sound>()[0]
-				       ->getVolume();
+		float volume = 0;
+		auto sound = scene.getGameObjects<SoundManager>()[0]->getComponents<sfs::Sound>();
+		if (sound.empty() == true)
+			volume = 100;
+		else
+			volume = sound[0]->getVolume();
+
 		_soundBar = &addComponent<sfs::Rectangle>(
 			sf::Vector2f(-16, 50),
 			sf::Vector2f((150 * volume) / 100, 30),

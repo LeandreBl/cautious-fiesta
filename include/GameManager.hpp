@@ -6,6 +6,7 @@
 #include "TcpConnection.hpp"
 #include "UdpConnection.hpp"
 #include "Serializer.hpp"
+#include "Game.hpp"
 
 namespace cf
 {
@@ -21,6 +22,7 @@ namespace cf
       UdpConnect *_udp = nullptr;
       sfs::Popup *_popup = nullptr;
       bool _gameStarted = false;
+      Game *_game = nullptr;
     protected:
       bool _gameFinished = false;
   };
