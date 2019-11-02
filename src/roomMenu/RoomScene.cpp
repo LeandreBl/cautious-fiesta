@@ -95,7 +95,7 @@ namespace cf
         _RSelector->drawRooms(_rooms);
     }
 
-    void roomScene::handleJoinRoom(Serializer &toread) noexcept // TODO GESTION ERREUR
+    void roomScene::handleJoinRoom(Serializer &toread) noexcept
     {
         uint8_t isOk = 0;
         toread.get(isOk);

@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include "GameManager.hpp"
 
 namespace cf
 {
@@ -15,7 +16,8 @@ namespace cf
         if (quit == false) {
 		    scene.close();
         } else {
-            //TODO REVENIR AU MENU
+            auto gameManager = scene.getGameObjects<GameManager>()[0];
+            gameManager->_tcp->leaveRoom();
         }
     }
 
@@ -26,8 +28,10 @@ namespace cf
         if (event.type == sf::Event::KeyPressed)
 			if (event.key.code == sf::Keyboard::Escape)
             {
-                if (scene.getGameObjects<optionScene>().empty() == true)
-                    _options = &addChild<optionScene>(scene); // TODO bouton return to menu (send close room and disconnect) && faire bouton quit game qui appelle quitGame
+                if (scene.getGameObjects<optionScene>().empty() == true) {
+                    _options = &addChild<optionScene>(scene);
+                    _options->ButtonsInGame(scene);
+                }
                 else {
                     _options->destroy();
                     _options = nullptr;
