@@ -15,7 +15,8 @@ namespace cf
     public :
       void start(sfs::Scene &scene) noexcept;
       void update(sfs::Scene &scene) noexcept;
-      void leaveRoomAfterTheGameStarted(Serializer &toread) noexcept;
+      void disconnectAndLeaveRoom(Serializer &toread) noexcept;
+      void updateRooms(Serializer &toread) noexcept;
       Character _character;
       std::string _ip = "";
       TcpConnect *_tcp = nullptr;

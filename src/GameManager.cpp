@@ -26,7 +26,7 @@ namespace cf
         }
     }
 
-    void GameManager::leaveRoomAfterTheGameStarted(Serializer &toread) noexcept
+    void GameManager::disconnectAndLeaveRoom(Serializer &toread) noexcept
     {
         uint8_t isOk = 0;
         toread.get(isOk);
@@ -36,6 +36,18 @@ namespace cf
             _ip = "";
             Character charac;
             _character = charac;
+        }
+    }
+
+    void GameManager::updateRooms(Serializer &toread) noexcept
+    {
+        uint64_t size = 0;
+        uint64_t nbPlayers;
+        std::string roomName;
+        toread.get(size);
+        for (uint64_t i = 0; i != size; i += 1) {
+            toread.get(nbPlayers);
+            toread.get(roomName);
         }
     }
 }

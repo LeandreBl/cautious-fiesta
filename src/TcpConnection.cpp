@@ -26,8 +26,9 @@ namespace cf
     void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
     {
         auto _gameManager = scene.getGameObjects<GameManager>()[0];
-        autoBind(cf::LEAVE_GAMEROOM, &GameManager::leaveRoomAfterTheGameStarted, _gameManager);
-        autoBind(cf::LOGOUT, &GameManager::leaveRoomAfterTheGameStarted, _gameManager);
+        autoBind(cf::LEAVE_GAMEROOM, &GameManager::disconnectAndLeaveRoom, _gameManager);
+        autoBind(cf::LOGOUT, &GameManager::disconnectAndLeaveRoom, _gameManager);
+        autoBind(cf::GET_GAMEROOMS_LIST, &GameManager::updateRooms, _gameManager);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept
