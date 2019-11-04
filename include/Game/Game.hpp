@@ -3,10 +3,13 @@
 #include <GameObject.hpp>
 #include "Option.hpp"
 #include "SoundManager.hpp"
-#include "Ui.hpp"
+#include "GameUi.hpp"
 
 namespace cf
 {
+
+    class GameUi;
+
     class Game : public sfs::GameObject
     {
         public:

@@ -12,11 +12,8 @@ namespace cf
     class GameUi : public sfs::UI
     {
         public:
-            GameUi(sfs::Scene &scene) noexcept
-            {
-                _rectangle = &addComponent<sfs::Rectangle>(sf::Vector2f(10, 10), sf::Vector2f(200, 50), sf::Color::White);
-                _chat = &addChild<Chat>(scene, 3);
-            }
+            GameUi(sfs::Scene &scene) noexcept;
+            void update(sfs::Scene &scene) noexcept;
         protected:
             sfs::Rectangle *_rectangle = nullptr;
             Chat *_chat;
