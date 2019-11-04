@@ -13,10 +13,16 @@ namespace cf
         scene.subscribe(*this, sf::Event::KeyPressed);
     }
 
-    void Chat::receiveMessage(const std::string &message) noexcept
+    void Chat::receiveMessage(Serializer &toread) noexcept
     {
+        std::string name;
+        toread.get(name);
+        std::string message;
+        toread.get(message);
+        message = name + " : " + message;
+
         sf::Vector2f newPos;
-        if (_chatMessages.size() == 0)
+        if (_chatMessages.empty() == true)
             newPos = sf::Vector2f(25, 950);
         else {
             for (auto &i : _chatMessages) {
@@ -29,10 +35,16 @@ namespace cf
             newPos = pos;
         }
         _chatMessages.emplace_back(&addComponent<sfs::Text>(*_font, message, sf::Color::White, 20, newPos));
-        if (_chatMessages.size() > 10) {
+        if (_chatMessages.size() > _messageQueu) {
             _chatMessages.front()->destroy();
             _chatMessages.erase(_chatMessages.begin());
         }
+    }
+
+    void Chat::handleSendMessage(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
     }
 
     void Chat::eraseChat() noexcept

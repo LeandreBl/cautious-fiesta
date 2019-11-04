@@ -17,10 +17,12 @@ namespace cf
         autoBind(cf::GET_GAMEROOM_PLAYERS_LIST, &roomScene::handlePlayerList, room);
         autoBind(cf::TOGGLE_READY, &roomScene::handleToggleReadyState, room);
         autoBind(cf::GAME_STARTED, &roomScene::handleGameStart, room);
-        autoBind(cf::SEND_MESSAGE, &roomScene::handleSendMessage, room);
-        autoBind(cf::RECEIVE_MESSAGE, &roomScene::handleReceiveMessage, room);
         autoBind(cf::ASSETS_REQUIREMENT, &roomScene::handleAssetRequirement, room);
         autoBind(cf::ASSETS_SEND, &roomScene::handleLoadAsset, room);
+
+        auto chat = scene.getGameObjects<Chat>()[0];
+        autoBind(cf::SEND_MESSAGE, &Chat::handleSendMessage, chat);
+        autoBind(cf::RECEIVE_MESSAGE, &Chat::receiveMessage, chat);
     }
 
     void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
@@ -29,6 +31,10 @@ namespace cf
         autoBind(cf::LEAVE_GAMEROOM, &GameManager::disconnectAndLeaveRoom, _gameManager);
         autoBind(cf::LOGOUT, &GameManager::disconnectAndLeaveRoom, _gameManager);
         autoBind(cf::GET_GAMEROOMS_LIST, &GameManager::updateRooms, _gameManager);
+
+        auto chat = scene.getGameObjects<Chat>()[1];
+        autoBind(cf::SEND_MESSAGE, &Chat::handleSendMessage, chat);
+        autoBind(cf::RECEIVE_MESSAGE, &Chat::receiveMessage, chat);
     }
 
     void TcpConnect::send(const Serializer &packet) noexcept

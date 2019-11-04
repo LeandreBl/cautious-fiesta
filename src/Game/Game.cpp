@@ -3,11 +3,18 @@
 
 namespace cf
 {
-    void Game::start(sfs::Scene &scene) noexcept
+    Game::Game(sfs::Scene &scene) noexcept
     {
         scene.subscribe(*this, sf::Event::Closed);
         scene.subscribe(*this, sf::Event::KeyPressed);
         _soundManager = &addChild<SoundManager>(scene);
+        _ui = &addChild<GameUi>(scene, std::ref(scene));
+    }
+
+    void Game::start(sfs::Scene &scene) noexcept
+    {
+        auto gameManager = scene.getGameObjects<GameManager>()[0];
+        gameManager->_tcp->bindAfterGameStarted(std::ref(scene));
     }
 
     void Game::quitGame(sfs::Scene &scene, bool quit) noexcept
@@ -17,6 +24,7 @@ namespace cf
 		    scene.close();
         } else {
             auto gameManager = scene.getGameObjects<GameManager>()[0];
+            gameManager->_tcp->sendMessage("disconnected");
             gameManager->_tcp->leaveRoom();
         }
     }

@@ -29,8 +29,7 @@ namespace cf {
             _mainMenu = &addChild<MainMenu>(scene, _scroller);
         }
         if (_gameManager->_gameStarted == true) {
-            _gameManager->_tcp->bindAfterGameStarted(std::ref(scene));
-            _gameManager->_game = &scene.addGameObject<Game>();
+            _gameManager->_game = &scene.addGameObject<Game>(scene);
             this->destroy();
         }
     }

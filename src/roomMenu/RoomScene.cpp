@@ -3,7 +3,9 @@
 
 namespace cf
 {
-    void roomScene::start(sfs::Scene &scene) noexcept
+
+    roomScene::roomScene(sfs::Scene &scene) noexcept
+        : _scene(scene)
     {
         auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
@@ -19,6 +21,11 @@ namespace cf
 	    _backToMenu->addComponent<PadderR<sfs::Button>>(25.f, *_backToMenu);
 	    _backToMenu->addComponent<PadderB<sfs::Button>>(25.f, *_backToMenu);
 
+		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
+    }
+
+    void roomScene::start(sfs::Scene &scene) noexcept
+    {
 		_gameManager = scene.getGameObjects<GameManager>()[0];
 		_gameManager->_tcp->bind(scene);
 		if (_gameManager->_tcp->connect(_gameManager->_character, _gameManager->_ip) == -84) {
@@ -27,16 +34,13 @@ namespace cf
 	        _gameManager->_character = character;
 	        _gameManager->_ip = "";
         }
-		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
     }
 
-    void roomScene::update(sfs::Scene &scene) noexcept
+    void roomScene::update(sfs::Scene &) noexcept
     {
         if (_checkAssets == true && _assetsPath.empty() == true)
         {
             _gameManager->_tcp->AssetRequirementIsDone();
-            auto chat = scene.getGameObjects<Chat>()[0];
-            chat->receiveMessage("server : all assets are corrects, you can start the game");
             _checkAssets = false;
         }
     }
@@ -145,22 +149,6 @@ namespace cf
         toread.get(port);
         _gameManager->_udp->setPort(port, _gameManager->_ip);
         _gameManager->_gameStarted = true;
-    }
-
-    void roomScene::handleSendMessage(Serializer &toread) noexcept
-    {
-        uint8_t isOk = 0;
-        toread.get(isOk);
-    }
-
-    void roomScene::handleReceiveMessage(Serializer &toread) noexcept
-    {
-        std::string name;
-        toread.get(name);
-        std::string message;
-        toread.get(message);
-        auto chat = _scene.getGameObjects<Chat>()[0];
-        chat->receiveMessage(name + " : " + message);
     }
 
     void roomScene::handleAssetRequirement(Serializer &toread) noexcept

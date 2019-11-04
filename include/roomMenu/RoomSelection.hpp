@@ -12,7 +12,6 @@ namespace cf
     {
         public :
             RoomSelector(sfs::Scene &scene) noexcept;
-            void start(sfs::Scene &scene) noexcept;
             void drawRooms(std::vector<std::pair<uint64_t, std::string>> rooms) noexcept;
             void update(sfs::Scene &) noexcept;
             void destroyRoom() noexcept;

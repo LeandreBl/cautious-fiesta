@@ -10,6 +10,9 @@
 
 namespace cf
 {
+
+  class Game;
+
   class GameManager : public sfs::GameObject
   {
     public :

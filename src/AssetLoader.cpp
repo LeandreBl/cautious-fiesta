@@ -83,8 +83,6 @@ namespace cf
         _socket.disconnect();
         if (std::filesystem::exists(path) == true && std::filesystem::file_size(path) == size && easyCheckSum(path) == checksum) {
             std::cout << "\nBIEN COPIER\n" << std::endl;
-            auto chat = scene.getGameObjects<Chat>()[0];
-            chat->receiveMessage("server : " + path.substr(path.find_last_of("/\\") + 1) + " correctly downloaded");
             assetsPath.erase(std::remove(assetsPath.begin(), assetsPath.end(), path));
         } else { //TODO trouver une solution quand c'est pas bon car du coup le vecteur de path est pas vidé
             std::cout << "NEIN" << std::endl;

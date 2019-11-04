@@ -4,10 +4,6 @@ namespace cf
 {
     RoomSelector::RoomSelector(sfs::Scene &scene) noexcept
         :_scene(scene)
-        {
-        };
-
-    void RoomSelector::start(sfs::Scene &scene) noexcept
     {
         _createButton = &addChild<roomList>(scene, std::ref(scene));
     }
