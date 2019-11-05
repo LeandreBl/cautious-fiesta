@@ -6,7 +6,11 @@ namespace cf
     {
         _font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
         _chatBox = &addChild<sfs::InputBox>(scene, *_font, sf::Vector2f(0, 0), "send message");
-        _chatBox->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(25, 970));
+        if (_messageQueu == 3) {
+            _chatBox->addComponent<PadderB<sfs::InputBox>>(15, *_chatBox);
+            _chatBox->addComponent<PadderL<sfs::InputBox>>(0, *_chatBox);
+        } else
+            _chatBox->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(25, 970));
 
         _gameManager = scene.getGameObjects<GameManager>()[0];
 
@@ -23,7 +27,7 @@ namespace cf
 
         sf::Vector2f newPos;
         if (_chatMessages.empty() == true)
-            newPos = sf::Vector2f(25, 950);
+            newPos = sf::Vector2f(_chatBox->getPosition().x, _chatBox->getPosition().y - 20);
         else {
             for (auto &i : _chatMessages) {
                 auto pos = i->getOffset();
