@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/System.hpp>
-#include <iostream>
 #include <IComponent.hpp>
 
 namespace cf

@@ -1,15 +1,12 @@
 #pragma once
 
-#include <GameObject.hpp>
 #include "Option.hpp"
 #include "SoundManager.hpp"
+#include "InputHandler.hpp"
 #include "GameUi.hpp"
 
 namespace cf
 {
-
-    class GameUi;
-
     class Game : public sfs::GameObject
     {
         public:
@@ -21,5 +18,6 @@ namespace cf
             optionScene *_options = nullptr;
             SoundManager *_soundManager = nullptr;
             GameUi *_ui = nullptr;
+            InputHandler *_input = nullptr;
     };
 }

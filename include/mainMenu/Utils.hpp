@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GameObject.hpp>
 #include <Velocity.hpp>
 #include <BasicShape.hpp>
 

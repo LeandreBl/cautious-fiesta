@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 namespace cf
 {
 class Character

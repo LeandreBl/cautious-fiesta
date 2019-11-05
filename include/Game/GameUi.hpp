@@ -6,9 +6,6 @@
 
 namespace cf
 {
-
-    class Chat;
-
     class GameUi : public sfs::UI
     {
         public:
@@ -16,6 +13,7 @@ namespace cf
             void update(sfs::Scene &scene) noexcept;
         protected:
             sfs::Rectangle *_rectangle = nullptr;
-            Chat *_chat;
+            sfs::Sprite *_life = nullptr;
+            Chat *_chat = nullptr;
     };
 }

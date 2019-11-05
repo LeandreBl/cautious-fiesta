@@ -1,5 +1,8 @@
 #include <fstream>
+#include <Button.hpp>
+#include <Hnavbar.hpp>
 #include "CharacterSelector.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {

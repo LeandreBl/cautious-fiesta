@@ -1,3 +1,4 @@
+#include <Velocity.hpp>
 #include "MenuBackgrounds.hpp"
 
 namespace cf

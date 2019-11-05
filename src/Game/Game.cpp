@@ -9,6 +9,7 @@ namespace cf
         scene.subscribe(*this, sf::Event::KeyPressed);
         _soundManager = &addChild<SoundManager>(scene);
         _ui = &addChild<GameUi>(scene, std::ref(scene));
+        _input = &addChild<InputHandler>(scene);
     }
 
     void Game::start(sfs::Scene &scene) noexcept

@@ -1,6 +1,5 @@
-#include "Room.hpp"
-#include "GameManager.hpp"
 #include <Offset.hpp>
+#include "Room.hpp"
 
 namespace cf
 {

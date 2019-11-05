@@ -1,13 +1,7 @@
 #pragma once
 
-#include <GameObject.hpp>
-#include <Sound.hpp>
 #include <BasicShape.hpp>
 #include <Button.hpp>
-#include <Velocity.hpp>
-#include "PaddedSprite.hpp"
-#include "Character.hpp"
-#include "SoundManager.hpp"
 #include "Utils.hpp"
 
 namespace cf

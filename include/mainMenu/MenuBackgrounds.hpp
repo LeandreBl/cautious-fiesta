@@ -1,9 +1,6 @@
 #pragma once
 
-#include <GameObject.hpp>
 #include <BasicShape.hpp>
-#include <IComponent.hpp>
-#include <Velocity.hpp>
 
 namespace cf
 {

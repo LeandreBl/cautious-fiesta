@@ -1,4 +1,5 @@
 #include "MainMenu.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {

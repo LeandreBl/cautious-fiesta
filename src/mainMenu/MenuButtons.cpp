@@ -1,5 +1,7 @@
-#include <iostream>
-#include "MainMenu.hpp"
+#include <Button.hpp>
+#include "MenuButtons.hpp"
+#include "GameManager.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {

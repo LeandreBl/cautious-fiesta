@@ -1,3 +1,4 @@
+#include <filesystem>
 #include "RoomScene.hpp"
 #include "PaddedSprite.hpp"
 

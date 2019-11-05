@@ -1,5 +1,7 @@
 #include "Option.hpp"
 #include "GameManager.hpp"
+#include "Game.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {
@@ -71,8 +73,8 @@ namespace cf
 
     void optionScene::quitGame(sfs::Scene &scene, bool quit) noexcept
     {
-        auto gameManager = scene.getGameObjects<GameManager>()[0];
-        gameManager->_game->quitGame(scene, quit);
+        auto game = scene.getGameObjects<Game>()[0];
+        game->quitGame(scene, quit);
     }
 
 }

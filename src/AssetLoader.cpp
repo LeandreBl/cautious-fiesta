@@ -1,5 +1,7 @@
+#include <fstream>
+#include <filesystem>
 #include "AssetLoader.hpp"
-#include "Chat.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {

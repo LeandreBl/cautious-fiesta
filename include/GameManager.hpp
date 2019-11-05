@@ -1,18 +1,13 @@
 #pragma once
 
-#include <GameObject.hpp>
 #include <Popup.hpp>
 #include "Character.hpp"
 #include "TcpConnection.hpp"
 #include "UdpConnection.hpp"
 #include "Serializer.hpp"
-#include "Game.hpp"
 
 namespace cf
 {
-
-  class Game;
-
   class GameManager : public sfs::GameObject
   {
     public :
@@ -26,8 +21,6 @@ namespace cf
       UdpConnect *_udp = nullptr;
       sfs::Popup *_popup = nullptr;
       bool _gameStarted = false;
-      Game *_game = nullptr;
-    protected:
       bool _gameFinished = false;
   };
 }

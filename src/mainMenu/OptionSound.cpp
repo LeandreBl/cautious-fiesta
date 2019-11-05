@@ -1,4 +1,6 @@
 #include "Option.hpp"
+#include "PaddedSprite.hpp"
+#include "SoundManager.hpp"
 
 namespace cf
 {

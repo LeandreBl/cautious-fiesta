@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <GameObject.hpp>
 #include <Sound.hpp>
 
 namespace cf

@@ -1,3 +1,4 @@
+#include <Offset.hpp>
 #include "RoomList.hpp"
 
 namespace cf

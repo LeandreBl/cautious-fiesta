@@ -1,12 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <GameObject.hpp>
 #include <Hnavbar.hpp>
-#include <Button.hpp>
-#include "Character.hpp"
 #include "CharacterCreator.hpp"
-#include "PaddedSprite.hpp"
 
 namespace cf
 {

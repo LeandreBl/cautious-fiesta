@@ -1,11 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <GameObject.hpp>
-#include "PaddedSprite.hpp"
-#include "Button.hpp"
-#include "Hnavbar.hpp"
-#include "InputBox.hpp"
 #include "MenuButtons.hpp"
 #include "MenuBackgrounds.hpp"
 #include "MenuUi.hpp"

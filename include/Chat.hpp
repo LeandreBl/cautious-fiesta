@@ -1,15 +1,10 @@
 #pragma once
 
 #include <InputBox.hpp>
-#include <Offset.hpp>
-#include <SFML/Graphics.hpp>
 #include "GameManager.hpp"
 
 namespace cf
 {
-
-    class GameManager;
-
     class Chat : public sfs::GameObject
     {
         public:

@@ -1,10 +1,6 @@
 #pragma once
 
-#include <GameObject.hpp>
-#include <Button.hpp>
 #include <InputBox.hpp>
-#include <Offset.hpp>
-#include "GameManager.hpp"
 #include "Room.hpp"
 
 namespace cf

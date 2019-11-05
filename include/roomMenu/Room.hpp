@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
 #include <Button.hpp>
-#include <BasicShape.hpp>
 #include "Chat.hpp"
 
 namespace cf

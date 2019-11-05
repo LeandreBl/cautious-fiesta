@@ -1,12 +1,7 @@
 #pragma once
 
 #include <SFML/Network.hpp>
-#include <GameObject.hpp>
-#include <algorithm>
-#include <fstream>
-#include <filesystem>
 #include <BasicShape.hpp>
-#include "PaddedSprite.hpp"
 
 namespace cf
 {

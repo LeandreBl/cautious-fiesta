@@ -1,6 +1,7 @@
 #include "GameManager.hpp"
 #include "PaddedSprite.hpp"
 #include "MenuManager.hpp"
+#include "Game.hpp"
 
 namespace cf
 {
@@ -18,8 +19,7 @@ namespace cf
         if (_gameFinished == true)
         {
             _gameStarted = false;
-            _game->destroy();
-            _game = nullptr;
+            scene.getGameObjects<Game>()[0]->destroy();
             _tcp->disconnect();
             scene.addGameObject<MenuManager>();
             _gameFinished = false;

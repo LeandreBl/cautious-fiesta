@@ -1,6 +1,5 @@
 #include <WScene.hpp>
 #include "MenuManager.hpp"
-#include "GameManager.hpp"
 
 int main()
 {

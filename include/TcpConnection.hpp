@@ -1,10 +1,10 @@
 #pragma once
 
 #include <GameObject.hpp>
+#include <functional>
 #include <SFML/Network.hpp>
 #include "Serializer.hpp"
 #include "Character.hpp"
-#include <functional>
 
 namespace cf {
 

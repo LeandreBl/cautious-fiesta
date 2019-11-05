@@ -1,4 +1,5 @@
 #include "Option.hpp"
+#include "PaddedSprite.hpp"
 
 namespace cf
 {
