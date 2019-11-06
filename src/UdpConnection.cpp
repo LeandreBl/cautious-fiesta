@@ -5,8 +5,9 @@ namespace cf
 
     void UdpConnect::send(Serializer &packet) noexcept
     {
-        if (_socket.send(packet.getNativeHandle(), packet.getSize(), _ip, _port) != sf::Socket::Done)
+        if (_socket.send("test", sizeof("test"), _ip, _port) != sf::Socket::Done)
             std::cout << "error" << std::endl;
+        std::cout << "sent to : " << _ip << " on the port : " << _port << std::endl;
     }
 
     void UdpConnect::setPort(uint16_t port, std::string ip) noexcept
@@ -18,15 +19,21 @@ namespace cf
         _socket.setBlocking(false);
     }
 
-    void UdpConnect::sendInput(UdpPrctl::inputType action, UdpPrctl::inputType type) noexcept
+    void UdpConnect::pushPacket(Serializer &packet, enum UdpPrctl::type type) noexcept
     {
-        if (action == UdpPrctl::inputType::RELEASED)
-            std::cout << "released" << std::endl;
-        else
-            std::cout << "pressed" << std::endl;
+        Serializer NewPacket(packet, type, _queueIndex);
 
+        _toWrite.emplace(NewPacket);
         _queueIndex += 1;
-        //_toWrite.emplace(packet); //TODO CREER LE PACKET A ENVOYE, METTRE EN COMMEUN UDP.H ET SERIALIZE.HPP
+    }
+
+    void UdpConnect::sendInput(const UdpPrctl::inputType &action, const UdpPrctl::inputType &type) noexcept
+    {
+        Serializer packet;
+        UdpPrctl::udpInput input = { action, type };
+
+        packet.set(input);
+        pushPacket(packet, UdpPrctl::type::INPUT);
     }
 
     void UdpConnect::update(sfs::Scene &) noexcept
@@ -36,12 +43,6 @@ namespace cf
 
         if (_queueIndex >= 30000)
             _queueIndex = 0;
-
-        while (_toWrite.empty() == false) {
-            Serializer packet = _toWrite.front();
-            send(packet);
-            _toWrite.pop();
-        }
 
         do {
             if (_socket.receive(buffer, sizeof(buffer), rd, _ip, _port) != sf::Socket::Done)
@@ -57,5 +58,12 @@ namespace cf
             if (udp.isCorrect())
                 std::cout << "packet type = " << static_cast<int>(udp.getType()) << std::endl;
         }
+
+        while (_toWrite.empty() == false) {
+            Serializer packet = _toWrite.front();
+            send(packet);
+            _toWrite.pop();
+        }
+
     }
 }
