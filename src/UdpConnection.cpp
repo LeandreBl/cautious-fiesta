@@ -19,7 +19,7 @@ namespace cf
         _socket.setBlocking(false);
     }
 
-    void UdpConnect::pushPacket(Serializer &packet, enum UdpPrctl::type type) noexcept
+    void UdpConnect::pushPacket(Serializer &packet, UdpPrctl::Type type) noexcept
     {
         Serializer NewPacket(packet, type, _queueIndex);
 
@@ -27,13 +27,13 @@ namespace cf
         _queueIndex += 1;
     }
 
-    void UdpConnect::sendInput(const UdpPrctl::inputType &action, const UdpPrctl::inputType &type) noexcept
+    void UdpConnect::sendInput(UdpPrctl::inputType action, UdpPrctl::inputType type) noexcept
     {
         Serializer packet;
-        UdpPrctl::udpInput input = { action, type };
+        UdpPrctl::udpInput input = { (int)action, (int)type };
 
         packet.set(input);
-        pushPacket(packet, UdpPrctl::type::INPUT);
+        pushPacket(packet, UdpPrctl::Type::INPUT);
     }
 
     void UdpConnect::update(sfs::Scene &) noexcept

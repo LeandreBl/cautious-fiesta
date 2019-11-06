@@ -38,10 +38,10 @@ namespace cf
 
             for (auto &matrix : input) { //TODO a mettre dans le update
                 for (size_t j = 0; j < matrix.size(); j += 1)
-                    if (matrix[j] == i) {
+                    if ((int)matrix[j] == i) {
                         letter = keys[j];
                         if (i <= 1) {
-                            if (matrix[j] == 0)
+                            if ((int)matrix[j] == 0)
                                 letter = keys[keys.size() - 1];
                             else
                                 letter = keys[keys.size() - 2];
