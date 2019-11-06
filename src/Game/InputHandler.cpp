@@ -16,18 +16,22 @@ namespace cf
 
     void InputHandler::onEvent(sfs::Scene &, const sf::Event &event) noexcept
     {
-        if (event.type == sf::Event::KeyPressed) {
-            if (getEvtKey(event.type, event.key.code) != UdpPrctl::inputType::UNKNOWN_KEY)
-                _gameManager->_udp->sendInput(UdpPrctl::inputType::PRESSED, getEvtKey(event.type, event.key.code));
-        } else if (event.type == sf::Event::KeyReleased) {
-            if (getEvtKey(event.type, event.key.code) != UdpPrctl::inputType::UNKNOWN_KEY)
-                _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.key.code));
-        } else if (event.type == sf::Event::MouseButtonPressed) {
-            if (getEvtKey(event.type, event.mouseButton.button) != UdpPrctl::inputType::UNKNOWN_KEY)
-                _gameManager->_udp->sendInput(UdpPrctl::inputType::PRESSED, getEvtKey(event.type, event.mouseButton.button));
-        } else if (event.type == sf::Event::MouseButtonReleased) {
-            if (getEvtKey(event.type, event.mouseButton.button) != UdpPrctl::inputType::UNKNOWN_KEY)
-                _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.mouseButton.button));
+        if (_optionKeyboardIsActive == false && _gameIsStarted == true) {
+            if (event.type == sf::Event::KeyPressed) {
+                if (getEvtKey(event.type, event.key.code) != UdpPrctl::inputType::UNKNOWN_KEY)
+                    _gameManager->_udp->sendInput(UdpPrctl::inputType::PRESSED, getEvtKey(event.type, event.key.code));
+            } else if (event.type == sf::Event::KeyReleased) {
+                if (getEvtKey(event.type, event.key.code) != UdpPrctl::inputType::UNKNOWN_KEY)
+                    _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.key.code));
+            } else if (event.type == sf::Event::MouseButtonPressed) {
+                if (getEvtKey(event.type, event.mouseButton.button) != UdpPrctl::inputType::UNKNOWN_KEY)
+                    _gameManager->_udp->sendInput(UdpPrctl::inputType::PRESSED, getEvtKey(event.type, event.mouseButton.button));
+            } else if (event.type == sf::Event::MouseButtonReleased) {
+                if (getEvtKey(event.type, event.mouseButton.button) != UdpPrctl::inputType::UNKNOWN_KEY)
+                    _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.mouseButton.button));
+            }
+        } else if (_optionKeyboardIsActive == true) {
+            //TODO recup les keys pour les changers
         }
     }
 

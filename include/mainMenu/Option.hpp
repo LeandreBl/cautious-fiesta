@@ -39,19 +39,35 @@ class optionFrameRate : public sfs::UI
 	uint32_t framerate = 120;
 };
 
+class optionKeyboard : public sfs::UI
+{
+	public:
+		void start(sfs::Scene &scene) noexcept;
+		sf::FloatRect getGlobalBounds() {return _optionMenuBox->getGlobalBounds();};
+		void changeBinding(sfs::Scene &scene) noexcept;
+	protected:
+		sfs::Sprite *_optionMenuBox;
+		std::vector<std::pair<sfs::Button *, sfs::Text *>> _buttons;
+};
+
 class optionScene : public sfs::UI
 {
       public:
-	optionScene() noexcept;
 	void start(sfs::Scene &scene) noexcept;
 	void ButtonsInGame(sfs::Scene &scene) noexcept;
+	void OptionButtons(sfs::Scene &scene) noexcept;
 	void quitGame(sfs::Scene &scene, bool quit) noexcept;
 	void closeOptions() noexcept {this->destroy();}
+	void KeyboardScene(sfs::Scene &scene) noexcept;
       protected:
-	Text *_menuBoxName;
-	Background *_optionMenuBox;
-	optionSound *_sound;
-	optionFrameRate *_frameRate;
-	sfs::Button *_resumeButton;
+	Text *_menuBoxName = nullptr;
+	Background *_optionMenuBox = nullptr;
+	optionSound *_sound = nullptr;
+	optionFrameRate *_frameRate = nullptr;
+	optionKeyboard *_keyboard = nullptr;
+	sfs::Button *_keyboardScene = nullptr;
+	sfs::Button *_resumeButton = nullptr;
+	sfs::Button *_backToMenu = nullptr;
+	sfs::Button *_quitGame = nullptr;
 };
 } // namespace cf

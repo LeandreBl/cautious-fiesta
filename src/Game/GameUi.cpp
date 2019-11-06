@@ -17,6 +17,7 @@ namespace cf
 
         _life = &addComponent<sfs::Sprite>(*scene.getAssetTexture("tmp/lifeHeart.png"), sf::Vector2f(500, 500));
         _life->setScale(sf::Vector2f(4,4));
+
     }
 
     void GameUi::update(sfs::Scene &) noexcept

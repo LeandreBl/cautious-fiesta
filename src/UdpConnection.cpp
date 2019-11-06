@@ -5,7 +5,7 @@ namespace cf
 
     void UdpConnect::send(Serializer &packet) noexcept
     {
-        if (_socket.send("test", sizeof("test"), _ip, _port) != sf::Socket::Done)
+        if (_socket.send(packet.getNativeHandle(), packet.getSize(), _ip, _port) != sf::Socket::Done)
             std::cout << "error" << std::endl;
         std::cout << "sent to : " << _ip << " on the port : " << _port << std::endl;
     }

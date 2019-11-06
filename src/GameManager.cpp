@@ -20,6 +20,7 @@ namespace cf
         {
             _gameStarted = false;
             scene.getGameObjects<Game>()[0]->destroy();
+            scene.getGameObjects<InputHandler>()[0]->changeGameStarted(false);
             _tcp->disconnect();
             scene.addGameObject<MenuManager>();
             _gameFinished = false;

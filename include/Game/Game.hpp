@@ -18,6 +18,5 @@ namespace cf
             optionScene *_options = nullptr;
             SoundManager *_soundManager = nullptr;
             GameUi *_ui = nullptr;
-            InputHandler *_input = nullptr;
     };
 }
