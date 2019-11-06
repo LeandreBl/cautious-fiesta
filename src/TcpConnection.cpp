@@ -41,7 +41,7 @@ namespace cf
     {
         std::size_t sent = 0;
         if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent) != sf::Socket::Done)
-            return;
+            return; //TODO REVENIR AU MENU et se DECO de le socket
         if (sent != packet.getSize())
             std::cout << "data mal envoyée\n";
     }

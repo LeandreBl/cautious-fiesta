@@ -2,6 +2,13 @@
 
 namespace cf
 {
+
+    void UdpConnect::send(Serializer &packet) noexcept
+    {
+        if (_socket.send(packet.getNativeHandle(), packet.getSize(), _ip, _port) != sf::Socket::Done)
+            std::cout << "error" << std::endl;
+    }
+
     void UdpConnect::setPort(uint16_t port, std::string ip) noexcept
     {
         _port = port;
@@ -11,10 +18,30 @@ namespace cf
         _socket.setBlocking(false);
     }
 
+    void UdpConnect::sendInput(const UdpPrctl::inputType &action, const UdpPrctl::inputType &type) noexcept
+    {
+        if (action == UdpPrctl::inputType::RELEASED)
+            std::cout << "released" << std::endl;
+        else
+            std::cout << "pressed" << std::endl;
+
+        _queueIndex += 1;
+        //_toWrite.emplace(packet); //TODO CREER LE PACKET A ENVOYE, METTRE EN COMMEUN UDP.H ET SERIALIZE.HPP
+    }
+
     void UdpConnect::update(sfs::Scene &) noexcept
     {
         char buffer[1024];
         std::size_t rd;
+
+        if (_queueIndex >= 30000)
+            _queueIndex = 0;
+
+        while (_toWrite.empty() == false) {
+            Serializer packet = _toWrite.front();
+            send(packet);
+            _toWrite.pop();
+        }
 
         do {
             if (_socket.receive(buffer, sizeof(buffer), rd, _ip, _port) != sf::Socket::Done)

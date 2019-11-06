@@ -11,7 +11,7 @@ constexpr uint16_t UDP_MAGIC = 0x0b3a;
 class UdpPrctl
 {
       public:
-	enum type { POSITION, VELOCITY, SPRITE, SPAWN, INPUT, TIME, UNKNOWN };
+	enum type { POSITION = 0, VELOCITY, SPRITE, SPAWN, INPUT, TIME, UNKNOWN };
 	struct udpHeader {
 		uint32_t type;  // packet type
 		uint32_t size;  // packet payload size
@@ -41,10 +41,9 @@ class UdpPrctl
 		uint32_t customIndex;
 		// extra data depending on type
 	};
-	enum inputType {
-
-	};
+	enum inputType { UNKNOWN_KEY = 0, PRESSED, RELEASED, LEFT, RIGHT, UP, DOWN, ATTACK1, ATTACK2 };
 	struct udpInput {
+		uint32_t action;
 		uint32_t type;
 		// extra data depending on type
 	};
