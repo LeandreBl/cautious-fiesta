@@ -18,7 +18,7 @@ namespace cf
         _socket.setBlocking(false);
     }
 
-    void UdpConnect::sendInput(const UdpPrctl::inputType &action, const UdpPrctl::inputType &type) noexcept
+    void UdpConnect::sendInput(UdpPrctl::inputType action, UdpPrctl::inputType type) noexcept
     {
         if (action == UdpPrctl::inputType::RELEASED)
             std::cout << "released" << std::endl;
@@ -53,9 +53,9 @@ namespace cf
         UdpPrctl::udpHeader header;
         while (_serializer.getSize() >= sizeof(header)) {
             _serializer.get(header);
-            UdpPrctl udp((UdpPrctl::type)header.type, header.size, header.index);
+            UdpPrctl udp(static_cast<UdpPrctl::Type>(header.type), header.length, header.index);
             if (udp.isCorrect())
-                std::cout << "packet type = " << udp.getType() << std::endl;
+                std::cout << "packet type = " << static_cast<int>(udp.getType()) << std::endl;
         }
     }
 }

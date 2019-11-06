@@ -1,7 +1,8 @@
 #include <cstring>
 
+#include <Trace.hpp>
+
 #include "DiscordApp.hpp"
-#include "trace.hpp"
 
 static void DrpEvtReady(const DiscordUser *request) noexcept
 {

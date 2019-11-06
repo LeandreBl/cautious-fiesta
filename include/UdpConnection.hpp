@@ -3,7 +3,7 @@
 #include <GameObject.hpp>
 #include <queue>
 #include <SFML/Network.hpp>
-#include "Serializer.hpp"
+#include <Serializer.hpp>
 #include "Udp.h"
 
 namespace cf
@@ -14,7 +14,7 @@ namespace cf
             void setPort(uint16_t port, std::string ip) noexcept;
             void update(sfs::Scene &) noexcept;
             void send(Serializer &packet) noexcept;
-            void sendInput(const UdpPrctl::inputType &action, const UdpPrctl::inputType &type) noexcept;
+            void sendInput(UdpPrctl::inputType action, UdpPrctl::inputType type) noexcept;
         protected:
             uint16_t _port;
             sf::IpAddress _ip;

@@ -4,7 +4,7 @@
 #include "Character.hpp"
 #include "TcpConnection.hpp"
 #include "UdpConnection.hpp"
-#include "Serializer.hpp"
+#include <Serializer.hpp>
 
 namespace cf
 {

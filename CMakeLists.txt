@@ -4,25 +4,31 @@ project("cautious-fiesta" CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "8.0.0")
+    message(FATAL_ERROR "Insufficient gcc version")
+  endif()
+endif()
+
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 file(GLOB_RECURSE SRCS "src/*.cpp")
-file(GLOB_RECURSE HDRS "include/*.hpp")
-file(GLOB_RECURSE MENUSRCS "src/mainMenu/*.cpp")
-file(GLOB_RECURSE MENUHDRS "include/mainMenu/*.hpp")
-file(GLOB_RECURSE ROOMSRCS "src/roomMenu/*.cpp")
-file(GLOB_RECURSE ROOMHDRS "include/roomMenu/*.hpp")
-file(GLOB_RECURSE GAMESRCS "src/Game/*.cpp")
-file(GLOB_RECURSE GAMEHDRS "include/Game/*.hpp")
+
+set(HDRS_DIRS "include/" "include/Game" "include/mainMenu" "include/roomMenu")
 
 SET(CMAKE_CXX_FLAGS_DEBUG "-O3 -g3 -Wall -Wextra -Weffc++ -Wshadow -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wsign-conversion -Wlogical-op -Wuseless-cast -fsanitize=address")
 SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -g3 -Wextra -O3 -fsanitize=address")
 
-add_subdirectory(sfml-scene)
-add_subdirectory(discord-rpc)
+add_subdirectory(cautious-fiesta-common)
 
-add_executable("cautious-fiesta" ${SRCS} ${HDRS} ${MENUSRCS} ${MENUHDRS} ${ROOMSRCS} ${ROOMHDRS} ${GAMESRCS} ${GAMEHDRS})
-target_include_directories("cautious-fiesta" PRIVATE "./include" "./include/mainMenu" "./include/roomMenu" "./include/Game/" "sfml-scene/include" "discord-rpc/include")
-target_link_libraries("cautious-fiesta" sfml-graphics sfml-system sfml-window sfml-network sfml-audio asan stdc++fs sfml-scene discord-rpc stdc++fs)
+include_directories(
+	"cautious-fiesta-common/include"
+	"cautious-fiesta-common/sfml-scene/include"
+	"cautious-fiesta-common/discord-rpc/include"
+)
+
+add_executable("cautious-fiesta" ${SRCS} ${HDRS})
+target_include_directories("cautious-fiesta" PRIVATE ${HDRS_DIRS})
+target_link_libraries("cautious-fiesta" cautious-fiesta-common sfml-graphics sfml-system sfml-window sfml-network sfml-audio asan stdc++fs sfml-scene discord-rpc stdc++fs)
