@@ -1,3 +1,4 @@
+#include <Offset.hpp>
 #include "Option.hpp"
 #include "GameManager.hpp"
 #include "Game.hpp"
@@ -19,6 +20,15 @@ namespace cf
 		OptionButtons(scene);
 	}
 
+	void optionScene::update(sfs::Scene &scene) noexcept
+	{
+		if (scene.getGameObjects<optionKeyboard>().empty() == true && _keyboardActive == true) {
+			_keyboard->destroy();
+			OptionButtons(scene);
+			_keyboardActive = false;
+		}
+	}
+
 	void optionScene::KeyboardScene(sfs::Scene &scene) noexcept
 	{
 		_sound->destroy();
@@ -29,6 +39,7 @@ namespace cf
 			_backToMenu->destroy();
 			_quitGame->destroy();
 		}
+		_keyboardActive = true;
 		_keyboard = &addChild<optionKeyboard>(scene);
 	}
 
@@ -71,7 +82,9 @@ namespace cf
 												std::bind(&optionScene::quitGame, this, std::ref(scene), false), "quit game", sf::Color::White, 20);
         _quitGame->setScale(sf::Vector2f(0.7, 0.5));
         _quitGame->addComponent<PadderW<sfs::Button>>(0, *_quitGame);
-        _quitGame->addComponent<PadderH<sfs::Button>>(120, *_quitGame);
+	    auto posY = _optionMenuBox->getGlobalBounds().height + 10;
+		_quitGame->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(_quitGame->getPosition().x, posY));
+        //_quitGame->addComponent<PadderH<sfs::Button>>(120, *_quitGame);
 	}
 
     void optionScene::quitGame(sfs::Scene &scene, bool quit) noexcept

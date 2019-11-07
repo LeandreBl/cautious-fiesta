@@ -3,6 +3,8 @@
 #include <BasicShape.hpp>
 #include <Button.hpp>
 #include "Utils.hpp"
+#include "Udp.h"
+#include "InputHandler.hpp"
 
 namespace cf
 {
@@ -43,17 +45,22 @@ class optionKeyboard : public sfs::UI
 {
 	public:
 		void start(sfs::Scene &scene) noexcept;
+		void update(sfs::Scene &scene) noexcept;
 		sf::FloatRect getGlobalBounds() {return _optionMenuBox->getGlobalBounds();};
-		void changeBinding(sfs::Scene &scene) noexcept;
+		void changeBinding(UdpPrctl::inputType type) noexcept;
+		void setDefaultBindings() noexcept;
+		void closeOptions() noexcept {this->destroy();};
 	protected:
 		sfs::Sprite *_optionMenuBox;
 		std::vector<std::pair<sfs::Button *, sfs::Text *>> _buttons;
+		InputHandler *_input;
 };
 
 class optionScene : public sfs::UI
 {
       public:
 	void start(sfs::Scene &scene) noexcept;
+	void update(sfs::Scene &scene) noexcept;
 	void ButtonsInGame(sfs::Scene &scene) noexcept;
 	void OptionButtons(sfs::Scene &scene) noexcept;
 	void quitGame(sfs::Scene &scene, bool quit) noexcept;
@@ -69,5 +76,6 @@ class optionScene : public sfs::UI
 	sfs::Button *_resumeButton = nullptr;
 	sfs::Button *_backToMenu = nullptr;
 	sfs::Button *_quitGame = nullptr;
+	bool _keyboardActive = false;
 };
 } // namespace cf

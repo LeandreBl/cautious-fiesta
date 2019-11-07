@@ -31,12 +31,25 @@ namespace cf
                     _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.mouseButton.button));
             }
         } else if (_optionKeyboardIsActive == true) {
-            //TODO recup les keys pour les changers
+            if (event.type == sf::Event::KeyPressed) {
+                setEvtKey(sf::Event::KeyPressed, event.key.code, _tmpType);
+                setEvtKey(sf::Event::KeyReleased, event.key.code, _tmpType);
+                _tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
+                _optionKeyboardIsActive = false;
+            } else if (event.type == sf::Event::MouseButtonPressed) {
+                setEvtKey(sf::Event::MouseButtonPressed, event.mouseButton.button, _tmpType);
+                setEvtKey(sf::Event::MouseButtonReleased, event.mouseButton.button, _tmpType);
+                _tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
+                _optionKeyboardIsActive = false;
+            }
         }
     }
 
     void InputHandler::setDefaultKeys() noexcept
     {
+        std::vector<std::vector<enum UdpPrctl::inputType>> newMatrix;
+        _evtsMatrix = newMatrix;
+
         setEvtKey(sf::Event::EventType::KeyPressed, sf::Keyboard::Q, UdpPrctl::inputType::LEFT);
         setEvtKey(sf::Event::EventType::KeyReleased, sf::Keyboard::Q, UdpPrctl::inputType::LEFT);
         setEvtKey(sf::Event::EventType::KeyPressed, sf::Keyboard::D, UdpPrctl::inputType::RIGHT);
@@ -57,6 +70,13 @@ namespace cf
             _evtsMatrix.resize(type + 1);
         if (key >= (int)_evtsMatrix[type].size())
             _evtsMatrix[type].resize(key + 1, UdpPrctl::inputType::UNKNOWN_KEY);
+        if (type == sf::Event::EventType::MouseButtonPressed) {
+            _evtsMatrix[sf::Event::EventType::KeyPressed].resize(103, UdpPrctl::inputType::UNKNOWN_KEY);
+            if (key == 0)
+                _evtsMatrix[sf::Event::EventType::KeyPressed][101] = value;
+            else if (key == 1)
+                _evtsMatrix[sf::Event::EventType::KeyPressed][102] = value;
+        }
         _evtsMatrix[type][key] = value;
     }
 
@@ -66,4 +86,16 @@ namespace cf
             return UdpPrctl::inputType::UNKNOWN_KEY;
         return _evtsMatrix[type][key];
     }
+
+    void InputHandler::changeKeyDetection(bool mode, UdpPrctl::inputType type) noexcept
+    {
+        _optionKeyboardIsActive = mode;
+        _tmpType = type;
+        for (auto &i : _evtsMatrix) {
+            for (auto &j : i)
+                if (j == _tmpType)
+                    j = UdpPrctl::inputType::UNKNOWN_KEY;
+            }
+    }
+
 }
