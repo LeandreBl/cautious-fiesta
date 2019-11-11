@@ -61,6 +61,9 @@ void TcpConnect::send(const Serializer &packet) noexcept
             Character character;
 			manager->_ip = "";
 	        manager->_character = character;
+			_socket.disconnect();
+			_status = _socket.Disconnected;
+			lock = false;
 			return;
 	}
 	if (sent != packet.getSize())
@@ -72,7 +75,7 @@ int TcpConnect::connect(Character charac, const std::string &ip) noexcept
 	Serializer packet;
 	if (lock == false) {
 		_status = _socket.connect(ip, 2121);
-		if (_status != sf::Socket::Done)
+		if (_status == sf::Socket::Error)
 			return -84;
 		_socket.setBlocking(false);
 		lock = true;
