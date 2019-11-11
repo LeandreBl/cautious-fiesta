@@ -2,7 +2,7 @@
 #include <Button.hpp>
 #include <Hnavbar.hpp>
 #include "CharacterSelector.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {

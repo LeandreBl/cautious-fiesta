@@ -1,6 +1,6 @@
 #include <Offset.hpp>
 #include "Chat.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {

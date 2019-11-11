@@ -1,6 +1,6 @@
 #include <Offset.hpp>
 #include "Option.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {
@@ -20,11 +20,11 @@ namespace cf
 
     void optionKeyboard::start(sfs::Scene &scene) noexcept
     {
+        addComponent<PadderW<optionKeyboard>>(0, *this);
+		addComponent<PadderH<optionKeyboard>>(0, *this);
         _input = scene.getGameObjects<InputHandler>()[0];
         _optionMenuBox = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/ui/OptionWindow.png"));
         _optionMenuBox->setScale(sf::Vector2f(1.5, 1));
-		addComponent<PadderW<optionKeyboard>>(0, *this);
-		addComponent<PadderH<optionKeyboard>>(0, *this);
         auto text = &addComponent<sfs::Text>(*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"), "key mapping", sf::Color::White, 35);
         auto posX = (_optionMenuBox->getGlobalBounds().width / 2) - (text->getGlobalBounds().width / 2);
         text->setOffset(sf::Vector2f(posX, 10));
@@ -62,7 +62,6 @@ namespace cf
         posX = (_optionMenuBox->getGlobalBounds().width / 2) - (closeButton->getGlobalBounds().width / 2);
         posY = _optionMenuBox->getGlobalBounds().height + 10;
         closeButton->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(posX, posY));
-        //closeButton->addComponent<PadderH<sfs::Button>>(120, *closeButton);
     }
 
     void optionKeyboard::update(sfs::Scene &) noexcept

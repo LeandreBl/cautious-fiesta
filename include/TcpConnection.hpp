@@ -15,6 +15,7 @@ namespace cf
 class TcpConnect : public sfs::GameObject
 {
       public:
+	TcpConnect(sfs::Scene &scene) noexcept : _scene(scene) {};
 	void bind(sfs::Scene &scene) noexcept;
 	void bindAfterGameStarted(sfs::Scene &scene) noexcept;
 	void send(const Serializer &packet) noexcept;
@@ -44,5 +45,6 @@ class TcpConnect : public sfs::GameObject
 	std::function<void(Serializer &toRead)>
 		_callbacks[static_cast<int>(TcpPrctl::Type::ACK) + 1];
 	bool lock = false;
+	sfs::Scene &_scene;
 };
 } // namespace cf

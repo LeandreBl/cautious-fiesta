@@ -1,6 +1,6 @@
 #include <filesystem>
 #include "RoomScene.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {

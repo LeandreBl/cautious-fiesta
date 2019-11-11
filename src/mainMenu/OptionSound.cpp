@@ -1,5 +1,5 @@
 #include "Option.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 #include "SoundManager.hpp"
 
 namespace cf

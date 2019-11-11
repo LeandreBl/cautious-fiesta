@@ -1,6 +1,6 @@
 #include "CharacterCreator.hpp"
 #include "Serializer.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 #include "Character.hpp"
 
 namespace cf {

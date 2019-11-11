@@ -2,7 +2,7 @@
 #include "Option.hpp"
 #include "GameManager.hpp"
 #include "Game.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {
@@ -65,7 +65,7 @@ namespace cf
 												std::bind(&optionScene::KeyboardScene, this, std::ref(scene)), "change controls", sf::Color::White, 20);
 		_keyboardScene->setScale(sf::Vector2f(0.7, 0.5));
 		_keyboardScene->addComponent<PadderW<sfs::Button>>(0, *_keyboardScene);
-		_keyboardScene->addComponent<PadderH<sfs::Button>>(170, *_keyboardScene);
+		_keyboardScene->addComponent<PadderH<sfs::Button>>(70, *_keyboardScene);
 	}
 
     void optionScene::ButtonsInGame(sfs::Scene &scene) noexcept
@@ -75,16 +75,14 @@ namespace cf
 												std::bind(&optionScene::quitGame, this, std::ref(scene), true), "back to menu", sf::Color::White, 20);
         _backToMenu->setScale(sf::Vector2f(0.7, 0.5));
 		_backToMenu->addComponent<PadderW<sfs::Button>>(0, *_backToMenu);
-		_backToMenu->addComponent<PadderH<sfs::Button>>(70, *_backToMenu);
+		_backToMenu->addComponent<PadderH<sfs::Button>>(120, *_backToMenu);
 
         _quitGame = &addChild<sfs::Button>(scene, *scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png"),
 												*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"), sf::Vector2f(-1000, -1000),
 												std::bind(&optionScene::quitGame, this, std::ref(scene), false), "quit game", sf::Color::White, 20);
         _quitGame->setScale(sf::Vector2f(0.7, 0.5));
         _quitGame->addComponent<PadderW<sfs::Button>>(0, *_quitGame);
-	    auto posY = _optionMenuBox->getGlobalBounds().height + 10;
-		_quitGame->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(_quitGame->getPosition().x, posY));
-        //_quitGame->addComponent<PadderH<sfs::Button>>(120, *_quitGame);
+        _quitGame->addComponent<PadderH<sfs::Button>>(170, *_quitGame);
 	}
 
     void optionScene::quitGame(sfs::Scene &scene, bool quit) noexcept

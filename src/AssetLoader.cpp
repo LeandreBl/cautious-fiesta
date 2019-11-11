@@ -1,7 +1,7 @@
 #include <fstream>
 #include <filesystem>
 #include "AssetLoader.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {

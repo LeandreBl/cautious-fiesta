@@ -1,5 +1,5 @@
 #include "GameManager.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 #include "MenuManager.hpp"
 #include "Game.hpp"
 
@@ -7,7 +7,7 @@ namespace cf
 {
     void GameManager::start(sfs::Scene &scene) noexcept
     {
-        _tcp = &addChild<TcpConnect>(scene);
+        _tcp = &addChild<TcpConnect>(scene, std::ref(scene));
         _udp = &addChild<UdpConnect>(scene);
         _popup = &addChild<sfs::Popup>(scene, *scene.getAssetFont("local-assets/fonts/commodore-64.ttf"));
         _popup->addComponent<PadderR<sfs::Popup>>(-335, *_popup);

@@ -55,8 +55,14 @@ void TcpConnect::send(const Serializer &packet) noexcept
 {
 	std::size_t sent = 0;
 	if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent)
-	    != sf::Socket::Done)
-		return; // TODO REVENIR AU MENU et se DECO de le socket
+	    != sf::Socket::Done) {
+			auto manager = _scene.getGameObjects<GameManager>()[0];
+			manager->_popup->push("Connection lost...");
+            Character character;
+			manager->_ip = "";
+	        manager->_character = character;
+			return;
+	}
 	if (sent != packet.getSize())
 		std::cout << "data mal envoyée\n";
 }

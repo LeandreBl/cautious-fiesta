@@ -1,7 +1,7 @@
 #include <Button.hpp>
 #include "MenuButtons.hpp"
 #include "GameManager.hpp"
-#include "PaddedSprite.hpp"
+#include <Padder.hpp>
 
 namespace cf
 {
