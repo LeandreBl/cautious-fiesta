@@ -42,7 +42,7 @@ namespace cf
                     _options->ButtonsInGame(scene);
                 }
                 else {
-                    _options->destroy();
+                    _options->closeOptions(scene);
                     _options = nullptr;
                 }
             }

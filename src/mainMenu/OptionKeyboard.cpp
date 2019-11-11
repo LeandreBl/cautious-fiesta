@@ -72,7 +72,7 @@ namespace cf
         auto matrix = _input->getMatrix()[sf::Event::KeyPressed];
         for (int i = 0; i != 6; i += 1) {
             waiting = false;
-            if (_buttons[i].first->getString() == "waiting..." && _input->getKeyboardActive() == true) {
+            if (_buttons[i].first->getString() == "waiting..." && _input->getChangeKeys() == true) {
                 waiting = true;
             }
             for (size_t j = 0; j < matrix.size(); j += 1) {
@@ -95,7 +95,7 @@ namespace cf
             if (i.first->getString() == "waiting...")
                 return;
         _buttons[(int)type].first->setString("waiting...");
-		_input->changeKeyDetection(true, type);
+		_input->changeKeys(true, type);
     }
 
     void optionKeyboard::setDefaultBindings() noexcept

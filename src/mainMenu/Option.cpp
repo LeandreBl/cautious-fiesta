@@ -18,6 +18,7 @@ namespace cf
 		_menuBoxName->addComponent<PadderH<Text>>(-204, *_menuBoxName);
 
 		OptionButtons(scene);
+		scene.getGameObjects<InputHandler>()[0]->changeOption(true);
 	}
 
 	void optionScene::update(sfs::Scene &scene) noexcept
@@ -55,7 +56,7 @@ namespace cf
 
 		_resumeButton = &addChild<sfs::Button>(scene, *scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png"),
 												*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"), sf::Vector2f(-1000, -1000),
-												std::bind(&optionScene::closeOptions, this), "resume", sf::Color::White, 20);
+												std::bind(&optionScene::closeOptions, this, std::ref(scene)), "resume", sf::Color::White, 20);
 		_resumeButton->setScale(sf::Vector2f(0.7, 0.5));
 		_resumeButton->addComponent<PadderW<sfs::Button>>(0, *_resumeButton);
 		_resumeButton->addComponent<PadderH<sfs::Button>>(245, *_resumeButton);
@@ -90,5 +91,11 @@ namespace cf
         auto game = scene.getGameObjects<Game>()[0];
         game->quitGame(scene, quit);
     }
+
+	void optionScene::closeOptions(sfs::Scene &scene) noexcept
+	{
+		scene.getGameObjects<InputHandler>()[0]->changeOption(false);
+		this->destroy();
+	}
 
 }

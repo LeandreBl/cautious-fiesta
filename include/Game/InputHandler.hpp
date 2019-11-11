@@ -11,16 +11,18 @@ namespace cf
             void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
             void setDefaultKeys() noexcept;
             void setEvtKey(const sf::Event::EventType type, int key, enum UdpPrctl::inputType value) noexcept;
-            void changeKeyDetection(bool mode, UdpPrctl::inputType type) noexcept;
+            void changeKeys(bool mode, UdpPrctl::inputType type) noexcept;
             void changeGameStarted(bool mode) noexcept {_gameIsStarted = mode;};
-            bool getKeyboardActive() noexcept {return _optionKeyboardIsActive;};
+            void changeOption(bool mode) noexcept {_optionIsActive = mode;};
+            bool getChangeKeys() noexcept {return _changeKeys;};
             enum UdpPrctl::inputType getEvtKey(sf::Event::EventType type, int key) noexcept;
             std::vector<std::vector<enum UdpPrctl::inputType>> getMatrix() noexcept {return _evtsMatrix;};
         protected:
             GameManager *_gameManager;
             std::vector<std::vector<enum UdpPrctl::inputType>> _evtsMatrix;
-            bool _optionKeyboardIsActive = false;
             UdpPrctl::inputType _tmpType;
+            bool _optionIsActive = false;
+            bool _changeKeys = false;
             bool _gameIsStarted = false;
     };
 }

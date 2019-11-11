@@ -64,7 +64,7 @@ class optionScene : public sfs::UI
 	void ButtonsInGame(sfs::Scene &scene) noexcept;
 	void OptionButtons(sfs::Scene &scene) noexcept;
 	void quitGame(sfs::Scene &scene, bool quit) noexcept;
-	void closeOptions() noexcept {this->destroy();}
+	void closeOptions(sfs::Scene &scene) noexcept;
 	void KeyboardScene(sfs::Scene &scene) noexcept;
       protected:
 	Text *_menuBoxName = nullptr;

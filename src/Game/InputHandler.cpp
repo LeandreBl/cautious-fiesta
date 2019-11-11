@@ -16,7 +16,7 @@ namespace cf
 
     void InputHandler::onEvent(sfs::Scene &, const sf::Event &event) noexcept
     {
-        if (_optionKeyboardIsActive == false && _gameIsStarted == true) {
+        if (_optionIsActive == false && _gameIsStarted == true) {
             if (event.type == sf::Event::KeyPressed) {
                 if (getEvtKey(event.type, event.key.code) != UdpPrctl::inputType::UNKNOWN_KEY)
                     _gameManager->_udp->sendInput(UdpPrctl::inputType::PRESSED, getEvtKey(event.type, event.key.code));
@@ -30,17 +30,17 @@ namespace cf
                 if (getEvtKey(event.type, event.mouseButton.button) != UdpPrctl::inputType::UNKNOWN_KEY)
                     _gameManager->_udp->sendInput(UdpPrctl::inputType::RELEASED, getEvtKey(event.type, event.mouseButton.button));
             }
-        } else if (_optionKeyboardIsActive == true) {
+        } else if (_optionIsActive == true && _changeKeys == true) {
             if (event.type == sf::Event::KeyPressed) {
                 setEvtKey(sf::Event::KeyPressed, event.key.code, _tmpType);
                 setEvtKey(sf::Event::KeyReleased, event.key.code, _tmpType);
                 _tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
-                _optionKeyboardIsActive = false;
+                _changeKeys = false;
             } else if (event.type == sf::Event::MouseButtonPressed) {
                 setEvtKey(sf::Event::MouseButtonPressed, event.mouseButton.button, _tmpType);
                 setEvtKey(sf::Event::MouseButtonReleased, event.mouseButton.button, _tmpType);
                 _tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
-                _optionKeyboardIsActive = false;
+                _changeKeys = false;
             }
         }
     }
@@ -87,9 +87,9 @@ namespace cf
         return _evtsMatrix[type][key];
     }
 
-    void InputHandler::changeKeyDetection(bool mode, UdpPrctl::inputType type) noexcept
+    void InputHandler::changeKeys(bool mode, UdpPrctl::inputType type) noexcept
     {
-        _optionKeyboardIsActive = mode;
+        _changeKeys = mode;
         _tmpType = type;
         for (auto &i : _evtsMatrix) {
             for (auto &j : i)

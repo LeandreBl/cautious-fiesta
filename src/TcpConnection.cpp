@@ -55,7 +55,7 @@ void TcpConnect::send(const Serializer &packet) noexcept
 {
 	std::size_t sent = 0;
 	if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent)
-	    != sf::Socket::Done) {
+	    != sf::Socket::Done) { /* TODO fix ça (probleme avec le back to menu des options en game)
 			auto manager = _scene.getGameObjects<GameManager>()[0];
 			manager->_popup->push("Connection lost...");
             Character character;
@@ -63,7 +63,7 @@ void TcpConnect::send(const Serializer &packet) noexcept
 	        manager->_character = character;
 			_socket.disconnect();
 			_status = _socket.Disconnected;
-			lock = false;
+			lock = false;*/
 			return;
 	}
 	if (sent != packet.getSize())
@@ -75,7 +75,7 @@ int TcpConnect::connect(Character charac, const std::string &ip) noexcept
 	Serializer packet;
 	if (lock == false) {
 		_status = _socket.connect(ip, 2121);
-		if (_status == sf::Socket::Error)
+		if (_status == sf::Socket::Error) //TODO a la base c'est DONE
 			return -84;
 		_socket.setBlocking(false);
 		lock = true;
