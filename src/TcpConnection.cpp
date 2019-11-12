@@ -84,6 +84,7 @@ int TcpConnect::connect(Character charac, const std::string &ip) noexcept
 	}
 	packet.set(charac.getName());
 	packet.set(charac.getStats());
+	packet.set(charac.getColor());
 	packet.setHeader(TcpPrctl::Type::LOGIN);
 	send(packet);
 	return 0;

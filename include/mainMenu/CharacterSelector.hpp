@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <Hnavbar.hpp>
+#include <Vnavbar.hpp>
 #include "CharacterCreator.hpp"
 
 namespace cf
@@ -11,7 +11,7 @@ namespace cf
   public:
     CharacterSelector(const std::string &path) noexcept
     : _navbar(nullptr), _image(nullptr), _name(nullptr),
-      _creator(nullptr), _path(path) {};
+      _creator(nullptr), _path(path), _hat(nullptr) {};
     void start(sfs::Scene &scene) noexcept;
     void update(sfs::Scene &scene) noexcept;
     Character charaterSelected() noexcept {
@@ -46,11 +46,12 @@ namespace cf
     }
   protected:
     std::vector<Character> _characters;
-    sfs::Hnavbar *_navbar;
+    sfs::Vnavbar *_navbar;
     sfs::Sprite *_image;
     sfs::Text *_name;
     CharacterCreation *_creator;
     std::string _path;
     std::vector<Text *> _stats;
+    sfs::Sprite *_hat;
   };
 }

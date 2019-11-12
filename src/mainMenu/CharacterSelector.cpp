@@ -1,6 +1,6 @@
 #include <fstream>
 #include <Button.hpp>
-#include <Hnavbar.hpp>
+#include <Vnavbar.hpp>
 #include "CharacterSelector.hpp"
 #include <Padder.hpp>
 
@@ -12,11 +12,11 @@ static const char *_statsNames[] = {"life", "speed", "attack", "att speed",
 
 void CharacterSelector::start(sfs::Scene &scene) noexcept
 {
-	_navbar = &addChild<sfs::Hnavbar>(scene, sf::Vector2f(0, 0),
+	_navbar = &addChild<sfs::Vnavbar>(scene, sf::Vector2f(0, 0),
 					  sf::Vector2f(16, 150),
 					  sf::Color::White);
-	_navbar->addComponent<PadderW<sfs::Hnavbar>>(-285, *_navbar);
-	_navbar->addComponent<PadderH<sfs::Hnavbar>>(46, *_navbar);
+	_navbar->addComponent<PadderW<sfs::Vnavbar>>(-285, *_navbar);
+	_navbar->addComponent<PadderH<sfs::Vnavbar>>(46, *_navbar);
 	_image = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/ui/CharacterSelection.png"),
 										sf::Vector2f(690, 510));
 	_image->setScale(sf::Vector2f(1.2, 1.5));
@@ -37,6 +37,7 @@ void CharacterSelector::start(sfs::Scene &scene) noexcept
 	_name = &addComponent<sfs::Text>(*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),"",
 									sf::Color::White, 20, sf::Vector2f(1082, 590));
 	loadCharactersFromFile();
+	_hat = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/hat.png"), sf::Vector2f(699, 575));
 }
 
 void CharacterSelector::update(sfs::Scene &scene) noexcept
@@ -55,6 +56,7 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			data[2] = _characters.at((int)characterSelected).getAttack();
 			data[3] = _characters.at((int)characterSelected).getAttackSpeed();
 			data[4] = _characters.at((int)characterSelected).getArmor();
+			_hat->setColor(_characters.at((int)characterSelected).getColor());
 			for (int i = 0; i < 5; i += 1)
 				_stats[i]->setString(std::to_string((int)data[i]));
 		} else if (_navbar->getValue() == 1) {
@@ -104,6 +106,7 @@ void CharacterSelector::writeCharacterInFile() noexcept
 	Serializer s;
 	s.set(_characters.back().getName());
 	s.set(_characters.back().getStats());
+	s.set(_characters.back().getColor());
 	myfile.write(static_cast<const char *>(s.getNativeHandle()),
 		     s.getSize());
 	myfile.close();
@@ -128,9 +131,11 @@ void CharacterSelector::loadCharactersFromFile() noexcept
 	while (s.getSize() > 0) {
 		std::string name;
 		struct Character::stats stats;
+		sf::Color color;
 		s.get(name);
 		s.get(stats);
-		_characters.emplace_back(name, stats);
+		s.get(color);
+		_characters.emplace_back(name, stats, color);
 	}
 	stream.close();
 }

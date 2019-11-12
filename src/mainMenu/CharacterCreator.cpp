@@ -1,6 +1,8 @@
+#include <Vnavbar.hpp>
+#include <Offset.hpp>
+#include <Padder.hpp>
 #include "CharacterCreator.hpp"
 #include "Serializer.hpp"
-#include <Padder.hpp>
 #include "Character.hpp"
 
 namespace cf {
@@ -23,6 +25,13 @@ namespace cf {
 			                                       "total", sf::Vector2f(990, 555));
 
 		_gameMananger = scene.getGameObjects<GameManager>()[0];
+
+		_hat = &addComponent<sfs::Sprite>(*scene.getAssetTexture("local-assets/sprites/Menu/hat.png"), sf::Vector2f(699, 575));
+		for (int i = 0; i < 3; i++) {
+			auto colorbar = &addChild<sfs::Hnavbar>(scene, sf::Vector2f(0, 0), sf::Vector2f(68, 10));
+			colorbar->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(697, 530 + i * 13));
+			_hatColors.emplace_back(colorbar);
+		}
 	}
 
     void CharacterCreation::update(sfs::Scene &) noexcept
@@ -40,6 +49,10 @@ namespace cf {
 		 }
 	    _total = total;
 	    _printTotal->setString("total\n " + std::to_string((int)_total));
+
+		for (size_t i = 0; i != _colors.size(); i += 1)
+			_colors[i] = (255 - (_hatColors[i]->getValue() * 255));
+		_hat->setColor(sf::Color(_colors[0], _colors[1], _colors[2]));
 	}
 
     void CharacterCreation::onEvent(sfs::Scene &, const sf::Event &event) noexcept
@@ -83,11 +96,11 @@ namespace cf {
 		stat.armor = s[4];
 		std::string name = _boxName->string();
 		if (name != "") {
-			Character newCharacter(name, stat);
+			Character newCharacter(name, stat, sf::Color(_colors[0], _colors[1], _colors[2]));
 			return newCharacter;
 		}
 		_gameMananger->_popup->push("Character name invalid");
-		Character newCharacter("noName", stat);
+		Character newCharacter("noName", stat, sf::Color());
 		return newCharacter;
 	};
 }

@@ -81,7 +81,7 @@ void IpInputBox::start(sfs::Scene &scene) noexcept
 		return;
 	}
 
-	auto &button = addChild<sfs::Button>(scene, *texture, *font);
+	auto &button = addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(-1000, -1000), std::bind(&IpInputBox::activeInputBox, this));
 	button.setScale(sf::Vector2f(1.5, 2.2));
 	button.addComponent<PadderW<sfs::Button>>(0, button);
 	button.addComponent<PadderH<sfs::Button>>(-100, button);

@@ -15,7 +15,7 @@ namespace cf
             for (size_t i = 0; i < rooms.size(); i += 1) {
                 _createButton->addRoom(_scene, rooms[i].second, i + 1, rooms[i].first);
                 if (_createButton->getPosition().y >= 950 && _scrollBar == nullptr)
-                    _scrollBar = &addChild<sfs::Hnavbar>(_scene, sf::Vector2f(0, 0), sf::Vector2f(30, 1080));
+                    _scrollBar = &addChild<sfs::Vnavbar>(_scene, sf::Vector2f(0, 0), sf::Vector2f(30, 1080));
                 else if (_createButton->getPosition().y < 950 && _scrollBar != nullptr) {
                     _scrollBar->destroy();
                     _scrollBar = nullptr;

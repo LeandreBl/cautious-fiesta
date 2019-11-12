@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Hnavbar.hpp>
+#include <Vnavbar.hpp>
 #include "RoomList.hpp"
 
 namespace cf
@@ -15,7 +15,7 @@ namespace cf
             void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready = 2) noexcept;
             sf::Vector2f RoomListPos() noexcept;
         protected:
-            sfs::Hnavbar *_scrollBar = nullptr;
+            sfs::Vnavbar *_scrollBar = nullptr;
             roomList *_createButton;
             sfs::Scene &_scene;
             float lockScrollBar = 0;
