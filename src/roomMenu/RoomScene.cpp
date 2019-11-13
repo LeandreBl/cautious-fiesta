@@ -1,6 +1,7 @@
 #include <filesystem>
-#include "RoomScene.hpp"
 #include <Padder.hpp>
+#include <Asset.hpp>
+#include "RoomScene.hpp"
 
 namespace cf
 {
@@ -71,49 +72,6 @@ namespace cf
         }
     }
 
-    void roomScene::handleCreateRoom(Serializer &toread) noexcept
-	{
-        uint8_t isOk = 0;
-        toread.get(isOk);
-        if ((int)isOk == 0)
-            _gameManager->_popup->push("The gameroom already exist");
-    }
-
-    void roomScene::handleDeleteRoom(Serializer &toread) noexcept
-    {
-        uint8_t isOk = 0;
-        toread.get(isOk);
-    }
-
-	void roomScene::handleRoomList(Serializer &toread) noexcept
-	{
-        uint64_t size = 0;
-        uint64_t nbPlayers;
-        std::string roomName;
-        toread.get(size);
-        std::vector<std::pair<uint64_t, std::string>> _rooms;
-        for (uint64_t i = 0; i != size; i += 1) {
-            toread.get(nbPlayers);
-            toread.get(roomName);
-            _rooms.emplace_back(std::make_pair(nbPlayers, roomName));
-        }
-        _RSelector->drawRooms(_rooms);
-    }
-
-    void roomScene::handleJoinRoom(Serializer &toread) noexcept
-    {
-        uint8_t isOk = 0;
-        toread.get(isOk);
-    }
-
-    void roomScene::handleLeaveRoom(Serializer &toread) noexcept
-    {
-        uint8_t isLeaving = 0;
-        toread.get(isLeaving);
-        if ((int)isLeaving == 1)
-            _RSelector->destroyRoom();
-    }
-
     void roomScene::handleGameStart(Serializer &toread) noexcept
 	{
         uint16_t port = 0;
@@ -133,7 +91,7 @@ namespace cf
             toread.get(fileName);
             toread.get(fileSize);
             toread.get(checkSum);
-            if (std::filesystem::exists(fileName) == false || std::filesystem::file_size(fileName) != fileSize || easyCheckSum(fileName) != checkSum) {
+            if (std::filesystem::exists(fileName) == false || std::filesystem::file_size(fileName) != fileSize || common::computeChksum(fileName) != checkSum) {
                 if (std::filesystem::exists(fileName) == true)
                     std::filesystem::remove(fileName);
                 _assetsPath.push_back(fileName);
@@ -163,23 +121,5 @@ namespace cf
             return;
         }
 		_gameManager->_tcp->disconnect();
-    }
-
-    uint64_t easyCheckSum(const std::string &filename) noexcept
-    {
- 	    std::ifstream file;
-	    char buffer[4096];
-	    uint64_t chk = 0;
-
-	    file.open(filename);
-	    if (!file.is_open())
-	        return 0;
-	    std::streamsize rd;
-	    do {
-	        rd = file.readsome(buffer, sizeof(buffer));
-	        for (std::streamsize i = 0; i < rd; ++i)
-	                chk += ~buffer[i] & 0xF0F0F0F0F;
-	    } while (rd == sizeof(buffer));
-	    return chk;
     }
 }

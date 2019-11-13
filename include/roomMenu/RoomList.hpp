@@ -10,14 +10,15 @@ namespace cf
         public:
             roomList(sfs::Scene &scene) noexcept;
             void update(sfs::Scene &scene) noexcept;
-            void createRoom() noexcept;
+            void createRoom() noexcept {_gameManager->_tcp->createRoom(_box->string());};
             void drawButtonCreateRoom(sfs::Scene &scene) noexcept;
-            void joinRoom(const std::string &name) noexcept;
             void addRoom(sfs::Scene &scene, const std::string &name, int mul, int players = 0) noexcept;
             void destroyRooms() noexcept;
             float getHeight() noexcept;
-            void HideRoom() noexcept;
-            void deleteRoom() noexcept;
+            void handleJoinRoom(Serializer &toread) noexcept;
+            void handleLeaveRoom(Serializer &toread) noexcept;
+            void handleCreateRoom(Serializer &toread) noexcept;
+            void handleDeleteRoom(Serializer &toread) noexcept;
         protected:
             sfs::Button *_room;
             sfs::Button *_createRoom;

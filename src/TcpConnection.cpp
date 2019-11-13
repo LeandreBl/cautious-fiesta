@@ -10,11 +10,6 @@ void TcpConnect::bind(sfs::Scene &scene) noexcept
 	auto rScene = scene.getGameObjects<roomScene>()[0];
 	autoBind(TcpPrctl::Type::LOGIN, &roomScene::handleConnect, rScene);
 	autoBind(TcpPrctl::Type::LOGOUT, &roomScene::handleDisconnect, rScene);
-	autoBind(TcpPrctl::Type::CREATE_GAMEROOM, &roomScene::handleCreateRoom, rScene);
-	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &roomScene::handleRoomList, rScene);
-	autoBind(TcpPrctl::Type::JOIN_GAMEROOM, &roomScene::handleJoinRoom, rScene);
-	autoBind(TcpPrctl::Type::DELETE_GAMEROOM, &roomScene::handleDeleteRoom, rScene);
-	autoBind(TcpPrctl::Type::LEAVE_GAMEROOM, &roomScene::handleLeaveRoom, rScene);
 	autoBind(TcpPrctl::Type::GAME_STARTED, &roomScene::handleGameStart, rScene);
 	autoBind(TcpPrctl::Type::ASSETS_REQUIREMENT, &roomScene::handleAssetRequirement, rScene);
 	autoBind(TcpPrctl::Type::ASSETS_SEND, &roomScene::handleLoadAsset, rScene);
@@ -26,6 +21,15 @@ void TcpConnect::bind(sfs::Scene &scene) noexcept
 	auto room = scene.getGameObjects<Room>()[0];
 	autoBind(TcpPrctl::Type::GET_GAMEROOM_PLAYERS_LIST, &Room::handlePlayerList, room);
 	autoBind(TcpPrctl::Type::TOGGLE_READY, &Room::handleTogglePlayerReadyState, room);
+
+	auto roomSelector = scene.getGameObjects<RoomSelector>()[0];
+	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &RoomSelector::handleRoomList, roomSelector);
+
+	auto roomL = scene.getGameObjects<roomList>()[0];
+	autoBind(TcpPrctl::Type::JOIN_GAMEROOM, &roomList::handleJoinRoom, roomL);
+	autoBind(TcpPrctl::Type::LEAVE_GAMEROOM, &roomList::handleLeaveRoom, roomL);
+	autoBind(TcpPrctl::Type::CREATE_GAMEROOM, &roomList::handleCreateRoom, roomL);
+	autoBind(TcpPrctl::Type::DELETE_GAMEROOM, &roomList::handleDeleteRoom, roomL);
 }
 
 void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
@@ -91,10 +95,12 @@ void TcpConnect::disconnect() noexcept
 
 void TcpConnect::createRoom(const std::string &roomName) noexcept
 {
-	Serializer packet;
-	packet.set(roomName);
-	packet.setHeader(TcpPrctl::Type::CREATE_GAMEROOM);
-	send(packet);
+	if (roomName != "") {
+		Serializer packet;
+		packet.set(roomName);
+		packet.setHeader(TcpPrctl::Type::CREATE_GAMEROOM);
+		send(packet);
+	}
 }
 
 void TcpConnect::deleteRoom() noexcept

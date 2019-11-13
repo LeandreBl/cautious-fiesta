@@ -15,11 +15,6 @@ namespace cf
             void deleteScene() noexcept;
             void handleConnect(Serializer &toread) noexcept;
             void handleDisconnect(Serializer &toread) noexcept;
-            void handleCreateRoom(Serializer &toread) noexcept;
-            void handleDeleteRoom(Serializer &toread) noexcept;
-            void handleRoomList(Serializer &toread) noexcept;
-            void handleJoinRoom(Serializer &toread) noexcept;
-            void handleLeaveRoom(Serializer &toread) noexcept;
             void handleGameStart(Serializer &toread) noexcept;
             void handleAssetRequirement(Serializer &toread) noexcept;
             void handleLoadAsset(Serializer &toread) noexcept;

@@ -25,11 +25,8 @@ namespace cf
         _chat->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(0, 0));
     }
 
-    void Room::setImage(const std::string &name) noexcept
+    void Room::setImage() noexcept
     {
-        _roomName->setString(name);
-        auto pos = (_image->getGlobalBounds().width / 2) - (_roomName->getGlobalBounds().width / 2);
-        _roomName->setOffset(sf::Vector2f(pos, 40));
         setPosition(sf::Vector2f(0, 0));
     }
 
@@ -68,6 +65,11 @@ namespace cf
             return;
         std::string roomName;
         toread.get(roomName);
+
+        _roomName->setString(roomName);
+        auto pos = (_image->getGlobalBounds().width / 2) - (_roomName->getGlobalBounds().width / 2);
+        _roomName->setOffset(sf::Vector2f(pos, 40));
+
         uint64_t size;
         toread.get(size);
         std::string name;
@@ -83,7 +85,7 @@ namespace cf
             text += "\n\n";
         }
         _players->setString(text);
-        auto pos = (_image->getGlobalBounds().width / 2) - (_players->getGlobalBounds().width / 2);
+        pos = (_image->getGlobalBounds().width / 2) - (_players->getGlobalBounds().width / 2);
         _players->setOffset(sf::Vector2f(pos, _players->getOffset().y));
     }
 }

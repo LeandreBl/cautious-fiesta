@@ -8,6 +8,7 @@ namespace cf
         : _room(nullptr), _createRoom(nullptr), _box(nullptr), _imageCreationRoom(nullptr), _selectedRoom(nullptr), _gameManager(nullptr)
     {
         setPosition(sf::Vector2f(0, 30));
+        _gameManager = scene.getGameObjects<GameManager>()[0];
         auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
         _room = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(50, 0),
@@ -17,12 +18,11 @@ namespace cf
         _room->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(50, 0));
 
         _deleteRoom = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(-1000, -1000),
-		                                std::bind(&roomList::deleteRoom, this),
+		                                std::bind(&TcpConnect::deleteRoom, _gameManager->_tcp),
 		                                "delete room", sf::Color::White, 20);
         _deleteRoom->setScale(sf::Vector2f(0.7, 0.7));
 
         _selectedRoom = &addChild<Room>(scene);
-        _gameManager = scene.getGameObjects<GameManager>()[0];
     }
 
     void roomList::addRoom(sfs::Scene &scene, const std::string &name, int mul, int players) noexcept
@@ -33,7 +33,7 @@ namespace cf
         auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	    auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
         auto &Button = _room->addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(50, 0),
-		                                std::bind(&roomList::joinRoom, this, name),
+		                                std::bind(&TcpConnect::joinRoom, _gameManager->_tcp, name),
 		                                name + " " + std::to_string(players) + " players", sf::Color::White, 25);
         Button.setScale(sf::Vector2f(1.5, 1.5));
         Button.addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(50, -132 * mul));
@@ -53,34 +53,14 @@ namespace cf
             auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton2.png");
             _imageCreationRoom = &addComponent<sfs::Sprite>(*texture, sf::Vector2f(605, 0));
             _imageCreationRoom->setScale(sf::Vector2f(0.75, 0.75));
+            _box = &addChild<sfs::InputBox>(scene, *font, sf::Vector2f(645, 10), "room's name", sf::Color::White, 25);
+            _box->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(645, 10));
             _createRoom = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(605, 50),
 		                            std::bind(&roomList::createRoom, this),
 		                            "create", sf::Color::White, 20);
             _createRoom->setScale(sf::Vector2f(0.75, 0.75));
             _createRoom->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(605, 50));
-            _box = &addChild<sfs::InputBox>(scene, *font, sf::Vector2f(645, 10), "room's name", sf::Color::White, 25);
-            _box->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(645, 10));
         }
-    }
-
-    void roomList::createRoom() noexcept
-    {
-        if (_box->string() != "") {
-            _gameManager->_tcp->createRoom(_box->string());
-            _box->destroy();
-            _box = nullptr;
-            _createRoom->destroy();
-            _createRoom = nullptr;
-            _imageCreationRoom->destroy();
-            _imageCreationRoom = nullptr;
-        }
-    }
-
-    void roomList::joinRoom(const std::string &name) noexcept
-    {
-        _gameManager->_tcp->joinRoom(name);
-        _selectedRoom->setImage(name);
-        setPosition(sf::Vector2f(-1000, getPosition().y));
     }
 
     void roomList::destroyRooms() noexcept
@@ -103,13 +83,6 @@ namespace cf
         return height;
     }
 
-    void roomList::HideRoom() noexcept
-    {
-        _selectedRoom->hideImage();
-        setPosition(sf::Vector2f(0, getPosition().y));
-        _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
-    }
-
     void roomList::update(sfs::Scene &) noexcept
     {
         if (_selectedRoom->getRoomOwner() == _gameManager->_character.getName()) {
@@ -118,11 +91,46 @@ namespace cf
         }
     }
 
-    void roomList::deleteRoom() noexcept
+    void roomList::handleJoinRoom(Serializer &toread) noexcept
     {
-        _selectedRoom->hideImage();
-        setPosition(sf::Vector2f(0, getPosition().y));
-        _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
-        _gameManager->_tcp->deleteRoom();
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 1) {
+            _selectedRoom->setImage();
+            setPosition(sf::Vector2f(-1000, getPosition().y));
+        }
+    }
+
+    void roomList::handleLeaveRoom(Serializer &toread) noexcept
+    {
+        uint8_t isLeaving = 0;
+        toread.get(isLeaving);
+        if ((int)isLeaving == 1) {
+            _selectedRoom->hideImage();
+            setPosition(sf::Vector2f(0, getPosition().y));
+            _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
+        }
+    }
+
+    void roomList::handleCreateRoom(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 0)
+            _gameManager->_popup->push("The gameroom already exist");
+        else {
+            _box->destroy();
+            _box = nullptr;
+            _createRoom->destroy();
+            _createRoom = nullptr;
+            _imageCreationRoom->destroy();
+            _imageCreationRoom = nullptr;
+        }
+    }
+
+    void roomList::handleDeleteRoom(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
     }
 }

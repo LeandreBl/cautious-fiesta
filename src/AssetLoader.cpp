@@ -1,8 +1,9 @@
-#include <fstream>
 #include <filesystem>
 #include <functional>
-#include "AssetLoader.hpp"
 #include <Padder.hpp>
+#include <Asset.hpp>
+#include <fstream>
+#include "AssetLoader.hpp"
 
 namespace cf
 {
@@ -84,14 +85,14 @@ namespace cf
         } while (dl < size); //avant c'était juste rd
         file.close();
         _socket.disconnect();
-        if (std::filesystem::exists(path) == true && std::filesystem::file_size(path) == size && easyCheckSum(path) == checksum) {
+        if (std::filesystem::exists(path) == true && std::filesystem::file_size(path) == size && common::computeChksum(path) == checksum) {
             std::cout << "\nBIEN COPIER\n" << std::endl;
             assetsPath.erase(std::remove(assetsPath.begin(), assetsPath.end(), path));
         } else { //TODO trouver une solution quand c'est pas bon car du coup le vecteur de path est pas vidé
             std::cout << "NEIN" << std::endl;
             std::cout << "file exits ? : " << std::filesystem::exists(path)
             << "\nfile size : " << std::filesystem::file_size(path) << " true size : " << size
-            << "\ncheckSum : " << easyCheckSum(path) << " true checkSum : " << checksum << std::endl;
+            << "\ncheckSum : " << common::computeChksum(path) << " true checkSum : " << checksum << std::endl;
             std::filesystem::remove(path);
         }
         destroy();

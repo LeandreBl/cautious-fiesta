@@ -6,8 +6,6 @@
 namespace cf
 {
 
-    uint64_t easyCheckSum(const std::string &fileName) noexcept;
-
     class assetDisplay : public sfs::GameObject
     {
         public:

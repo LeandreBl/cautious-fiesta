@@ -10,7 +10,7 @@ namespace cf
     {
         public:
             void start(sfs::Scene &scene) noexcept;
-            void setImage(const std::string &name) noexcept;
+            void setImage() noexcept;
             void hideImage() noexcept;
             float getImageWidth() const noexcept {return _image->getGlobalBounds().width;};
             void togglePlayerReadyState(sfs::Scene &scene) noexcept;
