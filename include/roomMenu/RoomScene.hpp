@@ -20,8 +20,6 @@ namespace cf
             void handleRoomList(Serializer &toread) noexcept;
             void handleJoinRoom(Serializer &toread) noexcept;
             void handleLeaveRoom(Serializer &toread) noexcept;
-            void handlePlayerList(Serializer &toread) noexcept;
-            void handleToggleReadyState(Serializer &toread) noexcept;
             void handleGameStart(Serializer &toread) noexcept;
             void handleAssetRequirement(Serializer &toread) noexcept;
             void handleLoadAsset(Serializer &toread) noexcept;

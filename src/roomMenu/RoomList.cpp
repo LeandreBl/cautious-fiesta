@@ -110,10 +110,9 @@ namespace cf
         _deleteRoom->setPosition(sf::Vector2f(-1000, -1000));
     }
 
-    void roomList::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept
+    void roomList::update(sfs::Scene &) noexcept
     {
-        _selectedRoom->updatePlayerInRoom(players, ready);
-        if (players.size() > 0 && players[0].second == _gameManager->_character.getName()) {
+        if (_selectedRoom->getRoomOwner() == _gameManager->_character.getName()) {
             auto pos = (_selectedRoom->getImageWidth() / 2) - (_deleteRoom->getGlobalBounds().width / 2);
             _deleteRoom->setPosition(sf::Vector2f(pos, 1012));
         }

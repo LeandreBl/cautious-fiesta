@@ -2,6 +2,7 @@
 
 #include <Button.hpp>
 #include "Chat.hpp"
+#include "Serializer.hpp"
 
 namespace cf
 {
@@ -11,9 +12,11 @@ namespace cf
             void start(sfs::Scene &scene) noexcept;
             void setImage(const std::string &name) noexcept;
             void hideImage() noexcept;
-            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t isready) noexcept;
             float getImageWidth() const noexcept {return _image->getGlobalBounds().width;};
             void togglePlayerReadyState(sfs::Scene &scene) noexcept;
+            void handleTogglePlayerReadyState(Serializer &toread) noexcept;
+            void handlePlayerList(Serializer &toread) noexcept;
+            std::string getRoomOwner() const noexcept {return _roomOwner;};
         protected:
             sfs::Sprite *_image = nullptr;
             sfs::Text *_roomName = nullptr;
@@ -22,5 +25,6 @@ namespace cf
             Chat *_chat;
             const sf::Font *_font;
             bool isready = false;
+            std::string _roomOwner;
     };
 }

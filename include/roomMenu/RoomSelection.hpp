@@ -12,7 +12,6 @@ namespace cf
             void drawRooms(std::vector<std::pair<uint64_t, std::string>> rooms) noexcept;
             void update(sfs::Scene &) noexcept;
             void destroyRoom() noexcept;
-            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready = 2) noexcept;
             sf::Vector2f RoomListPos() noexcept;
         protected:
             sfs::Vnavbar *_scrollBar = nullptr;

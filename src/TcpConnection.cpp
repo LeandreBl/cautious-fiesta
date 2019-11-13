@@ -7,33 +7,25 @@ namespace cf
 {
 void TcpConnect::bind(sfs::Scene &scene) noexcept
 {
-	auto room = scene.getGameObjects<roomScene>()[0];
-	autoBind(TcpPrctl::Type::LOGIN, &roomScene::handleConnect, room);
-	autoBind(TcpPrctl::Type::LOGOUT, &roomScene::handleDisconnect, room);
-	autoBind(TcpPrctl::Type::CREATE_GAMEROOM, &roomScene::handleCreateRoom,
-		 room);
-	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &roomScene::handleRoomList,
-		 room);
-	autoBind(TcpPrctl::Type::JOIN_GAMEROOM, &roomScene::handleJoinRoom,
-		 room);
-	autoBind(TcpPrctl::Type::DELETE_GAMEROOM, &roomScene::handleDeleteRoom,
-		 room);
-	autoBind(TcpPrctl::Type::LEAVE_GAMEROOM, &roomScene::handleLeaveRoom,
-		 room);
-	autoBind(TcpPrctl::Type::GET_GAMEROOM_PLAYERS_LIST,
-		 &roomScene::handlePlayerList, room);
-	autoBind(TcpPrctl::Type::TOGGLE_READY,
-		 &roomScene::handleToggleReadyState, room);
-	autoBind(TcpPrctl::Type::GAME_STARTED, &roomScene::handleGameStart,
-		 room);
-	autoBind(TcpPrctl::Type::ASSETS_REQUIREMENT,
-		 &roomScene::handleAssetRequirement, room);
-	autoBind(TcpPrctl::Type::ASSETS_SEND, &roomScene::handleLoadAsset,
-		 room);
+	auto rScene = scene.getGameObjects<roomScene>()[0];
+	autoBind(TcpPrctl::Type::LOGIN, &roomScene::handleConnect, rScene);
+	autoBind(TcpPrctl::Type::LOGOUT, &roomScene::handleDisconnect, rScene);
+	autoBind(TcpPrctl::Type::CREATE_GAMEROOM, &roomScene::handleCreateRoom, rScene);
+	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &roomScene::handleRoomList, rScene);
+	autoBind(TcpPrctl::Type::JOIN_GAMEROOM, &roomScene::handleJoinRoom, rScene);
+	autoBind(TcpPrctl::Type::DELETE_GAMEROOM, &roomScene::handleDeleteRoom, rScene);
+	autoBind(TcpPrctl::Type::LEAVE_GAMEROOM, &roomScene::handleLeaveRoom, rScene);
+	autoBind(TcpPrctl::Type::GAME_STARTED, &roomScene::handleGameStart, rScene);
+	autoBind(TcpPrctl::Type::ASSETS_REQUIREMENT, &roomScene::handleAssetRequirement, rScene);
+	autoBind(TcpPrctl::Type::ASSETS_SEND, &roomScene::handleLoadAsset, rScene);
 
 	auto chat = scene.getGameObjects<Chat>()[0];
 	autoBind(TcpPrctl::Type::SEND_MESSAGE, &Chat::handleSendMessage, chat);
 	autoBind(TcpPrctl::Type::RECEIVE_MESSAGE, &Chat::receiveMessage, chat);
+
+	auto room = scene.getGameObjects<Room>()[0];
+	autoBind(TcpPrctl::Type::GET_GAMEROOM_PLAYERS_LIST, &Room::handlePlayerList, room);
+	autoBind(TcpPrctl::Type::TOGGLE_READY, &Room::handleTogglePlayerReadyState, room);
 }
 
 void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept

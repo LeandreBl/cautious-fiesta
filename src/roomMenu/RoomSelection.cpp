@@ -39,11 +39,6 @@ namespace cf
         _createButton->HideRoom();
     }
 
-    void RoomSelector::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept
-    {
-        _createButton->updatePlayerInRoom(players, ready);
-    }
-
     sf::Vector2f RoomSelector::RoomListPos() noexcept
     {
         return _createButton->getPosition();

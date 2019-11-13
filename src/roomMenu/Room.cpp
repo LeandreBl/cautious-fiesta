@@ -37,35 +37,53 @@ namespace cf
     {
         setPosition(sf::Vector2f(-1500, -1500));
         _chat->eraseChat();
-    }
-
-    void Room::updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept
-    {
-        if ((int)ready == 0) {
-            isready = false;
-            _toggleReady->setText("ready");
-        }
-        else if ((int)ready == 1) {
-            isready = true;
-            _toggleReady->setText("unready");
-        }
-        else if ((int)ready == 2) {
-            std::string text;
-            for (auto &i : players) {
-                text += i.second;
-                text += " state : ";
-                text += std::to_string(i.first);
-                text += "\n\n";
-            }
-            _players->setString(text);
-            auto pos = (_image->getGlobalBounds().width / 2) - (_players->getGlobalBounds().width / 2);
-            _players->setOffset(sf::Vector2f(pos, _players->getOffset().y));
-        }
+        _roomOwner = "";
     }
 
     void Room::togglePlayerReadyState(sfs::Scene &scene) noexcept
     {
         auto gameManager = scene.getGameObjects<GameManager>()[0];
         gameManager->_tcp->toggleReadyState();
+    }
+
+    void Room::handleTogglePlayerReadyState(Serializer &toread) noexcept
+    {
+        uint8_t state = 0;
+        toread.get(state);
+        if ((int)state == 0) {
+            isready = false;
+            _toggleReady->setText("ready");
+        }
+        else if ((int)state == 1) {
+            isready = true;
+            _toggleReady->setText("unready");
+        }
+    }
+
+    void Room::handlePlayerList(Serializer &toread) noexcept
+    {
+        uint8_t isOk = 0;
+        toread.get(isOk);
+        if ((int)isOk == 0)
+            return;
+        std::string roomName;
+        toread.get(roomName);
+        uint64_t size;
+        toread.get(size);
+        std::string name;
+        std::string text;
+        for (uint64_t i = 0; i != size; i+= 1) {
+            toread.get(isOk);
+            toread.get(name);
+            if (i == 0)
+                _roomOwner = name;
+            text += name;
+            text += " state : ";
+            text += std::to_string(isOk);
+            text += "\n\n";
+        }
+        _players->setString(text);
+        auto pos = (_image->getGlobalBounds().width / 2) - (_players->getGlobalBounds().width / 2);
+        _players->setOffset(sf::Vector2f(pos, _players->getOffset().y));
     }
 }

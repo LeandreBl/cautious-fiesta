@@ -114,36 +114,6 @@ namespace cf
             _RSelector->destroyRoom();
     }
 
-    void roomScene::handlePlayerList(Serializer &toread) noexcept
-    {
-        uint8_t isOk = 0;
-        toread.get(isOk);
-        if ((int)isOk == 0) {
-            _gameManager->_popup->push("No player list");
-            return ;
-        }
-        std::string roomName;
-        toread.get(roomName);
-        uint64_t size;
-        toread.get(size);
-        std::string name;
-        std::vector<std::pair<uint64_t, std::string>> players;
-        for (uint64_t i = 0; i != size; i+= 1) {
-            toread.get(isOk);
-            toread.get(name);
-            players.emplace_back(std::make_pair(isOk, name));
-        }
-        _RSelector->updatePlayerInRoom(players);
-    }
-
-    void roomScene::handleToggleReadyState(Serializer &toread) noexcept
-    {
-        uint8_t state = 0;
-        toread.get(state);
-        std::vector<std::pair<uint64_t, std::string>> players;
-        _RSelector->updatePlayerInRoom(players, state);
-    }
-
     void roomScene::handleGameStart(Serializer &toread) noexcept
 	{
         uint16_t port = 0;

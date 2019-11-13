@@ -9,6 +9,7 @@ namespace cf
     {
         public:
             roomList(sfs::Scene &scene) noexcept;
+            void update(sfs::Scene &scene) noexcept;
             void createRoom() noexcept;
             void drawButtonCreateRoom(sfs::Scene &scene) noexcept;
             void joinRoom(const std::string &name) noexcept;
@@ -16,7 +17,6 @@ namespace cf
             void destroyRooms() noexcept;
             float getHeight() noexcept;
             void HideRoom() noexcept;
-            void updatePlayerInRoom(std::vector<std::pair<uint64_t, std::string>> players, uint8_t ready) noexcept;
             void deleteRoom() noexcept;
         protected:
             sfs::Button *_room;
