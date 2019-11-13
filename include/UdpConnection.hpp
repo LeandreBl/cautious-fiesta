@@ -11,9 +11,9 @@ namespace cf
     class UdpConnect : public sfs::GameObject
     {
         public:
-            void setPort(uint16_t port, std::string ip) noexcept;
+            int setPort(uint16_t port, std::string ip) noexcept;
             void update(sfs::Scene &) noexcept;
-            void pushPacket(Serializer &packet, UdpPrctl::Type type) noexcept;
+            void pushPacket(Serializer &packet, UdpPrctl::Type type, uint16_t index) noexcept;
             void send(Serializer &packet) noexcept;
             void sendInput(UdpPrctl::inputType action, UdpPrctl::inputType type) noexcept;
         protected:

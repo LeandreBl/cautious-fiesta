@@ -76,7 +76,9 @@ namespace cf
 	{
         uint16_t port = 0;
         toread.get(port);
-        _gameManager->_udp->setPort(port, _gameManager->_ip);
+        auto answer = _gameManager->_udp->setPort(port, _gameManager->_ip);
+        if (answer != -1 || answer != -84) //TODO gestion erreur en cas de -84
+            _gameManager->_tcp->sendLocalPort(answer);
         _gameManager->_gameStarted = true;
     }
 

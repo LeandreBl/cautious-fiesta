@@ -30,6 +30,7 @@ class TcpConnect : public sfs::GameObject
 	void sendMessage(const std::string &message) noexcept;
 	void loadAsset(const std::string &asset) noexcept;
 	void AssetRequirementIsDone() noexcept;
+	void sendLocalPort(uint16_t port) noexcept;
 	void update(sfs::Scene &) noexcept;
 	template <typename... Args>
 	void autoBind(TcpPrctl::Type type, Args... args) noexcept

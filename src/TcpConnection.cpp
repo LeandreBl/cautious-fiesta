@@ -162,6 +162,14 @@ void TcpConnect::AssetRequirementIsDone() noexcept
 	send(packet);
 }
 
+void TcpConnect::sendLocalPort(uint16_t port) noexcept
+{
+	Serializer packet;
+	packet.set(port);
+	packet.setHeader(TcpPrctl::Type::GAME_STARTED);
+	send(packet);
+}
+
 void TcpConnect::update(sfs::Scene &) noexcept
 {
 	char buffer[1024];
