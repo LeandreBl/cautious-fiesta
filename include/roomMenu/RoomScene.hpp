@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Serializer.hpp>
-#include "RoomSelection.hpp"
+#include "RoomList.hpp"
 #include "AssetLoader.hpp"
 
 namespace cf
@@ -21,7 +21,7 @@ namespace cf
         protected:
             sfs::Button *_backToMenu;
             GameManager *_gameManager;
-            RoomSelector *_RSelector;
+            roomList *_roomList;
             sfs::Scene &_scene;
             std::vector<std::string> _assetsPath;
             bool _checkAssets = false;

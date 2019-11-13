@@ -5,7 +5,9 @@ namespace cf
 {
 
     roomList::roomList(sfs::Scene &scene) noexcept
-        : _room(nullptr), _createRoom(nullptr), _box(nullptr), _imageCreationRoom(nullptr), _selectedRoom(nullptr), _gameManager(nullptr)
+        : _room(nullptr), _createRoom(nullptr), _box(nullptr), _imageCreationRoom(nullptr),
+         _selectedRoom(nullptr), _gameManager(nullptr), _scene(scene),
+         _scrollbar(nullptr), _lockScrollbar(0)
     {
         setPosition(sf::Vector2f(0, 30));
         _gameManager = scene.getGameObjects<GameManager>()[0];
@@ -89,6 +91,12 @@ namespace cf
             auto pos = (_selectedRoom->getImageWidth() / 2) - (_deleteRoom->getGlobalBounds().width / 2);
             _deleteRoom->setPosition(sf::Vector2f(pos, 1012));
         }
+        if (_scrollbar != nullptr)
+            if (_lockScrollbar != _scrollbar->getValue()) {
+                float pos = (getHeight() -950) * _scrollbar->getValue();
+                setPosition(sf::Vector2f(0, getHeight() - pos));
+                _lockScrollbar = _scrollbar->getValue();
+        }
     }
 
     void roomList::handleJoinRoom(Serializer &toread) noexcept
@@ -116,8 +124,11 @@ namespace cf
     {
         uint8_t isOk = 0;
         toread.get(isOk);
-        if ((int)isOk == 0)
+        if ((int)isOk == 0) {
             _gameManager->_popup->push("The gameroom already exist");
+            _box->string("");
+            _box->toggle(false);
+        }
         else {
             _box->destroy();
             _box = nullptr;
@@ -132,5 +143,25 @@ namespace cf
     {
         uint8_t isOk = 0;
         toread.get(isOk);
+    }
+
+    void roomList::handleRoomList(Serializer &toread) noexcept
+    {
+        uint64_t size = 0;
+        uint64_t nbPlayers;
+        std::string roomName;
+        toread.get(size);
+        destroyRooms();
+        for (uint64_t i = 0; i != size; i += 1) {
+            toread.get(nbPlayers);
+            toread.get(roomName);
+            addRoom(_scene, roomName, i + 1, nbPlayers);
+            if (getPosition().y >= 950 && getPosition().x == 0 && _scrollbar == nullptr)
+                _scrollbar = &addChild<sfs::Vnavbar>(_scene, sf::Vector2f(0, 0), sf::Vector2f(30, 1080));
+            else if (getPosition().y < 950 && _scrollbar != nullptr) {
+                _scrollbar->destroy();
+                _scrollbar = nullptr;
+            }
+        }
     }
 }

@@ -22,14 +22,13 @@ void TcpConnect::bind(sfs::Scene &scene) noexcept
 	autoBind(TcpPrctl::Type::GET_GAMEROOM_PLAYERS_LIST, &Room::handlePlayerList, room);
 	autoBind(TcpPrctl::Type::TOGGLE_READY, &Room::handleTogglePlayerReadyState, room);
 
-	auto roomSelector = scene.getGameObjects<RoomSelector>()[0];
-	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &RoomSelector::handleRoomList, roomSelector);
-
 	auto roomL = scene.getGameObjects<roomList>()[0];
 	autoBind(TcpPrctl::Type::JOIN_GAMEROOM, &roomList::handleJoinRoom, roomL);
 	autoBind(TcpPrctl::Type::LEAVE_GAMEROOM, &roomList::handleLeaveRoom, roomL);
 	autoBind(TcpPrctl::Type::CREATE_GAMEROOM, &roomList::handleCreateRoom, roomL);
 	autoBind(TcpPrctl::Type::DELETE_GAMEROOM, &roomList::handleDeleteRoom, roomL);
+	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &roomList::handleRoomList, roomL);
+
 }
 
 void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept

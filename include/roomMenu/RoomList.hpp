@@ -1,6 +1,7 @@
 #pragma once
 
 #include <InputBox.hpp>
+#include <Vnavbar.hpp>
 #include "Room.hpp"
 
 namespace cf
@@ -19,6 +20,7 @@ namespace cf
             void handleLeaveRoom(Serializer &toread) noexcept;
             void handleCreateRoom(Serializer &toread) noexcept;
             void handleDeleteRoom(Serializer &toread) noexcept;
+            void handleRoomList(Serializer &toread) noexcept;
         protected:
             sfs::Button *_room;
             sfs::Button *_createRoom;
@@ -27,5 +29,8 @@ namespace cf
             sfs::Sprite *_imageCreationRoom;
             Room *_selectedRoom;
             GameManager *_gameManager;
+            sfs::Scene &_scene;
+            sfs::Vnavbar *_scrollbar;
+            float _lockScrollbar;
     };
 }

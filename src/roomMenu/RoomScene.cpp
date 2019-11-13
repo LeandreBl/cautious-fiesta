@@ -23,7 +23,7 @@ namespace cf
 	    _backToMenu->addComponent<PadderR<sfs::Button>>(25.f, *_backToMenu);
 	    _backToMenu->addComponent<PadderB<sfs::Button>>(25.f, *_backToMenu);
 
-		_RSelector = &addChild<RoomSelector>(scene, std::ref(scene));
+		_roomList = &addChild<roomList>(scene, std::ref(scene));
     }
 
     void roomScene::start(sfs::Scene &scene) noexcept
@@ -116,7 +116,7 @@ namespace cf
 
     void roomScene::deleteScene() noexcept
     {
-        if (_RSelector->RoomListPos().x <= -1000) {
+        if (_roomList->getPosition().x <= -1000) {
             _gameManager->_tcp->leaveRoom();
             return;
         }
