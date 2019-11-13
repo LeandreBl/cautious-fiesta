@@ -1,5 +1,6 @@
 #include <fstream>
 #include <filesystem>
+#include <functional>
 #include "AssetLoader.hpp"
 #include <Padder.hpp>
 
