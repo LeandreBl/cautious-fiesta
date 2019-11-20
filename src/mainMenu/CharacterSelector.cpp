@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iomanip>
 #include <Button.hpp>
 #include <Vnavbar.hpp>
 #include "CharacterSelector.hpp"
@@ -57,8 +58,14 @@ void CharacterSelector::update(sfs::Scene &scene) noexcept
 			data[3] = _characters.at((int)characterSelected).getAttackSpeed();
 			data[4] = _characters.at((int)characterSelected).getArmor();
 			_hat->setColor(_characters.at((int)characterSelected).getColor());
-			for (int i = 0; i < 5; i += 1)
-				_stats[i]->setString(std::to_string((int)data[i]));
+			std::ostringstream stream;
+			stream << std::fixed << std::setprecision(1);
+			for (int i = 0; i < 5; i += 1) {
+				stream.str("");
+				stream.clear();
+				stream << data[i];
+				_stats[i]->setString(stream.str());
+			}
 		} else if (_navbar->getValue() == 1) {
 			if (_creator == nullptr) {
 				_creator = &addChild<CharacterCreation>(scene);

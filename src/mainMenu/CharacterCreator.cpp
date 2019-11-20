@@ -1,6 +1,7 @@
 #include <Vnavbar.hpp>
 #include <Offset.hpp>
 #include <Padder.hpp>
+#include <iomanip>
 #include "CharacterCreator.hpp"
 #include "Serializer.hpp"
 #include "Character.hpp"
@@ -16,7 +17,7 @@ namespace cf {
 		_boxName->addComponent<PadderW<sfs::InputBox>>(180, *_boxName);
 		for (int i = 0; i < 5; ++i) {
 			auto inputBox = &addChild<sfs::CustomBox>(scene, *scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
-				                                      sf::Vector2f(-1000, 0), "< ? >", sf::Color::White, 18, "0123456789");
+				                                      sf::Vector2f(-1000, 0), "< ? >", sf::Color::White, 18, "0123456789.");
 			inputBox->addComponent<PadderH<sfs::CustomBox>>(23 + i * 18, *inputBox);
 			inputBox->addComponent<PadderL<sfs::CustomBox>>(910, *inputBox);
 			_stats.emplace_back(inputBox);
@@ -37,18 +38,24 @@ namespace cf {
     void CharacterCreation::update(sfs::Scene &) noexcept
 	{
 		float total = 100;
+		std::ostringstream stream;
+		stream << std::fixed << std::setprecision(1);
 		for (auto &i : _stats) {
 			if (i->string() != "") {
-				float value = std::atoi(i->string().c_str());
+				float value = std::atof(i->string().c_str());
 				if ((total - value) < 0) {
-				    i->string(std::to_string((int)(value + (total - value))));
+					stream << value + (total - value);
+				    i->string(stream.str());
 				    total = 0;
 			    } else
 				    total -= value;
 			}
 		 }
 	    _total = total;
-	    _printTotal->setString("total\n " + std::to_string((int)_total));
+		stream.str("");
+		stream.clear();
+		stream << total;
+	    _printTotal->setString("total\n " + stream.str());
 
 		for (size_t i = 0; i != _colors.size(); i += 1)
 			_colors[i] = (255 - (_hatColors[i]->getValue() * 255));
@@ -85,9 +92,9 @@ namespace cf {
 		}
 	}
     Character CharacterCreation::createCharacter() noexcept {
-		int s[5];
+		float s[5];
 		for (size_t i = 0; i < _stats.size(); ++i)
-			s[i] = std::atoi(_stats[i]->string().c_str());
+			s[i] = std::atof(_stats[i]->string().c_str());
 		struct Character::stats stat;
 		stat.life = s[0];
 		stat.speed = s[1];
