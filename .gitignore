@@ -1,3 +1,4 @@
+config/.characters.dat
 sfml-scene/*
 discord-rpc/*
 build/*
