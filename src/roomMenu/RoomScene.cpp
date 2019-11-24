@@ -72,12 +72,20 @@ void roomScene::handleDisconnect(Serializer &toread) noexcept
 
 void roomScene::handleGameStart(Serializer &toread) noexcept
 {
-	uint16_t port = 0;
-	toread.get(port);
-	auto answer = _gameManager->_udp->setPort(port, _gameManager->_ip);
-	if (answer != -1)
-		_gameManager->_tcp->sendLocalPort(answer);
-	_gameManager->_gameStarted = true;
+	uint16_t port;
+
+	if (!toread.get(port))
+		return;
+	if (_gameManager->_udp == nullptr)
+		_gameManager->_udp = &_gameManager->addChild<UdpConnect>(_scene, *_gameManager,
+									 _gameManager->_ip, port);
+	if (_gameManager->_udp->isConnected()) {
+		_gameManager->_tcp->sendLocalPort(_gameManager->_udp->getPort());
+		_gameManager->_gameStarted = true;
+	}
+	else {
+		_gameManager->destroy();
+	}
 }
 
 void roomScene::handleAssetRequirement(Serializer &toread) noexcept

@@ -2,6 +2,34 @@
 
 namespace cf {
 
+UdpConnect::UdpConnect(GameManager &manager, const sf::IpAddress &ip, uint16_t port) noexcept
+	: _manager(manager)
+	, _callbacks()
+	, _port(port)
+	, _ip(ip)
+	, _socket()
+	, _serializer()
+	, _queueIndex(0)
+	, _serverIndex(-1)
+	, _ackPackets()
+	, _toProcess()
+	, _connected(false)
+{
+	autoBind(UdpPrctl::Type::SPAWN, &UdpConnect::spawnHandler);
+	autoBind(UdpPrctl::Type::POSITION, &UdpConnect::positionHandler);
+	setPort(port, ip);
+}
+
+bool UdpConnect::isConnected() const noexcept
+{
+	return _connected;
+}
+
+uint16_t UdpConnect::getPort() const noexcept
+{
+	return _socket.getLocalPort();
+}
+
 void UdpConnect::send(Serializer &packet) noexcept
 {
 	if (_socket.send(packet.getNativeHandle(), packet.getSize(), _ip, _port)
@@ -9,28 +37,30 @@ void UdpConnect::send(Serializer &packet) noexcept
 		std::cout << "error" << std::endl;
 }
 
-int UdpConnect::setPort(uint16_t port, std::string ip) noexcept
+uint16_t UdpConnect::setPort(uint16_t port, const sf::IpAddress &ip) noexcept
 {
 	_port = port;
 	_ip = ip;
 	if (_socket.bind(port) != sf::Socket::Done) {
 		if (_socket.bind(0) != sf::Socket::Done)
-			return -1;
+			return 0;
 		_socket.setBlocking(false);
 		std::cout << "Local port created : " << _socket.getLocalPort() << std::endl;
+		_connected = true;
 		return _socket.getLocalPort();
 	}
 	_socket.setBlocking(false);
-	return -1;
+	_connected = true;
+	return _socket.getLocalPort();
 }
 
-void UdpConnect::pushPacket(Serializer &packet, UdpPrctl::Type type, uint16_t index) noexcept
+void UdpConnect::pushPacket(Serializer &packet, UdpPrctl::Type type) noexcept
 {
-	Serializer NewPacket(packet, type, index);
+	UdpPrctl header(type, packet.getSize(), _queueIndex);
+	Serializer NewPacket(packet, type, _queueIndex);
 
-	_toWrite.emplace(NewPacket);
-	if (index == _queueIndex)
-		_queueIndex += 1;
+	_ackPackets.emplace_back(header, NewPacket);
+	++_queueIndex;
 }
 
 void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType type) noexcept
@@ -39,36 +69,108 @@ void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType typ
 	UdpPrctl::udpInput input = {(int)action, (int)type};
 
 	packet.set(input);
-	pushPacket(packet, UdpPrctl::Type::INPUT, _queueIndex);
+	pushPacket(packet, UdpPrctl::Type::INPUT);
 }
 
-void UdpConnect::update(sfs::Scene &) noexcept
+void UdpConnect::receiveData() noexcept
 {
-	char buffer[1024];
-	std::size_t rd;
 	sf::IpAddress ip = _ip;
 	uint16_t port = _port;
-
-	if (_queueIndex >= 30000)
-		_queueIndex = 0;
+	char data[4096];
+	size_t rd;
 
 	do {
-		if (_socket.receive(buffer, sizeof(buffer), rd, ip, port) != sf::Socket::Done)
-			break;
-		else
-			_serializer.nativeSet(buffer, rd);
-	} while (rd == sizeof(buffer));
-	UdpPrctl::udpHeader header;
-	while (_serializer.getSize() >= sizeof(header)) {
+		auto ret = _socket.receive(data, sizeof(data), rd, ip, port);
+		if (ret == sf::Socket::Disconnected) {
+			std::cerr << "Server udp disconnected" << std::endl;
+			return;
+		}
+		else if (ret == sf::Socket::Error) {
+			std::cerr << "Error reading udp socket" << std::endl;
+			return;
+		}
+		else if (ip.toInteger() != 0 && ip.toInteger() != 2130706433
+			 && (ip != _ip || port != _port)) {
+			std::cerr << "Unhandled remote: " << ip << ":" << port << std::endl;
+			return;
+		}
+		_serializer.nativeSet(data, rd);
+	} while (rd > 0);
+}
+
+void UdpConnect::removeAckPacket(uint16_t idx) noexcept
+{
+	for (auto it = _ackPackets.begin(); it != _ackPackets.end(); ++it) {
+		if (it->first.getIndex() == idx) {
+			_ackPackets.erase(it);
+			return;
+		}
+	}
+}
+
+void UdpConnect::parseHeaders() noexcept
+{
+	if (_serializer.getSize() >= sizeof(UdpPrctl::udpHeader)) {
+		UdpPrctl::udpHeader header;
 		_serializer.get(header);
-		std::cout << "packet type = " << (int)header.type << std::endl;
-		Serializer packet;
-		pushPacket(packet, (UdpPrctl::Type)header.type, header.index);
+		UdpPrctl packet(header);
+		if (packet.isCorrect() == false) {
+			_serializer.clear();
+			return;
+		}
+		else if (static_cast<UdpPrctl::Type>(packet.getType()) == UdpPrctl::Type::ACK) {
+			removeAckPacket(packet.getIndex());
+			return parseHeaders();
+		}
+		if (abs(packet.getIndex() - _serverIndex) > 1000) {
+			_serverIndex = packet.getIndex();
+		}
+		UdpPrctl::udpHeader dupHead = header;
+		dupHead.type = static_cast<int32_t>(UdpPrctl::Type::ACK);
+		_socket.send(&dupHead, sizeof(dupHead), _ip, _port);
+		if (_serializer.getSize() >= packet.getLength()) {
+			if (packet.getIndex() <= _serverIndex) {
+				_serializer.shift(packet.getLength());
+			}
+			else {
+				_toProcess.emplace(packet,
+						   Serializer(_serializer, packet.getLength()));
+				_serverIndex = header.index;
+			}
+			return parseHeaders();
+		}
+		_serializer.forceSetFirst(header);
 	}
-	while (_toWrite.empty() == false) {
-		Serializer &packet = _toWrite.front();
-		send(packet);
-		_toWrite.pop();
+}
+
+void UdpConnect::executePackets(sfs::Scene &scene) noexcept
+{
+	while (!_toProcess.empty()) {
+		auto &p = _toProcess.front();
+		int idx = static_cast<int>(p.first.getType());
+		if (_callbacks[idx])
+			_callbacks[static_cast<int>(p.first.getType())](scene, _manager, p.second);
+		_toProcess.pop();
 	}
+}
+
+void UdpConnect::sendPackets(sfs::Scene &scene) noexcept
+{
+	float time = scene.realTime();
+
+	if (time - _prev > (1.f / 60)) {
+		for (auto &&i : _ackPackets) {
+			send(i.second);
+		}
+		_prev = time;
+	}
+}
+
+void UdpConnect::update(sfs::Scene &scene) noexcept
+{
+	receiveData();
+	parseHeaders();
+	executePackets(scene);
+	sendPackets(scene);
 }
 } // namespace cf
