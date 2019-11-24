@@ -11,7 +11,7 @@ UdpConnect::UdpConnect(GameManager &manager, const sf::IpAddress &ip, uint16_t p
 	, _serializer()
 	, _queueIndex(0)
 	, _serverIndex(-1)
-	, _ackPackets()
+	, _packets()
 	, _toProcess()
 	, _connected(false)
 {
@@ -54,13 +54,12 @@ uint16_t UdpConnect::setPort(uint16_t port, const sf::IpAddress &ip) noexcept
 	return _socket.getLocalPort();
 }
 
-void UdpConnect::pushPacket(Serializer &packet, UdpPrctl::Type type) noexcept
+void UdpConnect::pushPacket(const Serializer &packet, UdpPrctl::Type type) noexcept
 {
 	UdpPrctl header(type, packet.getSize(), _queueIndex);
-	Serializer NewPacket(packet, type, _queueIndex);
 
-	_ackPackets.emplace_back(header, NewPacket);
-	++_queueIndex;
+	_packets.emplace_back(header, Serializer(packet, type, _queueIndex));
+	_queueIndex++;
 }
 
 void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType type) noexcept
@@ -68,7 +67,7 @@ void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType typ
 	Serializer packet;
 	UdpPrctl::udpInput input = {(int)action, (int)type};
 
-	packet.set(input);
+	packet << input;
 	pushPacket(packet, UdpPrctl::Type::INPUT);
 }
 
@@ -98,11 +97,11 @@ void UdpConnect::receiveData() noexcept
 	} while (rd > 0);
 }
 
-void UdpConnect::removeAckPacket(uint16_t idx) noexcept
+void UdpConnect::notifyAck(uint16_t idx) noexcept
 {
-	for (auto it = _ackPackets.begin(); it != _ackPackets.end(); ++it) {
+	for (auto it = _packets.begin(); it != _packets.end(); ++it) {
 		if (it->first.getIndex() == idx) {
-			_ackPackets.erase(it);
+			_packets.erase(it);
 			return;
 		}
 	}
@@ -119,7 +118,7 @@ void UdpConnect::parseHeaders() noexcept
 			return;
 		}
 		else if (static_cast<UdpPrctl::Type>(packet.getType()) == UdpPrctl::Type::ACK) {
-			removeAckPacket(packet.getIndex());
+			notifyAck(packet.getIndex());
 			return parseHeaders();
 		}
 		if (abs(packet.getIndex() - _serverIndex) > 1000) {
@@ -149,7 +148,7 @@ void UdpConnect::executePackets(sfs::Scene &scene) noexcept
 		auto &p = _toProcess.front();
 		int idx = static_cast<int>(p.first.getType());
 		if (_callbacks[idx])
-			_callbacks[static_cast<int>(p.first.getType())](scene, _manager, p.second);
+			_callbacks[idx](scene, _manager, p.second);
 		_toProcess.pop();
 	}
 }
@@ -159,7 +158,7 @@ void UdpConnect::sendPackets(sfs::Scene &scene) noexcept
 	float time = scene.realTime();
 
 	if (time - _prev > (1.f / 60)) {
-		for (auto &&i : _ackPackets) {
+		for (auto &&i : _packets) {
 			send(i.second);
 		}
 		_prev = time;
