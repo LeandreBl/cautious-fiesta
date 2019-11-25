@@ -8,10 +8,8 @@ void Chat::start(sfs::Scene &scene) noexcept
 {
 	_font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	_chatBox = &addChild<sfs::InputBox>(scene, *_font, sf::Vector2f(0, 0), "send message");
-	if (_messageQueu == 3) {
-		_chatBox->addComponent<PadderB<sfs::InputBox>>(15, *_chatBox);
-		_chatBox->addComponent<PadderL<sfs::InputBox>>(0, *_chatBox);
-	}
+	if (_messageQueu == 3)
+		_chatBox->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(0, 1040));
 	else
 		_chatBox->addComponent<sfs::Offset>(this->getPosition(), sf::Vector2f(25, 970));
 
@@ -65,9 +63,13 @@ void Chat::eraseChat() noexcept
 	_chatMessages.clear();
 }
 
-void Chat::onEvent(sfs::Scene &, const sf::Event &event) noexcept
+void Chat::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 {
 	if (event.type == sf::Event::KeyPressed) {
+		if (_chatBox->getSelected() == true)
+			scene.unsubscribe(*scene.getGameObjects<InputHandler>()[0], sf::Event::KeyPressed);
+		else
+			scene.subscribe(*scene.getGameObjects<InputHandler>()[0], sf::Event::KeyPressed);
 		if (event.key.code == sf::Keyboard::Return && _chatBox->getSelected() == true) {
 			_chatBox->toggle(false);
 			_gameManager->_tcp->sendMessage(_chatBox->string());
