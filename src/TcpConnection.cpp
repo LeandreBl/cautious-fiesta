@@ -45,19 +45,8 @@ void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
 void TcpConnect::send(const Serializer &packet) noexcept
 {
 	std::size_t sent = 0;
-	if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent) != sf::Socket::Done) {
-		auto manager = _scene.getGameObjects<GameManager>()[0];
-		manager->_popup->push("Connection lost...");
-		Character character;
-		manager->_ip = "";
-		manager->_character = character;
-		_socket.disconnect();
-		_status = _socket.Disconnected;
-		lock = false;
-		if (manager->_gameStarted == true)
-			manager->_gameFinished = true;
+	if (_socket.send(packet.getNativeHandle(), packet.getSize(), sent) != sf::Socket::Done)
 		return;
-	}
 	if (sent != packet.getSize())
 		std::cout << "data mal envoyée\n";
 }
@@ -165,14 +154,31 @@ void TcpConnect::sendLocalPort(uint16_t port) noexcept
 	send(packet);
 }
 
-void TcpConnect::update(sfs::Scene &) noexcept
+void TcpConnect::update(sfs::Scene &scene) noexcept
 {
 	char buffer[1024];
 	std::size_t rd;
+	int socketReturn;
 	do {
-		if (_socket.receive(buffer, sizeof(buffer), rd) != sf::Socket::Done)
+		socketReturn = _socket.receive(buffer, sizeof(buffer), rd);
+		if (socketReturn != sf::Socket::Done) {
+			if (socketReturn == sf::Socket::Disconnected && lock == true) {
+				std :: cout << "DECOOOOOOO" << std::endl;
+				auto manager = _scene.getGameObjects<GameManager>()[0];
+
+				manager->_popup->push("Connection lost...");
+				Character character;
+				manager->_ip = "";
+				manager->_character = character;
+				_socket.disconnect();
+				_status = _socket.Disconnected;
+				lock = false;
+				if (manager->_gameStarted == true)
+					manager->_gameFinished = true;
+
+			}
 			return;
-		else
+		} else
 			_serializer.nativeSet(buffer, rd);
 	} while (rd == sizeof(buffer));
 	TcpPrctl header;
