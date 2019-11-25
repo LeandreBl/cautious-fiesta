@@ -8,8 +8,7 @@ int UdpConnect::positionHandler(sfs::Scene &scene, GameManager &manager, Seriali
 	uint64_t id;
 	sf::Vector2f position;
 
-	s >> id;
-	s >> position;
+	s >> id >> position;
 	auto *go = scene.getGameObject(id);
 	if (go == nullptr) {
 		std::cerr << "Can't find object " << id << std::endl;

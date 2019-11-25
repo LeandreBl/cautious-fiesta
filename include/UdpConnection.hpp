@@ -18,7 +18,9 @@ class UdpConnect : public sfs::GameObject {
 	uint16_t setPort(uint16_t port, const sf::IpAddress &ip) noexcept;
 	void update(sfs::Scene &) noexcept;
 	void pushPacket(const Serializer &packet, UdpPrctl::Type type) noexcept;
-	void send(Serializer &packet) noexcept;
+	void pushAck(const UdpPrctl &header) noexcept;
+	void send(const Serializer &packet) noexcept;
+	void send(const UdpPrctl &header) noexcept;
 	void sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType type) noexcept;
 	void executePackets(sfs::Scene &scene) noexcept;
 	uint16_t getPort() const noexcept;
@@ -49,6 +51,7 @@ class UdpConnect : public sfs::GameObject {
 	uint16_t _queueIndex;
 	int32_t _serverIndex;
 	std::list<std::pair<UdpPrctl, Serializer>> _packets;
+	std::queue<UdpPrctl> _ackQueue;
 	std::queue<std::pair<UdpPrctl, Serializer>> _toProcess;
 	float _prev = 0;
 	bool _connected;

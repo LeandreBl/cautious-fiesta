@@ -30,11 +30,17 @@ uint16_t UdpConnect::getPort() const noexcept
 	return _socket.getLocalPort();
 }
 
-void UdpConnect::send(Serializer &packet) noexcept
+void UdpConnect::send(const Serializer &packet) noexcept
 {
 	if (_socket.send(packet.getNativeHandle(), packet.getSize(), _ip, _port)
 	    != sf::Socket::Done)
-		std::cout << "error" << std::endl;
+		std::cerr << "error can't send to " << _ip << ":" << _port << std::endl;
+}
+
+void UdpConnect::send(const UdpPrctl &header) noexcept
+{
+	if (_socket.send(&header.getNativeHandle(), sizeof(header), _ip, _port) != sf::Socket::Done)
+		std::cerr << "error can't send to " << _ip << ":" << _port << std::endl;
 }
 
 uint16_t UdpConnect::setPort(uint16_t port, const sf::IpAddress &ip) noexcept
@@ -54,18 +60,21 @@ uint16_t UdpConnect::setPort(uint16_t port, const sf::IpAddress &ip) noexcept
 	return _socket.getLocalPort();
 }
 
+void UdpConnect::pushAck(const UdpPrctl &header) noexcept
+{
+	_ackQueue.emplace(UdpPrctl::Type::ACK, 0, header.getIndex());
+}
+
 void UdpConnect::pushPacket(const Serializer &packet, UdpPrctl::Type type) noexcept
 {
-	UdpPrctl header(type, packet.getSize(), _queueIndex);
-
-	_packets.emplace_back(header, Serializer(packet, type, _queueIndex));
+	_packets.emplace_back(UdpPrctl(type, packet.getSize(), _queueIndex), packet);
 	_queueIndex++;
 }
 
 void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType type) noexcept
 {
-	Serializer packet;
 	UdpPrctl::udpInput input = {(int)action, (int)type};
+	Serializer packet;
 
 	packet << input;
 	pushPacket(packet, UdpPrctl::Type::INPUT);
@@ -109,38 +118,34 @@ void UdpConnect::notifyAck(uint16_t idx) noexcept
 
 void UdpConnect::parseHeaders() noexcept
 {
-	if (_serializer.getSize() >= sizeof(UdpPrctl::udpHeader)) {
-		UdpPrctl packet;
-		_serializer >>= packet;
-		if (packet.isCorrect() == false) {
-			_serializer.clear();
-			return;
-		}
-		else if (static_cast<UdpPrctl::Type>(packet.getType()) == UdpPrctl::Type::ACK) {
-			notifyAck(packet.getIndex());
-			_serializer.shift(sizeof(UdpPrctl::udpHeader));
-			return parseHeaders();
-		}
-		if (abs(packet.getIndex() - _serverIndex) > 1000) {
-			_serverIndex = packet.getIndex();
-		}
-		if (_serializer.getSize() >= (packet.getLength() + sizeof(UdpPrctl::udpHeader))) {
-			UdpPrctl dupHead = packet.getNativeHandle();
-			dupHead.getNativeHandle().type = static_cast<int32_t>(UdpPrctl::Type::ACK);
-			_socket.send(&dupHead.getNativeHandle(), sizeof(UdpPrctl::udpHeader), _ip,
-				     _port);
-			_serializer.shift(sizeof(UdpPrctl::udpHeader));
-			if (packet.getIndex() <= _serverIndex) {
-				_serializer.shift(packet.getLength());
-			}
-			else {
-				_toProcess.emplace(packet,
-						   Serializer(_serializer, packet.getLength()));
-				_serverIndex = packet.getIndex();
-			}
-			return parseHeaders();
-		}
+	if (_serializer.getSize() < sizeof(UdpPrctl))
+		return;
+	UdpPrctl packet;
+	_serializer >>= packet;
+	if (packet.isCorrect() == false) {
+		_serializer.clear();
+		return;
 	}
+	else if (packet.getType() == UdpPrctl::Type::ACK) {
+		notifyAck(packet.getIndex());
+		_serializer.shift(sizeof(UdpPrctl));
+		return parseHeaders();
+	}
+	if (abs(packet.getIndex() - _serverIndex) > 1000) {
+		_serverIndex = packet.getIndex();
+	}
+	if (_serializer.getSize() < (packet.getLength() + sizeof(UdpPrctl)))
+		return;
+	_serializer.shift(sizeof(UdpPrctl));
+	pushAck(packet);
+	if (packet.getIndex() < _serverIndex) {
+		_serializer.shift(packet.getLength());
+	}
+	else {
+		_toProcess.emplace(packet, Serializer(_serializer, packet.getLength()));
+		_serverIndex = packet.getIndex();
+	}
+	return parseHeaders();
 }
 
 void UdpConnect::executePackets(sfs::Scene &scene) noexcept
@@ -159,8 +164,16 @@ void UdpConnect::sendPackets(sfs::Scene &scene) noexcept
 	float time = scene.realTime();
 
 	if (time - _prev > (1.f / 60)) {
+		while (!_ackQueue.empty()) {
+			auto &p = _ackQueue.front();
+			send(p);
+			_ackQueue.pop();
+		}
 		for (auto &&i : _packets) {
-			send(i.second);
+			Serializer s;
+			s << i.first;
+			s << i.second;
+			send(s);
 		}
 		_prev = time;
 	}
