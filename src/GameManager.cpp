@@ -28,8 +28,9 @@ void GameManager::update(sfs::Scene &scene) noexcept
 
 void GameManager::disconnectAndLeaveRoom(Serializer &toread) noexcept
 {
-	uint8_t isOk = 0;
-	toread.get(isOk);
+	bool isOk = 0;
+
+	toread >> isOk;
 	if ((int)isOk == 1 && _gameStarted == true)
 		_gameFinished = true;
 	else if ((int)isOk == 1 && _gameStarted == false) {
@@ -44,10 +45,10 @@ void GameManager::updateRooms(Serializer &toread) noexcept
 	uint64_t size = 0;
 	uint64_t nbPlayers;
 	std::string roomName;
-	toread.get(size);
+	toread >> size;
 	for (uint64_t i = 0; i != size; i += 1) {
-		toread.get(nbPlayers);
-		toread.get(roomName);
+		toread >> nbPlayers;
+		toread >> roomName;
 	}
 }
 } // namespace cf

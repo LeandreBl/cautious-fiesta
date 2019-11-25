@@ -110,35 +110,36 @@ void UdpConnect::notifyAck(uint16_t idx) noexcept
 void UdpConnect::parseHeaders() noexcept
 {
 	if (_serializer.getSize() >= sizeof(UdpPrctl::udpHeader)) {
-		UdpPrctl::udpHeader header;
-		_serializer.get(header);
-		UdpPrctl packet(header);
+		UdpPrctl packet;
+		_serializer >>= packet;
 		if (packet.isCorrect() == false) {
 			_serializer.clear();
 			return;
 		}
 		else if (static_cast<UdpPrctl::Type>(packet.getType()) == UdpPrctl::Type::ACK) {
 			notifyAck(packet.getIndex());
+			_serializer.shift(sizeof(UdpPrctl::udpHeader));
 			return parseHeaders();
 		}
 		if (abs(packet.getIndex() - _serverIndex) > 1000) {
 			_serverIndex = packet.getIndex();
 		}
-		UdpPrctl::udpHeader dupHead = header;
-		dupHead.type = static_cast<int32_t>(UdpPrctl::Type::ACK);
-		_socket.send(&dupHead, sizeof(dupHead), _ip, _port);
-		if (_serializer.getSize() >= packet.getLength()) {
+		if (_serializer.getSize() >= (packet.getLength() + sizeof(UdpPrctl::udpHeader))) {
+			UdpPrctl dupHead = packet.getNativeHandle();
+			dupHead.getNativeHandle().type = static_cast<int32_t>(UdpPrctl::Type::ACK);
+			_socket.send(&dupHead.getNativeHandle(), sizeof(UdpPrctl::udpHeader), _ip,
+				     _port);
+			_serializer.shift(sizeof(UdpPrctl::udpHeader));
 			if (packet.getIndex() <= _serverIndex) {
 				_serializer.shift(packet.getLength());
 			}
 			else {
 				_toProcess.emplace(packet,
 						   Serializer(_serializer, packet.getLength()));
-				_serverIndex = header.index;
+				_serverIndex = packet.getIndex();
 			}
 			return parseHeaders();
 		}
-		_serializer.forceSetFirst(header);
 	}
 }
 

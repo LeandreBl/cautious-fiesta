@@ -119,7 +119,7 @@ void roomList::update(sfs::Scene &) noexcept
 void roomList::handleJoinRoom(Serializer &toread) noexcept
 {
 	uint8_t isOk = 0;
-	toread.get(isOk);
+	toread >> isOk;
 	if ((int)isOk == 1) {
 		_selectedRoom->setImage();
 		setPosition(sf::Vector2f(-1000, getPosition().y));
@@ -129,7 +129,7 @@ void roomList::handleJoinRoom(Serializer &toread) noexcept
 void roomList::handleLeaveRoom(Serializer &toread) noexcept
 {
 	uint8_t isLeaving = 0;
-	toread.get(isLeaving);
+	toread >> isLeaving;
 	if ((int)isLeaving == 1) {
 		_selectedRoom->hideImage();
 		setPosition(sf::Vector2f(0, getPosition().y));
@@ -140,7 +140,7 @@ void roomList::handleLeaveRoom(Serializer &toread) noexcept
 void roomList::handleCreateRoom(Serializer &toread) noexcept
 {
 	uint8_t isOk = 0;
-	toread.get(isOk);
+	toread >> isOk;
 	if ((int)isOk == 0) {
 		_gameManager->_popup->push("The gameroom already exist");
 		_box->string("");
@@ -159,7 +159,7 @@ void roomList::handleCreateRoom(Serializer &toread) noexcept
 void roomList::handleDeleteRoom(Serializer &toread) noexcept
 {
 	uint8_t isOk = 0;
-	toread.get(isOk);
+	toread >> isOk;
 }
 
 void roomList::handleRoomList(Serializer &toread) noexcept
@@ -167,11 +167,11 @@ void roomList::handleRoomList(Serializer &toread) noexcept
 	uint64_t size = 0;
 	uint64_t nbPlayers;
 	std::string roomName;
-	toread.get(size);
+	toread >> size;
 	destroyRooms();
 	for (uint64_t i = 0; i != size; i += 1) {
-		toread.get(nbPlayers);
-		toread.get(roomName);
+		toread >> nbPlayers;
+		toread >> roomName;
 		addRoom(_scene, roomName, i + 1, nbPlayers);
 		if (getPosition().y >= 950 && getPosition().x == 0 && _scrollbar == nullptr)
 			_scrollbar = &addChild<sfs::Vnavbar>(_scene, sf::Vector2f(0, 0),

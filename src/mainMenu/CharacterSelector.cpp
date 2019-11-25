@@ -113,9 +113,9 @@ void CharacterSelector::writeCharacterInFile() noexcept
 	if (!myfile.is_open())
 		return;
 	Serializer s;
-	s.set(_characters.back().getName());
-	s.set(_characters.back().getStats());
-	s.set(_characters.back().getColor());
+	s << _characters.back().getName();
+	s << _characters.back().getStats();
+	s << _characters.back().getColor();
 	myfile.write(static_cast<const char *>(s.getNativeHandle()), s.getSize());
 	myfile.close();
 }
@@ -140,9 +140,9 @@ void CharacterSelector::loadCharactersFromFile() noexcept
 		std::string name;
 		struct Character::stats stats;
 		sf::Color color;
-		s.get(name);
-		s.get(stats);
-		s.get(color);
+		s >> name;
+		s >> stats;
+		s >> color;
 		_characters.emplace_back(name, stats, color);
 	}
 	stream.close();

@@ -45,11 +45,11 @@ void roomScene::update(sfs::Scene &) noexcept
 	}
 }
 
-void roomScene::handleConnect(Serializer &toread) noexcept
+void roomScene::handleConnect(Serializer &s) noexcept
 {
-	uint8_t isOk = 0;
-	toread.get(isOk);
-	if ((int)isOk == 0) {
+	bool isOk = 0;
+	s >> isOk;
+	if (isOk == false) {
 		_gameManager->_popup->push("Connection fail, Player already exist");
 		Character character;
 		_gameManager->_character = character;
@@ -59,23 +59,22 @@ void roomScene::handleConnect(Serializer &toread) noexcept
 	_gameManager->_tcp->getRooms();
 }
 
-void roomScene::handleDisconnect(Serializer &toread) noexcept
+void roomScene::handleDisconnect(Serializer &s) noexcept
 {
-	uint8_t isOk = 0;
-	toread.get(isOk);
-	if ((int)isOk == 1) {
+	bool isOk = 0;
+	s >> isOk;
+	if (isOk) {
 		Character character;
 		_gameManager->_character = character;
 		_gameManager->_ip = "";
 	}
 }
 
-void roomScene::handleGameStart(Serializer &toread) noexcept
+void roomScene::handleGameStart(Serializer &s) noexcept
 {
 	uint16_t port;
 
-	if (!toread.get(port))
-		return;
+	s >> port;
 	if (_gameManager->_udp == nullptr)
 		_gameManager->_udp = &_gameManager->addChild<UdpConnect>(_scene, *_gameManager,
 									 _gameManager->_ip, port);
@@ -88,17 +87,17 @@ void roomScene::handleGameStart(Serializer &toread) noexcept
 	}
 }
 
-void roomScene::handleAssetRequirement(Serializer &toread) noexcept
+void roomScene::handleAssetRequirement(Serializer &s) noexcept
 {
 	uint64_t size;
-	toread.get(size);
+	s >> size;
 	std::string fileName;
 	uint64_t fileSize;
 	uint64_t checkSum;
 	for (uint64_t i = 0; i != size; i += 1) {
-		toread.get(fileName);
-		toread.get(fileSize);
-		toread.get(checkSum);
+		s >> fileName;
+		s >> fileSize;
+		s >> checkSum;
 		if (std::filesystem::exists(fileName) == false
 		    || std::filesystem::file_size(fileName) != fileSize
 		    || common::computeChksum(fileName) != checkSum) {
@@ -111,16 +110,16 @@ void roomScene::handleAssetRequirement(Serializer &toread) noexcept
 	_checkAssets = true;
 }
 
-void roomScene::handleLoadAsset(Serializer &toread) noexcept
+void roomScene::handleLoadAsset(Serializer &s) noexcept
 {
 	uint16_t tcpPort;
 	uint64_t fileSize;
 	std::string fileName;
 	uint64_t checkSum;
-	toread.get(tcpPort);
-	toread.get(fileSize);
-	toread.get(fileName);
-	toread.get(checkSum);
+	s >> tcpPort;
+	s >> fileSize;
+	s >> fileName;
+	s >> checkSum;
 	addChild<assetLoader>(_scene, std::ref(_scene), fileName, tcpPort, _gameManager->_ip,
 			      fileSize, checkSum, std::ref(_assetsPath));
 }
