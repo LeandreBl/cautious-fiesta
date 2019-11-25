@@ -98,6 +98,8 @@ void roomScene::handleAssetRequirement(Serializer &s) noexcept
 		s >> fileName;
 		s >> fileSize;
 		s >> checkSum;
+		if (std::filesystem::exists("assets") == false)
+			std::filesystem::create_directory("assets");
 		if (std::filesystem::exists(fileName) == false
 		    || std::filesystem::file_size(fileName) != fileSize
 		    || common::computeChksum(fileName) != checkSum) {
