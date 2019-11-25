@@ -51,6 +51,7 @@ namespace cf
     {
         uint8_t isOk = 0;
         toread.get(isOk);
+        _chatBox->toggle(true);
     }
 
     void Chat::eraseChat() noexcept
