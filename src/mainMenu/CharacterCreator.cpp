@@ -39,22 +39,14 @@ namespace cf {
 	{
 		float total = 100;
 		std::ostringstream stream;
-		stream << std::fixed << std::setprecision(1);
-		for (auto &i : _stats) {
-			if (i->string() != "") {
-				float value = std::atof(i->string().c_str());
-				if ((total - value) < 0) {
-					stream << value + (total - value);
-				    i->string(stream.str());
-				    total = 0;
-			    } else
-				    total -= value;
-			}
+		for (size_t i = 0; i != _stats.size(); i += 1) {
+			float value = std::atof(_stats[i]->string().c_str());
+			if (i == 3)
+				value *= 20;
+			total -= value;
 		 }
 	    _total = total;
-		stream.str("");
-		stream.clear();
-		stream << total;
+		stream << std::fixed << std::setprecision(1) << _total;
 	    _printTotal->setString("total\n " + stream.str());
 
 		for (size_t i = 0; i != _colors.size(); i += 1)
@@ -102,11 +94,13 @@ namespace cf {
 		stat.attackSpeed = s[3];
 		stat.armor = s[4];
 		std::string name = _boxName->string();
-		if (name != "") {
+		if (name != "" && _total == 0) {
 			Character newCharacter(name, stat, sf::Color(_colors[0], _colors[1], _colors[2]));
 			return newCharacter;
-		}
-		_gameMananger->_popup->push("Character name invalid");
+		} else if (_total != 0)
+			_gameMananger->_popup->push("invalid point distribution");
+		else
+			_gameMananger->_popup->push("Character name invalid");
 		Character newCharacter("noName", stat, sf::Color());
 		return newCharacter;
 	};
