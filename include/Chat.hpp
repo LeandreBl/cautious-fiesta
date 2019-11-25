@@ -10,6 +10,7 @@ namespace cf
         public:
             Chat(int messageQueu = 10) noexcept {_messageQueu = messageQueu;};
             void start(sfs::Scene &scene) noexcept;
+            void update(sfs::Scene &scene) noexcept;
             void receiveMessage(Serializer &toread) noexcept;
             void handleSendMessage(Serializer &toread) noexcept;            
             void eraseChat() noexcept;

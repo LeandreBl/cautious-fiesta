@@ -1,6 +1,7 @@
 #include <Offset.hpp>
-#include "Chat.hpp"
 #include <Padder.hpp>
+#include "InputHandler.hpp"
+#include "Chat.hpp"
 
 namespace cf
 {
@@ -17,6 +18,16 @@ namespace cf
         _gameManager = scene.getGameObjects<GameManager>()[0];
 
         scene.subscribe(*this, sf::Event::KeyPressed);
+    }
+
+    void Chat::update(sfs::Scene &scene) noexcept
+    {
+        if (_chatBox->getSelected() == true)
+            scene.getGameObjects<InputHandler>()[0]->changeOption(true);
+        else {
+            scene.getGameObjects<InputHandler>()[0]->changeOption(false);
+            _chatBox->string("");
+        }
     }
 
     void Chat::receiveMessage(Serializer &toread) noexcept
