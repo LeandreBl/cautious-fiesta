@@ -38,7 +38,7 @@ void MenuManager::update(sfs::Scene &scene) noexcept
 	}
 	if (_gameManager->_gameStarted == true) {
 		scene.addGameObject<Game>(scene);
-		this->destroy();
+		destroy();
 	}
 }
 

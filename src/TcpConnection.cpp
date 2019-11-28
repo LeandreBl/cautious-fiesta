@@ -54,12 +54,12 @@ void TcpConnect::send(const Serializer &packet) noexcept
 int TcpConnect::connect(Character charac, const std::string &ip) noexcept
 {
 	Serializer packet;
-	if (lock == false) {
+	if (_lock == false) {
 		_status = _socket.connect(ip, 2121);
 		if (_status == sf::Socket::Error)
 			return -84;
 		_socket.setBlocking(false);
-		lock = true;
+		_lock = true;
 	}
 	packet << charac.getName();
 	packet << charac.getStats();
@@ -146,24 +146,16 @@ void TcpConnect::AssetRequirementIsDone() noexcept
 	send(packet);
 }
 
-void TcpConnect::sendLocalPort(uint16_t port) noexcept
-{
-	Serializer packet;
-	packet << port;
-	packet.setHeader(TcpPrctl::Type::GAME_STARTED);
-	send(packet);
-}
-
 void TcpConnect::update(sfs::Scene &scene) noexcept
 {
-	char buffer[1024];
+	char buffer[4096];
 	std::size_t rd;
 	int socketReturn;
+
 	do {
 		socketReturn = _socket.receive(buffer, sizeof(buffer), rd);
 		if (socketReturn != sf::Socket::Done) {
-			if (socketReturn == sf::Socket::Disconnected && lock == true) {
-				std :: cout << "DECOOOOOOO" << std::endl;
+			if (socketReturn == sf::Socket::Disconnected && _lock == true) {
 				auto manager = _scene.getGameObjects<GameManager>()[0];
 
 				manager->_popup->push("Connection lost...");
@@ -172,25 +164,28 @@ void TcpConnect::update(sfs::Scene &scene) noexcept
 				manager->_character = character;
 				_socket.disconnect();
 				_status = _socket.Disconnected;
-				lock = false;
+				_lock = false;
 				if (manager->_gameStarted == true)
 					manager->_gameFinished = true;
-
 			}
-			return;
-		} else
+		}
+		if (rd > 0) {
 			_serializer.nativeSet(buffer, rd);
+		}
 	} while (rd == sizeof(buffer));
-	TcpPrctl header;
-	while (_serializer.getSize() >= sizeof(header)) {
-		_serializer >> header;
-		header.display();
-		if (_serializer.getSize() >= header.getLength() && header.isCorrect() == true)
-			_callbacks[header.getType()](_serializer);
-		else {
-			disconnect();
+	while (_serializer.getSize() >= sizeof(TcpPrctl)) {
+		TcpPrctl header;
+		_serializer >>= header;
+		if (header.isCorrect() == false) {
+			std::cerr << "clear" << std::endl;
+			_serializer.clear();
 			return;
 		}
+		if (_serializer.getSize() < header.getLength())
+			return;
+		header.display();
+		_serializer.shift(sizeof(TcpPrctl));
+		_callbacks[header.getType()](_serializer);
 	}
 }
 } // namespace cf

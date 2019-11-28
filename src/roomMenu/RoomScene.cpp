@@ -76,15 +76,13 @@ void roomScene::handleGameStart(Serializer &s) noexcept
 
 	s >> port;
 	if (_gameManager->_udp == nullptr)
-		_gameManager->_udp = &_gameManager->addChild<UdpConnect>(_scene, *_gameManager,
-									 _gameManager->_ip, port);
-	if (_gameManager->_udp->isConnected()) {
-		_gameManager->_tcp->sendLocalPort(_gameManager->_udp->getPort());
-		_gameManager->_gameStarted = true;
-	}
-	else {
+		_gameManager->_udp = &_gameManager->addChild<UdpConnect>(_scene, *_gameManager);
+	int status = _gameManager->_udp->connect(port, _gameManager->_ip);
+	if (status == -1) {
 		_gameManager->destroy();
+		return;
 	}
+	_gameManager->_gameStarted = true;
 }
 
 void roomScene::handleAssetRequirement(Serializer &s) noexcept

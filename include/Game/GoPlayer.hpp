@@ -1,5 +1,6 @@
 #include <BasicShape.hpp>
 
+#include "Velocity.hpp"
 #include "UdpGameObject.hpp"
 #include "Udp.hpp"
 
@@ -25,6 +26,7 @@ class GoPlayer : public UdpGameObject {
 	std::string _spriteName;
 	sfs::Sprite *_playerSprite;
 	sfs::Text *_playerName;
+	sfs::Velocity &_velocity;
 	// weapon todo
 };
 } // namespace cf

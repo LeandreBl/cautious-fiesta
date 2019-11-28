@@ -10,6 +10,7 @@ GoPlayer::GoPlayer(uint64_t id, const std::string &name, const struct stats &sta
 	, _spriteName(sprite)
 	, _playerSprite(nullptr)
 	, _playerName(nullptr)
+	, _velocity(addComponent<sfs::Velocity>())
 {
 	UdpGameObject::name(name);
 	// weapon todo

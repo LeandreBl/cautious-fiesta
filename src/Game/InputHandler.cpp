@@ -10,25 +10,49 @@ void InputHandler::start(sfs::Scene &scene) noexcept
 	scene.subscribe(*this, sf::Event::KeyReleased);
 	scene.subscribe(*this, sf::Event::MouseButtonPressed);
 	scene.subscribe(*this, sf::Event::MouseButtonReleased);
+	scene.subscribe(*this, sf::Event::LostFocus);
 	setDefaultKeys();
+	resetFocus();
+}
+
+void InputHandler::resetFocus() noexcept
+{
+	_keyStates[UdpPrctl::inputType::UP] = UdpPrctl::inputAction::RELEASED;
+	_keyStates[UdpPrctl::inputType::DOWN] = UdpPrctl::inputAction::RELEASED;
+	_keyStates[UdpPrctl::inputType::LEFT] = UdpPrctl::inputAction::RELEASED;
+	_keyStates[UdpPrctl::inputType::RIGHT] = UdpPrctl::inputAction::RELEASED;
+	_keyStates[UdpPrctl::inputType::ATTACK1] = UdpPrctl::inputAction::RELEASED;
+	_keyStates[UdpPrctl::inputType::ATTACK2] = UdpPrctl::inputAction::RELEASED;
 }
 
 void InputHandler::onEvent(sfs::Scene &, const sf::Event &event) noexcept
 {
+	if (event.type == sf::Event::LostFocus) {
+		resetFocus();
+		return;
+	}
 	if (_optionIsActive == false && _gameIsStarted == true) {
 		if (event.type == sf::Event::KeyPressed) {
-			if (getEvtKey(event.type, event.key.code)
-			    != UdpPrctl::inputType::UNKNOWN_KEY)
-				_gameManager->_udp->sendInput(
-					UdpPrctl::inputAction::PRESSED,
-					getEvtKey(event.type, event.key.code));
+			const auto k = UdpPrctl::inputAction::PRESSED;
+			const auto type = getEvtKey(event.type, event.key.code);
+			const auto kp = _keyStates[type];
+			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
+				return;
+			else if (kp == UdpPrctl::inputAction::RELEASED) {
+				_gameManager->_udp->sendInput(k, type);
+			}
+			_keyStates[type] = k;
 		}
 		else if (event.type == sf::Event::KeyReleased) {
-			if (getEvtKey(event.type, event.key.code)
-			    != UdpPrctl::inputType::UNKNOWN_KEY)
-				_gameManager->_udp->sendInput(
-					UdpPrctl::inputAction::RELEASED,
-					getEvtKey(event.type, event.key.code));
+			const auto k = UdpPrctl::inputAction::RELEASED;
+			const auto type = getEvtKey(event.type, event.key.code);
+			const auto kp = _keyStates[type];
+			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
+				return;
+			else if (kp == UdpPrctl::inputAction::PRESSED) {
+				_gameManager->_udp->sendInput(k, type);
+			}
+			_keyStates[type] = k;
 		}
 		else if (event.type == sf::Event::MouseButtonPressed) {
 			if (getEvtKey(event.type, event.mouseButton.button)
