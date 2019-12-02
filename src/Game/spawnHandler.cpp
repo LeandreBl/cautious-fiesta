@@ -1,8 +1,10 @@
 #include "GameManager.hpp"
 #include "UdpConnection.hpp"
 #include "GoPlayer.hpp"
+#include "GoWeapon.hpp"
 
-namespace cf {
+namespace cf
+{
 
 static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
 {
@@ -22,11 +24,30 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
 	s >> sprite;
 	s >> weaponType;
 	std::cout << name << " " << stats.life << " " << stats.speed << " " << stats.attack << " "
-		  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
-		  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
-		  << std::endl;
+			  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
+			  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
+			  << std::endl;
 	scene.addGameObject<GoPlayer>(id, name, stats, color, sprite,
-				      static_cast<UdpPrctl::weaponType>(weaponType));
+								  static_cast<UdpPrctl::weaponType>(weaponType));
+}
+
+static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id)
+{
+	uint64_t playerId;
+	int32_t weaponType;
+	std::string spriteName;
+
+	s >> playerId;
+	s >> weaponType;
+	s >> spriteName;
+
+	std::cout << "spawning a " << spriteName << std::endl;
+	auto *go = scene.getGameObject(playerId);
+	auto *texture = scene.getAssetTexture(spriteName);
+	if (go == nullptr || texture == nullptr)
+		return;
+	//add plutot un gameobject weapon
+	go->addChild<GoWeapon>(scene, id, playerId, *texture);
 }
 
 int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer &s)
@@ -37,11 +58,15 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 	s >> type;
 	s >> id;
 	std::cout << "spawn " << type << " " << id << std::endl;
-	switch (static_cast<UdpPrctl::spawnType>(type)) {
+	switch (static_cast<UdpPrctl::spawnType>(type))
+	{
 	case UdpPrctl::spawnType::PLAYER:
 		spawnPlayer(scene, s, id);
 		break;
 	case UdpPrctl::spawnType::OBSTACLE:
+		break;
+	case UdpPrctl::spawnType::WEAPON:
+		spawnWeapon(scene, s, id);
 		break;
 	};
 	return 0;

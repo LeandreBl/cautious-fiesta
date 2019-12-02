@@ -1,7 +1,8 @@
 #include "InputHandler.hpp"
 #include "Udp.hpp"
 
-namespace cf {
+namespace cf
+{
 
 void InputHandler::start(sfs::Scene &scene) noexcept
 {
@@ -27,60 +28,73 @@ void InputHandler::resetFocus() noexcept
 
 void InputHandler::onEvent(sfs::Scene &, const sf::Event &event) noexcept
 {
-	if (event.type == sf::Event::LostFocus) {
+	if (event.type == sf::Event::LostFocus)
+	{
 		resetFocus();
 		return;
 	}
-	if (_optionIsActive == false && _gameIsStarted == true) {
-		if (event.type == sf::Event::KeyPressed) {
+	if (_optionIsActive == false && _gameIsStarted == true)
+	{
+		if (event.type == sf::Event::KeyPressed)
+		{
 			const auto k = UdpPrctl::inputAction::PRESSED;
 			const auto type = getEvtKey(event.type, event.key.code);
 			const auto kp = _keyStates[type];
 			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
 				return;
-			else if (kp == UdpPrctl::inputAction::RELEASED) {
+			else if (kp == UdpPrctl::inputAction::RELEASED)
+			{
 				_gameManager->_udp->sendInput(k, type);
 			}
 			_keyStates[type] = k;
 		}
-		else if (event.type == sf::Event::KeyReleased) {
+		else if (event.type == sf::Event::KeyReleased)
+		{
 			const auto k = UdpPrctl::inputAction::RELEASED;
 			const auto type = getEvtKey(event.type, event.key.code);
 			const auto kp = _keyStates[type];
 			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
 				return;
-			else if (kp == UdpPrctl::inputAction::PRESSED) {
+			else if (kp == UdpPrctl::inputAction::PRESSED)
+			{
 				_gameManager->_udp->sendInput(k, type);
 			}
 			_keyStates[type] = k;
 		}
-		else if (event.type == sf::Event::MouseButtonPressed) {
-			if (getEvtKey(event.type, event.mouseButton.button)
-			    != UdpPrctl::inputType::UNKNOWN_KEY)
-				_gameManager->_udp->sendInput(
-					UdpPrctl::inputAction::PRESSED,
-					getEvtKey(event.type, event.mouseButton.button));
+		else if (event.type == sf::Event::MouseButtonPressed)
+		{
+			const auto k = UdpPrctl::inputAction::PRESSED;
+			const auto type = getEvtKey(event.type, event.mouseButton.button);
+			if (type == UdpPrctl::inputType::UNKNOWN_KEY)
+				return;
+			const auto kp = _keyStates[type];
+			_gameManager->_udp->sendInput(k, type);
 		}
-		else if (event.type == sf::Event::MouseButtonReleased) {
-			if (getEvtKey(event.type, event.mouseButton.button)
-			    != UdpPrctl::inputType::UNKNOWN_KEY)
-				_gameManager->_udp->sendInput(
-					UdpPrctl::inputAction::RELEASED,
-					getEvtKey(event.type, event.mouseButton.button));
+		else if (event.type == sf::Event::MouseButtonReleased)
+		{
+			const auto k = UdpPrctl::inputAction::RELEASED;
+			const auto type = getEvtKey(event.type, event.mouseButton.button);
+			if (type == UdpPrctl::inputType::UNKNOWN_KEY)
+				return;
+			const auto kp = _keyStates[type];
+			_gameManager->_udp->sendInput(k, type);
 		}
 	}
-	else if (_optionIsActive == true && _changeKeys == true) {
-		if (event.type == sf::Event::KeyPressed) {
+	else if (_optionIsActive == true && _changeKeys == true)
+	{
+		if (event.type == sf::Event::KeyPressed)
+		{
 			setEvtKey(sf::Event::KeyPressed, event.key.code, _tmpType);
 			setEvtKey(sf::Event::KeyReleased, event.key.code, _tmpType);
 			_tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
 			_changeKeys = false;
 		}
-		else if (event.type == sf::Event::MouseButtonPressed) {
+		else if (event.type == sf::Event::MouseButtonPressed)
+		{
 			setEvtKey(sf::Event::MouseButtonPressed, event.mouseButton.button,
-				  _tmpType);
+					  _tmpType);
 			setEvtKey(sf::Event::MouseButtonReleased, event.mouseButton.button,
-				  _tmpType);
+					  _tmpType);
 			_tmpType = UdpPrctl::inputType::UNKNOWN_KEY;
 			_changeKeys = false;
 		}
@@ -101,23 +115,24 @@ void InputHandler::setDefaultKeys() noexcept
 	setEvtKey(sf::Event::EventType::KeyPressed, sf::Keyboard::S, UdpPrctl::inputType::DOWN);
 	setEvtKey(sf::Event::EventType::KeyReleased, sf::Keyboard::S, UdpPrctl::inputType::DOWN);
 	setEvtKey(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Button::Left,
-		  UdpPrctl::inputType::ATTACK1);
+			  UdpPrctl::inputType::ATTACK1);
 	setEvtKey(sf::Event::EventType::MouseButtonReleased, sf::Mouse::Button::Left,
-		  UdpPrctl::inputType::ATTACK1);
+			  UdpPrctl::inputType::ATTACK1);
 	setEvtKey(sf::Event::EventType::MouseButtonPressed, sf::Mouse::Button::Right,
-		  UdpPrctl::inputType::ATTACK2);
+			  UdpPrctl::inputType::ATTACK2);
 	setEvtKey(sf::Event::EventType::MouseButtonReleased, sf::Mouse::Button::Right,
-		  UdpPrctl::inputType::ATTACK2);
+			  UdpPrctl::inputType::ATTACK2);
 }
 
 void InputHandler::setEvtKey(sf::Event::EventType type, int key,
-			     enum UdpPrctl::inputType value) noexcept
+							 enum UdpPrctl::inputType value) noexcept
 {
 	if (type >= _evtsMatrix.size())
 		_evtsMatrix.resize(type + 1);
 	if (key >= (int)_evtsMatrix[type].size())
 		_evtsMatrix[type].resize(key + 1, UdpPrctl::inputType::UNKNOWN_KEY);
-	if (type == sf::Event::EventType::MouseButtonPressed) {
+	if (type == sf::Event::EventType::MouseButtonPressed)
+	{
 		_evtsMatrix[sf::Event::EventType::KeyPressed].resize(
 			103, UdpPrctl::inputType::UNKNOWN_KEY);
 		if (key == 0)
@@ -139,7 +154,8 @@ void InputHandler::changeKeys(bool mode, UdpPrctl::inputType type) noexcept
 {
 	_changeKeys = mode;
 	_tmpType = type;
-	for (auto &i : _evtsMatrix) {
+	for (auto &i : _evtsMatrix)
+	{
 		for (auto &j : i)
 			if (j == _tmpType)
 				j = UdpPrctl::inputType::UNKNOWN_KEY;
