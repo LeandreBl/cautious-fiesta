@@ -2,9 +2,26 @@
 #include "UdpConnection.hpp"
 #include "GoPlayer.hpp"
 #include "GoWeapon.hpp"
+#include "GoProjectile.hpp"
 
-namespace cf
+namespace cf {
+
+static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id)
 {
+	sf::Vector2f position;
+	sf::Vector2f speed;
+	sf::Vector2f acceleration;
+	sf::Color color;
+	std::string spriteName;
+	s >> position >> speed >> acceleration >> color >> spriteName;
+
+	auto *texture = scene.getAssetTexture(spriteName);
+	if (texture == nullptr) {
+		std::cerr << "Can't load " << spriteName << std::endl;
+		return;
+	}
+	scene.addGameObject<GoProjectile>(position, speed, acceleration, color, *texture);
+}
 
 static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
 {
@@ -24,11 +41,11 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
 	s >> sprite;
 	s >> weaponType;
 	std::cout << name << " " << stats.life << " " << stats.speed << " " << stats.attack << " "
-			  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
-			  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
-			  << std::endl;
+		  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
+		  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
+		  << std::endl;
 	scene.addGameObject<GoPlayer>(id, name, stats, color, sprite,
-								  static_cast<UdpPrctl::weaponType>(weaponType));
+				      static_cast<UdpPrctl::weaponType>(weaponType));
 }
 
 static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id)
@@ -46,7 +63,7 @@ static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id)
 	auto *texture = scene.getAssetTexture(spriteName);
 	if (go == nullptr || texture == nullptr)
 		return;
-	//add plutot un gameobject weapon
+	// add plutot un gameobject weapon
 	go->addChild<GoWeapon>(scene, id, playerId, *texture);
 }
 
@@ -58,8 +75,7 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 	s >> type;
 	s >> id;
 	std::cout << "spawn " << type << " " << id << std::endl;
-	switch (static_cast<UdpPrctl::spawnType>(type))
-	{
+	switch (static_cast<UdpPrctl::spawnType>(type)) {
 	case UdpPrctl::spawnType::PLAYER:
 		spawnPlayer(scene, s, id);
 		break;
@@ -67,6 +83,9 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 		break;
 	case UdpPrctl::spawnType::WEAPON:
 		spawnWeapon(scene, s, id);
+		break;
+	case UdpPrctl::spawnType::PROJECTILE:
+		spawnProjectile(scene, s, id);
 		break;
 	};
 	return 0;
