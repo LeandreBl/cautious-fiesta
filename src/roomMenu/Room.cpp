@@ -84,7 +84,10 @@ void Room::handlePlayerList(Serializer &toread) noexcept
 			_roomOwner = name;
 		text += name;
 		text += " state : ";
-		text += std::to_string(isOk);
+		if (isOk == 0)
+			text += "unready";
+		else if (isOk == 1)
+			text += "ready";
 		text += "\n\n";
 	}
 	_players->setString(text);
