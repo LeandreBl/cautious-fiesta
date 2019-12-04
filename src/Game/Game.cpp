@@ -7,6 +7,7 @@ Game::Game(sfs::Scene &scene) noexcept
 	scene.subscribe(*this, sf::Event::Closed);
 	scene.subscribe(*this, sf::Event::KeyPressed);
 	_soundManager = &addChild<SoundManager>(scene);
+	_soundManager->addSound(scene, "local-assets/musics/gameMusic.ogg");
 	_ui = &addChild<GameUi>(scene, std::ref(scene));
 	scene.getGameObjects<InputHandler>()[0]->changeGameStarted(true);
 }
