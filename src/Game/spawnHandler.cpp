@@ -6,24 +6,24 @@
 
 namespace cf {
 
-static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id)
+static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
 {
 	sf::Vector2f position;
-	sf::Vector2f speed;
-	sf::Vector2f acceleration;
+	float angle;
+	float speed;
 	sf::Color color;
 	std::string spriteName;
-	s >> position >> speed >> acceleration >> color >> spriteName;
+	s >> position >> angle >> speed >> color >> spriteName;
 
 	auto *texture = scene.getAssetTexture(spriteName);
 	if (texture == nullptr) {
 		std::cerr << "Can't load " << spriteName << std::endl;
 		return;
 	}
-	scene.addGameObject<GoProjectile>(position, speed, acceleration, color, *texture);
+	scene.addGameObject<GoProjectile>(id, position, angle, speed, color, *texture);
 }
 
-static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
+static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
 {
 	sf::Color color;
 	struct GoPlayer::stats stats;
@@ -44,11 +44,14 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id)
 		  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
 		  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
 		  << std::endl;
-	scene.addGameObject<GoPlayer>(id, name, stats, color, sprite,
-				      static_cast<UdpPrctl::weaponType>(weaponType));
+	auto &go = scene.addGameObject<GoPlayer>(id, name, stats, color, sprite,
+						 static_cast<UdpPrctl::weaponType>(weaponType));
+	if (name == manager._character.getName()) {
+		manager._self = &go;
+	}
 }
 
-static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id)
+static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
 {
 	uint64_t playerId;
 	int32_t weaponType;
@@ -58,12 +61,10 @@ static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id)
 	s >> weaponType;
 	s >> spriteName;
 
-	std::cout << "spawning a " << spriteName << std::endl;
 	auto *go = scene.getGameObject(playerId);
 	auto *texture = scene.getAssetTexture(spriteName);
 	if (go == nullptr || texture == nullptr)
 		return;
-	// add plutot un gameobject weapon
 	go->addChild<GoWeapon>(scene, id, playerId, *texture);
 }
 
@@ -74,18 +75,18 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 
 	s >> type;
 	s >> id;
-	std::cout << "spawn " << type << " " << id << std::endl;
+	id += 1000;
 	switch (static_cast<UdpPrctl::spawnType>(type)) {
 	case UdpPrctl::spawnType::PLAYER:
-		spawnPlayer(scene, s, id);
+		spawnPlayer(scene, s, id, _manager);
 		break;
 	case UdpPrctl::spawnType::OBSTACLE:
 		break;
 	case UdpPrctl::spawnType::WEAPON:
-		spawnWeapon(scene, s, id);
+		spawnWeapon(scene, s, id, _manager);
 		break;
 	case UdpPrctl::spawnType::PROJECTILE:
-		spawnProjectile(scene, s, id);
+		spawnProjectile(scene, s, id, _manager);
 		break;
 	};
 	return 0;

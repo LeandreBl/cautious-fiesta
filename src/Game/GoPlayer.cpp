@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "GoPlayer.hpp"
 
 namespace cf {
@@ -36,8 +38,21 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 	_playerName = &addComponent<sfs::Text>(*font, name(), sf::Color::White, 20);
 	auto pRect = _playerSprite->getLocalBounds();
 	auto tRect = _playerName->getLocalBounds();
+	_playerSprite->setOrigin(pRect.width / 2, pRect.height / 2);
 	_playerName->setOffset(sf::Vector2f((pRect.width - tRect.width) / 2, -tRect.height - 5));
+	scene.subscribe(*this, sf::Event::MouseMoved);
 }
+
+void GoPlayer::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
+{
+	sf::Vector2f delta(getPosition());
+
+	delta.x -= event.mouseMove.x;
+	delta.y -= event.mouseMove.y;
+	float angle = atan2(delta.y, delta.x);
+	_playerSprite->setRotation(angle * 180 / M_PI + 145);
+}
+
 
 void GoPlayer::update(sfs::Scene &scene) noexcept
 {

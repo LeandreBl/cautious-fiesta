@@ -16,6 +16,7 @@ UdpConnect::UdpConnect(GameManager &manager) noexcept
 	autoBind(UdpPrctl::Type::SPAWN, &UdpConnect::spawnHandler);
 	autoBind(UdpPrctl::Type::POSITION, &UdpConnect::positionHandler);
 	autoBind(UdpPrctl::Type::VELOCITY, &UdpConnect::velocityHandler);
+	autoBind(UdpPrctl::Type::DESTROY, &UdpConnect::destroyHandler);
 }
 
 int UdpConnect::connect(uint16_t port, const sf::IpAddress &ip) noexcept
@@ -45,8 +46,8 @@ void UdpConnect::sendInput(UdpPrctl::inputAction action, UdpPrctl::inputType typ
 {
 	Serializer packet;
 
-	packet << (int)action;
-	packet << (int)type;
+	packet << static_cast<int32_t>(action);
+	packet << static_cast<int32_t>(type);
 	pushPacket(packet, UdpPrctl::Type::INPUT);
 }
 
@@ -66,8 +67,9 @@ void UdpConnect::receiveData(sfs::Scene &scene) noexcept
 void UdpConnect::executePacket(sfs::Scene &scene, const UdpPrctl &header) noexcept
 {
 	int idx = static_cast<int>(header.getType());
+	Serializer s(_serializer, header.getLength());
 	if (_callbacks[idx])
-		_callbacks[idx](scene, _manager, _serializer);
+		_callbacks[idx](scene, _manager, s);
 }
 
 static sf::Socket::Status sendWrapper(sf::TcpSocket &socket, void *data, size_t size)

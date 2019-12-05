@@ -35,6 +35,7 @@ class UdpConnect : public sfs::GameObject {
 	int spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer &toRead);
 	int positionHandler(sfs::Scene &scene, GameManager &manager, Serializer &toRead);
 	int velocityHandler(sfs::Scene &scene, GameManager &manager, Serializer &toRead);
+	int destroyHandler(sfs::Scene &scene, GameManager &manager, Serializer &toRead);
 	/* end */
 	GameManager &_manager;
 	std::function<int(sfs::Scene &, GameManager &, Serializer &)>

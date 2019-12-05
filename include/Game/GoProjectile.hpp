@@ -3,13 +3,13 @@
 #include "BasicShape.hpp"
 #include "GameObject.hpp"
 #include "Velocity.hpp"
+#include "UdpGameObject.hpp"
 
 namespace cf {
-class GoProjectile : public sfs::GameObject {
+class GoProjectile : public UdpGameObject {
       public:
-	GoProjectile(const sf::Vector2f &position, const sf::Vector2f &speed,
-		     const sf::Vector2f &acceleration, const sf::Color &color,
-		     const sf::Texture &texture) noexcept;
+	GoProjectile(uint64_t id, const sf::Vector2f &position, float angle, float speed,
+		     const sf::Color &color, const sf::Texture &texture) noexcept;
 
       protected:
 	sfs::Velocity &_velocity;

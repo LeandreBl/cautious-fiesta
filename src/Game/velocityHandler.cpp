@@ -10,6 +10,7 @@ int UdpConnect::velocityHandler(sfs::Scene &scene, GameManager &manager, Seriali
 	sf::Vector2f speed;
 
 	s >> id >> speed >> acceleration;
+	id += 1000;
 	auto *go = scene.getGameObject(id);
 	if (go == nullptr) {
 		std::cerr << "Can't find object " << id << std::endl;

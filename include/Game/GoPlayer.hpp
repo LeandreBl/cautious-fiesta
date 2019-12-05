@@ -4,13 +4,10 @@
 #include "UdpGameObject.hpp"
 #include "Udp.hpp"
 
-namespace cf
-{
-class GoPlayer : public UdpGameObject
-{
-public:
-	struct stats
-	{
+namespace cf {
+class GoPlayer : public UdpGameObject {
+      public:
+	struct stats {
 		float life;
 		float speed;
 		float attack;
@@ -18,12 +15,13 @@ public:
 		float armor;
 	};
 	GoPlayer(uint64_t id, const std::string &name, const struct stats &stats,
-			 const sf::Color &color, const std::string &sprite,
-			 UdpPrctl::weaponType weaponType) noexcept;
+		 const sf::Color &color, const std::string &sprite,
+		 UdpPrctl::weaponType weaponType) noexcept;
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &scene) noexcept;
+	void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
 
-protected:
+      protected:
 	struct stats _stats;
 	sf::Color _color;
 	std::string _spriteName;
