@@ -2,6 +2,9 @@
 #include "MenuButtons.hpp"
 #include "GameManager.hpp"
 #include <Padder.hpp>
+#include "MainMenu.hpp"
+#include "RoomScene.hpp"
+#include "MenuManager.hpp"
 
 namespace cf {
 void ExitButton::start(sfs::Scene &scene) noexcept
@@ -27,6 +30,16 @@ void PlayButton::play(sfs::Scene &scene) noexcept
 	auto gameManager = scene.getGameObjects<GameManager>();
 	gameManager[0]->_character = _CSelection->charaterSelected();
 	gameManager[0]->_ip = _box->getIp();
+
+	if (gameManager[0]->_character.getName() != "noName" && gameManager[0]->_ip != "" && gameManager[0]->_gameFinished == false) {
+		auto v = scene.getGameObjects<MainMenu>();
+		if (!v.empty()) {
+			v[0]->destroy();
+			auto v2 = scene.getGameObjects<MenuManager>();
+			if (!v2.empty())
+				v2[0]->addChild<roomScene>(scene, std::ref(scene));
+		}
+	}
 }
 
 void PlayButton::start(sfs::Scene &scene) noexcept

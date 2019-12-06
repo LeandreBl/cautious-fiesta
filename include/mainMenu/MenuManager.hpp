@@ -12,8 +12,8 @@ namespace cf {
         public:
             MenuManager() noexcept;
             void start(sfs::Scene &scene) noexcept;
-            void update(sfs::Scene &scene) noexcept;
             void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
+            Scroller *getScroller() const noexcept {return _scroller;};
         protected :
             MainMenu *_mainMenu;
             Scroller *_scroller;

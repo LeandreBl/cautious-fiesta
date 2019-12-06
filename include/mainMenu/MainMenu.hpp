@@ -9,7 +9,8 @@ namespace cf {
 class MainMenu : public sfs::GameObject {
       public:
 	MainMenu(Scroller *scroller) noexcept
-		: _scroller(scroller)
+		: sfs::GameObject(sf::Vector2f(), "mainMenu")
+		, _scroller(scroller)
 		, _play(nullptr)
 		, _quotes(nullptr)
 		, _exit(nullptr)

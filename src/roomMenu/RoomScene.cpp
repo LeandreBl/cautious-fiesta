@@ -8,7 +8,8 @@
 namespace cf {
 
 roomScene::roomScene(sfs::Scene &scene) noexcept
-	: _scene(scene)
+	: sfs::GameObject(sf::Vector2f(), "roomScene")
+	, _scene(scene)
 {
 	auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
@@ -69,6 +70,11 @@ void roomScene::handleDisconnect(Serializer &s) noexcept
 		Character character;
 		_gameManager->_character = character;
 		_gameManager->_ip = "";
+		auto v2 = _scene.getGameObjects<MenuManager>();
+		if (!v2.empty()) {
+			v2[0]->addChild<MainMenu>(_scene, v2[0]->getScroller());
+		}
+		destroy();
 	}
 }
 
