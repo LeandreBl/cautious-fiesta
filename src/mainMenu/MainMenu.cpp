@@ -1,8 +1,7 @@
 #include "MainMenu.hpp"
 #include <Padder.hpp>
 
-namespace cf
-{
+namespace cf {
 
 void MainMenu::start(sfs::Scene &scene) noexcept
 {
@@ -12,7 +11,8 @@ void MainMenu::start(sfs::Scene &scene) noexcept
 	createOptionsButton(scene);
 }
 
-void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
+void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept
+{
 	auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
@@ -20,7 +20,8 @@ void MainMenu::createOptionsButton(sfs::Scene &scene) noexcept {
 		destroy();
 		return;
 	}
-	_options = &addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(0, 0),
+	_options = &addChild<sfs::Button>(
+		scene, *texture, *font, sf::Vector2f(0, 0),
 		std::bind(&MainMenu::launchOptionScene, this, std::ref(scene)), "Options",
 		sf::Color::White, 25);
 	_options->setScale(sf::Vector2f(1.2, 1.7));
@@ -43,7 +44,7 @@ void MainMenu::launchOptionScene(sfs::Scene &scene) noexcept
 	_scroller->setLayersSpeed(scene, false, sf::Vector2f(0, -650));
 }
 
-bool lock = false;
+static bool lock = false;
 
 void MainMenu::update(sfs::Scene &scene) noexcept
 {
@@ -57,7 +58,8 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 				if (check.size() == 0) {
 					lock = true;
 					_optionImage->addVelocity(sf::Vector2f(0, 650));
-					_scroller->setLayersSpeed(scene, false, sf::Vector2f(0, 650));
+					_scroller->setLayersSpeed(scene, false,
+								  sf::Vector2f(0, 650));
 				}
 			}
 		}
@@ -74,4 +76,4 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 		createOptionsButton(scene);
 	}
 }
-}
+} // namespace cf

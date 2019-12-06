@@ -4,7 +4,8 @@
 namespace cf {
 
 MenuManager::MenuManager() noexcept
-	: _mainMenu(nullptr)
+	: sfs::GameObject(sf::Vector2f(), "menuManager")
+	, _mainMenu(nullptr)
 	, _scroller(nullptr)
 	, _gameManager(nullptr)
 	, _soundManager(nullptr)
@@ -30,15 +31,11 @@ void MenuManager::update(sfs::Scene &scene) noexcept
 		_mainMenu = nullptr;
 		_roomScene = &addChild<roomScene>(scene, std::ref(scene));
 	}
-	if (_gameManager->_character.getName() == "noName" && _gameManager->_ip == ""
-	    && _roomScene != nullptr) {
+	else if (_gameManager->_character.getName() == "noName" && _gameManager->_ip == ""
+		 && _roomScene != nullptr) {
 		_roomScene->destroy();
 		_roomScene = nullptr;
 		_mainMenu = &addChild<MainMenu>(scene, _scroller);
-	}
-	if (_gameManager->_gameStarted == true) {
-		scene.addGameObject<Game>(scene);
-		destroy();
 	}
 }
 

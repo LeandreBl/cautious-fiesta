@@ -2,6 +2,8 @@
 #include <Padder.hpp>
 #include <Asset.hpp>
 #include "RoomScene.hpp"
+#include "MenuManager.hpp"
+#include "Game.hpp"
 
 namespace cf {
 
@@ -83,6 +85,11 @@ void roomScene::handleGameStart(Serializer &s) noexcept
 		return;
 	}
 	_gameManager->_gameStarted = true;
+	auto v = _scene.getGameObjects<MenuManager>();
+	if (!v.empty()) {
+		_scene.addGameObject<Game>(_scene);
+		v[0]->destroy();
+	}
 }
 
 void roomScene::handleAssetRequirement(Serializer &s) noexcept

@@ -11,6 +11,7 @@ GoProjectile::GoProjectile(uint64_t id, const sf::Vector2f &position, float angl
 	, _sprite(addComponent<sfs::Sprite>(texture))
 	, _color(color)
 {
+	_sprite.setColor(color);
 	setPosition(position);
 }
 } // namespace cf

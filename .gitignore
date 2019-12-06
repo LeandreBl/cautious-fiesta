@@ -4,6 +4,7 @@ discord-rpc/*
 build/*
 assets/*
 .vscode
+.gdb_history
 
 # Prerequisites
 *.d
