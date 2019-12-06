@@ -37,7 +37,7 @@ void TcpConnect::bindAfterGameStarted(sfs::Scene &scene) noexcept
 	autoBind(TcpPrctl::Type::LOGOUT, &GameManager::disconnectAndLeaveRoom, _gameManager);
 	autoBind(TcpPrctl::Type::GET_GAMEROOMS_LIST, &GameManager::updateRooms, _gameManager);
 
-	auto chat = scene.getGameObjects<Chat>()[1];
+	auto chat = scene.getGameObjects<Chat>()[0];
 	autoBind(TcpPrctl::Type::SEND_MESSAGE, &Chat::handleSendMessage, chat);
 	autoBind(TcpPrctl::Type::RECEIVE_MESSAGE, &Chat::receiveMessage, chat);
 }
