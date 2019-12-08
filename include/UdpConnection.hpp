@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <list>
+#include <functional>
 
 #include <SFML/Network.hpp>
 
