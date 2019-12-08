@@ -2,6 +2,7 @@
 #include "UdpConnection.hpp"
 #include "GoPlayer.hpp"
 #include "GoWeapon.hpp"
+#include "GoObstacle.hpp"
 #include "GoProjectile.hpp"
 #include "SpriteSheetLoader.hpp"
 #include "UiWeapon.hpp"
@@ -24,6 +25,21 @@ static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id, GameM
 		return;
 	}
 	scene.addGameObject<GoProjectile>(id, position, angle, speed, color, *texture, loader.getFrames());
+}
+
+static void spawnObstacle(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
+{
+	sf::Vector2f position;
+	std::string spriteSheet;
+	s >> position >> spriteSheet;
+
+	SpriteSheetLoader loader(spriteSheet);
+	auto *texture = scene.getAssetTexture(loader.getSpritePath());
+	if (texture == nullptr) {
+		std::cerr << "Can't load " << spriteSheet << std::endl;
+		return;
+	}
+	scene.addGameObject<GoObstacle>(id, position, *texture, loader.getFrames());
 }
 
 static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
@@ -88,6 +104,7 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 		spawnPlayer(scene, s, id, _manager);
 		break;
 	case UdpPrctl::spawnType::OBSTACLE:
+		spawnObstacle(scene, s, id, _manager);
 		break;
 	case UdpPrctl::spawnType::WEAPON:
 		spawnWeapon(scene, s, id, _manager);
