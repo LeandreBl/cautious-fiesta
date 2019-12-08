@@ -3,6 +3,7 @@
 #include "GoPlayer.hpp"
 #include "GoWeapon.hpp"
 #include "GoProjectile.hpp"
+#include "SpriteSheetLoader.hpp"
 
 namespace cf {
 
@@ -12,15 +13,16 @@ static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id, GameM
 	float angle;
 	float speed;
 	sf::Color color;
-	std::string spriteName;
-	s >> position >> angle >> speed >> color >> spriteName;
+	std::string spriteSheet;
+	s >> position >> angle >> speed >> color >> spriteSheet;
 
-	auto *texture = scene.getAssetTexture(spriteName);
+	SpriteSheetLoader loader(spriteSheet);
+	auto *texture = scene.getAssetTexture(loader.getSpritePath());
 	if (texture == nullptr) {
-		std::cerr << "Can't load " << spriteName << std::endl;
+		std::cerr << "Can't load " << spriteSheet << std::endl;
 		return;
 	}
-	scene.addGameObject<GoProjectile>(id, position, angle, speed, color, *texture);
+	scene.addGameObject<GoProjectile>(id, position, angle, speed, color, *texture, loader.getFrames());
 }
 
 static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
