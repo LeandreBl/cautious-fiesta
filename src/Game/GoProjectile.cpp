@@ -5,10 +5,11 @@
 
 namespace cf {
 GoProjectile::GoProjectile(uint64_t id, const sf::Vector2f &position, float angle, float speed,
-			   const sf::Color &color, const sf::Texture &texture, const std::vector<sf::IntRect> &conteiners) noexcept
+			   const sf::Color &color, const sf::Texture &texture,
+			   const std::vector<sf::IntRect> &conteiners) noexcept
 	: UdpGameObject(id)
 	, _velocity(addComponent<sfs::Velocity>(
-		  sf::Vector2f(cosf(angle) * speed, sinf(angle) * speed)))
+		  sf::Vector2f(cosf(angle) * -speed, sinf(angle) * -speed)))
 	, _sprites(addComponent<sfs::MultiSprite>(texture, conteiners, 0.5))
 	, _color(color)
 {
@@ -18,6 +19,7 @@ GoProjectile::GoProjectile(uint64_t id, const sf::Vector2f &position, float angl
 
 void GoProjectile::start(sfs::Scene &scene) noexcept
 {
-	addComponent<sfs::Sound>(*scene.getAssetSoundBuffer("local-assets/musics/laser.ogg"), false, true);
+	addComponent<sfs::Sound>(*scene.getAssetSoundBuffer("local-assets/musics/laser.ogg"), false,
+				 true);
 }
 } // namespace cf

@@ -19,7 +19,7 @@ file(GLOB_RECURSE SRCS "src/*.cpp")
 set(HDRS_DIRS "include/" "include/Game" "include/mainMenu" "include/roomMenu")
 
 SET(CMAKE_CXX_FLAGS_DEBUG "-O3 -ggdb3 -Wall -Wextra -Weffc++ -Wshadow -Wold-style-cast -Wcast-align -Wunused -Woverloaded-virtual -Wpedantic -Wsign-conversion -Wlogical-op -Wuseless-cast -fsanitize=address")
-SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -ggdb3 -Wextra -O3")
+SET(CMAKE_CXX_FLAGS_RELEASE "-Wall -ggdb3 -Wextra -O3 -fsanitize=address")
 
 add_subdirectory(cautious-fiesta-common)
 

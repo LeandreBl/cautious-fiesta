@@ -15,7 +15,6 @@ GoPlayer::GoPlayer(uint64_t id, const std::string &name, const struct stats &sta
 	, _velocity(addComponent<sfs::Velocity>())
 {
 	UdpGameObject::name(name);
-	// weapon todo
 }
 
 void GoPlayer::start(sfs::Scene &scene) noexcept
@@ -36,10 +35,11 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 		return;
 	}
 	_playerName = &addComponent<sfs::Text>(*font, name(), sf::Color::White, 20);
-	auto pRect = _playerSprite->getLocalBounds();
-	auto tRect = _playerName->getLocalBounds();
+	auto pRect = _playerSprite->getGlobalBounds();
+	auto tRect = _playerName->getGlobalBounds();
 	_playerSprite->setOrigin(pRect.width / 2, pRect.height / 2);
-	_playerName->setOffset(sf::Vector2f((pRect.width - tRect.width) / 2, -tRect.height - 5));
+	_playerName->setOffset(sf::Vector2f((pRect.width - tRect.width) / 2 - pRect.width / 2,
+					    -tRect.height - 5 - pRect.height / 2));
 	scene.subscribe(*this, sf::Event::MouseMoved);
 }
 
