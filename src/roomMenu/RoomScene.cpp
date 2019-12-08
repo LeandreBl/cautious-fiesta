@@ -111,6 +111,8 @@ void roomScene::handleAssetRequirement(Serializer &s) noexcept
 		s >> checkSum;
 		if (std::filesystem::exists("assets") == false)
 			std::filesystem::create_directory("assets");
+		if (std::filesystem::exists("assets/SpriteSheets") == false)
+			std::filesystem::create_directory("assets/SpriteSheets");
 		if (std::filesystem::exists(fileName) == false
 		    || std::filesystem::file_size(fileName) != fileSize
 		    || common::computeChksum(fileName) != checkSum) {

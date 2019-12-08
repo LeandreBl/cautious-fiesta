@@ -17,11 +17,12 @@ namespace cf
     {
         auto gameManager = scene.getGameObjects<GameManager>();
         if (!gameManager.empty()) {
+            SpriteSheetLoader loader("assets/SpriteSheets/HeartSpriteSheet.txt");
+
             _maxLife = gameManager[0]->_character.getLife();
-            _heart = &addComponent<sfs::Sprite>(*scene.getAssetTexture("SpriteSheets/Heart.png"), sf::Vector2f(-500, -500));
+            _heart = &addComponent<sfs::Sprite>(*scene.getAssetTexture(loader.getSpritePath()), sf::Vector2f(-500, -500));
             _lifeDisplay = &addComponent<sfs::Text>(*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
                                                     std::to_string((int)_maxLife), sf::Color::Black, 35, sf::Vector2f(-550, -550));
-            SpriteSheetLoader loader("SpriteSheets/HeartSpriteSheet.txt");
             _frames = loader.getFrames();
             _heart->setTextureRect(_frames[0]);
             _heart->setScale(sf::Vector2f(10, 10));
