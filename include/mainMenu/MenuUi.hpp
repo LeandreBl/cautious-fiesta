@@ -2,13 +2,15 @@
 
 #include "InputBox.hpp"
 
-namespace cf
-{
-class QuoteGenerator : public sfs::UI
-{
+namespace cf {
+class QuoteGenerator : public sfs::UI {
       public:
-	QuoteGenerator() noexcept
-	    : _text(nullptr), _font(nullptr), _scale(1), _rev(1){};
+	QuoteGenerator(const sf::Vector2f &pos = sf::Vector2f(0, 0)) noexcept
+		: sfs::UI(pos, "quote generator")
+		, _text(nullptr)
+		, _font(nullptr)
+		, _scale(1)
+		, _rev(1){};
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &scene) noexcept;
 
@@ -17,12 +19,13 @@ class QuoteGenerator : public sfs::UI
 	const sf::Font *_font;
 	float _scale;
 	int _rev;
+	bool _swap = false;
 };
 
-class IpInputBox : public sfs::UI
-{
+class IpInputBox : public sfs::UI {
       public:
-	IpInputBox() noexcept : _input(nullptr){};
+	IpInputBox() noexcept
+		: _input(nullptr){};
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &) noexcept
 	{

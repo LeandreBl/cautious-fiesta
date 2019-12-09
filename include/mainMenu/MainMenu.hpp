@@ -6,10 +6,10 @@
 #include "Option.hpp"
 
 namespace cf {
-class MainMenu : public sfs::GameObject {
+class MainMenu : public sfs::UI {
       public:
 	MainMenu(Scroller *scroller) noexcept
-		: sfs::GameObject(sf::Vector2f(), "mainMenu")
+		: sfs::UI(sf::Vector2f(0, 0), "mainMenu")
 		, _scroller(scroller)
 		, _play(nullptr)
 		, _quotes(nullptr)

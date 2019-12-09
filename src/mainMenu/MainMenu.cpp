@@ -5,7 +5,7 @@ namespace cf {
 
 void MainMenu::start(sfs::Scene &scene) noexcept
 {
-	_quotes = &addChild<QuoteGenerator>(scene);
+	_quotes = &addChild<QuoteGenerator>(scene, sf::Vector2f(1170, 70));
 	_exit = &addChild<ExitButton>(scene);
 	_play = &addChild<PlayButton>(scene);
 	createOptionsButton(scene);
@@ -70,7 +70,7 @@ void MainMenu::update(sfs::Scene &scene) noexcept
 		_opS = nullptr;
 		lock = false;
 		_scroller->setLayersSpeed(scene, true);
-		_quotes = &addChild<QuoteGenerator>(scene);
+		_quotes = &addChild<QuoteGenerator>(scene, sf::Vector2f(1170, 70));
 		_play = &addChild<PlayButton>(scene);
 		_exit = &addChild<ExitButton>(scene);
 		createOptionsButton(scene);

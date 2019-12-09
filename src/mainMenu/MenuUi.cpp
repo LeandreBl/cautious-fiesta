@@ -2,46 +2,39 @@
 #include "MenuUi.hpp"
 #include <Padder.hpp>
 
-namespace cf
-{
-static const char *QUOTES[] = {"France number 1",
-			       "just ZIBoss117",
-			       "Better than Minecraft",
-			       "LaMout pd",
-			       "I like money",
-			       "I <3 Korea",
-			       "Better than Fortnite",
-			       "The game",
-			       "Ryan the king",
-			       "France > Korea",
-			       "<3 Kakao friends",
-			       "Kakao friends > Line Friends",
-			       "GOT is overrated",
-			       "JBest",
-			       "Made in two days",
-			       "Hello there",
-			       "T-Series > Pwediepie",
-			       "Han shot first",
-			       "<3 Game software",
-			       "Where is Ludo?",
-			       "E",
-			       "Life solution is 42",
-			       "Planard approved",
-			       "ASTEK !",
-			       "I seoul you",
-			       "too fast for u",
-			       "The best game",
-			       "JOJOOOOO !",
-			       "Faster than naruto runners",
-			       "Sard AYAYA",
-			       "FBI OPEN UP !",
-			       "This is a random quote",
-			       "Girls, I'm single",
-			       "Acmée de la vie"};
+namespace cf {
+static const char *QUOTES[] = {
+	"just ZIBoss",
+	"Better than Minecraft",
+	"LaMout pd",
+	"I like money",
+	"I <3 Korea",
+	"Better than Fortnite",
+	"The game",
+	"Ryan the king",
+	"<3 Kakao friends",
+	"GOT is overrated",
+	"Made in two days",
+	"Hello there",
+	"PewDiePie > T-Series",
+	"Han shot first",
+	"<3 Game software",
+	"Where is Ludo?",
+	"E",
+	"Life solution is 42",
+	"Planard approved",
+	"ASTEK !",
+	"I Seoul U",
+	"The best game",
+	"Sard AYAYA",
+	"FBI OPEN UP !",
+	"\"This is a random quote\"",
+	"Girls, I'm single",
+	"Acmee de la vie",
+};
 
 void QuoteGenerator::start(sfs::Scene &scene) noexcept
 {
-	setPosition(sf::Vector2f(200, 200));
 	_font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
 	if (_font == nullptr) {
 		errorLog("Required font not found.");
@@ -49,9 +42,16 @@ void QuoteGenerator::start(sfs::Scene &scene) noexcept
 		return;
 	}
 	std::srand(time(nullptr));
-	_text = &addComponent<sfs::Text>(
-		*_font, QUOTES[rand() % (sizeof(QUOTES) / sizeof(QUOTES[0]))],
-		sf::Color::Yellow, 40);
+	_text = &addComponent<sfs::Text>(*_font,
+					 QUOTES[rand() % (sizeof(QUOTES) / sizeof(QUOTES[0]))],
+					 sf::Color::Yellow, 40);
+	auto *texture = scene.getAssetTexture("local-assets/sprites/cautious-fiesta.png");
+	if (texture == nullptr) {
+		std::cerr << "Can't find cautious-fiesta.png" << std::endl;
+		scene.close();
+		return;
+	}
+	addComponent<sfs::Sprite>(*texture);
 }
 
 void QuoteGenerator::update(sfs::Scene &scene) noexcept
@@ -60,11 +60,14 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 	auto max = 1.f / scene.framerate();
 	if (dt > max)
 		dt = max;
-	_scale += 0.35 * dt * _rev;
-	if (_scale > 1 || _scale < 0.3) {
+	_scale += 0.75 * dt * _rev;
+	if (_scale > 1 || _scale < 0.01) {
 		_rev *= -1;
-		_text->setString(std::string(
-			QUOTES[rand() % (sizeof(QUOTES) / sizeof(QUOTES[0]))]));
+		_swap = !_swap;
+		if (_swap == false) {
+			_text->setString(
+				std::string(QUOTES[rand() % (sizeof(QUOTES) / sizeof(QUOTES[0]))]));
+		}
 	}
 	_text->setScale(_scale, _scale);
 }
@@ -72,23 +75,21 @@ void QuoteGenerator::update(sfs::Scene &scene) noexcept
 void IpInputBox::start(sfs::Scene &scene) noexcept
 {
 	auto font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
-	auto texture = scene.getAssetTexture(
-		"local-assets/sprites/Menu/ui/BlankButton1.png");
+	auto texture = scene.getAssetTexture("local-assets/sprites/Menu/ui/BlankButton1.png");
 	if (font == nullptr || texture == nullptr) {
-		errorLog(
-			"[Menu] The InputBox failed the loading of the font or the texture");
+		errorLog("[Menu] The InputBox failed the loading of the font or the texture");
 		destroy();
 		return;
 	}
 
-	auto &button = addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(-1000, -1000), std::bind(&IpInputBox::activeInputBox, this));
+	auto &button = addChild<sfs::Button>(scene, *texture, *font, sf::Vector2f(-1000, -1000),
+					     std::bind(&IpInputBox::activeInputBox, this));
 	button.setScale(sf::Vector2f(1.5, 2.2));
 	button.addComponent<PadderW<sfs::Button>>(0, button);
 	button.addComponent<PadderH<sfs::Button>>(-100, button);
 
-	_input = &addChild<sfs::CustomBox>(scene, *font, sf::Vector2f(0, 0),
-					   "IP", sf::Color::White, 35,
-					   "1234567890.");
+	_input = &addChild<sfs::CustomBox>(scene, *font, sf::Vector2f(0, 0), "IP", sf::Color::White,
+					   35, "1234567890.");
 	_input->addComponent<PadderW<sfs::InputBox>>(0, *_input);
 	_input->addComponent<PadderH<sfs::InputBox>>(-110, *_input);
 }
