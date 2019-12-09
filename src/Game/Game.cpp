@@ -10,6 +10,10 @@ Game::Game(sfs::Scene &scene) noexcept
 	_soundManager->addSound(scene, "local-assets/musics/gameMusic.ogg");
 	_ui = &addChild<GameUi>(scene, std::ref(scene));
 	scene.getGameObjects<InputHandler>()[0]->changeGameStarted(true);
+
+	auto floor = &addComponent<sfs::Sprite>(*scene.getAssetTexture("ground.jpg"));
+	floor->setScale(sf::Vector2f(3.40, 1.92));
+	layer(50);
 }
 
 void Game::start(sfs::Scene &scene) noexcept

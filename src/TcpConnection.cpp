@@ -146,7 +146,7 @@ void TcpConnect::AssetRequirementIsDone() noexcept
 	send(packet);
 }
 
-void TcpConnect::update(sfs::Scene &scene) noexcept
+void TcpConnect::update(sfs::Scene &) noexcept
 {
 	char buffer[4096];
 	std::size_t rd;
