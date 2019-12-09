@@ -4,6 +4,7 @@
 #include "GoWeapon.hpp"
 #include "GoProjectile.hpp"
 #include "SpriteSheetLoader.hpp"
+#include "UiWeapon.hpp"
 
 namespace cf {
 
@@ -63,11 +64,15 @@ static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 	s >> weaponType;
 	s >> spriteName;
 
-	auto *go = scene.getGameObject(playerId);
+	auto *go = scene.getGameObject(playerId + 1000);
 	auto *texture = scene.getAssetTexture(spriteName);
 	if (go == nullptr || texture == nullptr)
 		return;
 	go->addChild<GoWeapon>(scene, id, playerId, *texture);
+
+	auto v = scene.getGameObjects<UiWeapon>();
+	if (v.empty() == false)
+		v[0]->setUiWeapon(*texture);
 }
 
 int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer &s)

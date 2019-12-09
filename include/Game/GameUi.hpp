@@ -2,6 +2,7 @@
 
 #include "Chat.hpp"
 #include "Life.hpp"
+#include "UiWeapon.hpp"
 
 namespace cf
 {
@@ -12,5 +13,6 @@ namespace cf
         protected:
             Chat *_chat;
             Life *_life;
+            UiWeapon *_weapon;
     };
 }
