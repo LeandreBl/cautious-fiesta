@@ -51,7 +51,7 @@ void QuoteGenerator::start(sfs::Scene &scene) noexcept
 		scene.close();
 		return;
 	}
-	addComponent<sfs::Sprite>(*texture);
+	addComponent<sfs::Sprite>(*texture, -getPosition());
 }
 
 void QuoteGenerator::update(sfs::Scene &scene) noexcept
