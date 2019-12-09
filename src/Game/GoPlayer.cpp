@@ -30,11 +30,18 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 	_playerSprite->setColor(_color);
 	auto *font = scene.getAssetFont("");
 	if (font == nullptr) {
-		std::cerr << "not font found" << std::endl;
+		std::cerr << "no font found" << std::endl;
 		destroy();
 		return;
 	}
 	_playerName = &addComponent<sfs::Text>(*font, name(), sf::Color::White, 20);
+	auto *sound = scene.getAssetSoundBuffer("local-assets/musics/laser.ogg");
+	if (sound == nullptr) {
+		std::cerr << "laser sound not found" << std::endl;
+		destroy();
+		return;
+	}
+	_sound = &addComponent<sfs::Sound>(*sound);
 	auto pRect = _playerSprite->getGlobalBounds();
 	auto tRect = _playerName->getGlobalBounds();
 	_playerSprite->setOrigin(pRect.width / 2, pRect.height / 2);
@@ -53,8 +60,8 @@ void GoPlayer::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 	_playerSprite->setRotation(angle * 180 / M_PI + 145);
 }
 
-
-void GoPlayer::update(sfs::Scene &scene) noexcept
+sfs::Sound &GoPlayer::getAttackSound() noexcept
 {
+	return *_sound;
 }
 } // namespace cf

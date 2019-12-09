@@ -4,7 +4,7 @@
 #include "GameManager.hpp"
 
 namespace cf {
-class Chat : public sfs::GameObject {
+class Chat : public sfs::UI {
       public:
 	Chat(int messageQueu = 10) noexcept
 	{

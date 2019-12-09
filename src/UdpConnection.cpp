@@ -17,6 +17,7 @@ UdpConnect::UdpConnect(GameManager &manager) noexcept
 	autoBind(UdpPrctl::Type::POSITION, &UdpConnect::positionHandler);
 	autoBind(UdpPrctl::Type::VELOCITY, &UdpConnect::velocityHandler);
 	autoBind(UdpPrctl::Type::DESTROY, &UdpConnect::destroyHandler);
+	autoBind(UdpPrctl::Type::ATTACK, &UdpConnect::attackHandler);
 }
 
 int UdpConnect::connect(uint16_t port, const sf::IpAddress &ip) noexcept
