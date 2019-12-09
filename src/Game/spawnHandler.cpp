@@ -4,10 +4,12 @@
 #include "GoWeapon.hpp"
 #include "GoObstacle.hpp"
 #include "GoProjectile.hpp"
+#include "GoEnnemy.hpp"
 #include "SpriteSheetLoader.hpp"
 #include "UiWeapon.hpp"
 
-namespace cf {
+namespace cf
+{
 
 static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
 {
@@ -20,7 +22,8 @@ static void spawnProjectile(sfs::Scene &scene, Serializer &s, uint64_t id, GameM
 
 	SpriteSheetLoader loader(spriteSheet);
 	auto *texture = scene.getAssetTexture(loader.getSpritePath());
-	if (texture == nullptr) {
+	if (texture == nullptr)
+	{
 		std::cerr << "Can't load " << spriteSheet << std::endl;
 		return;
 	}
@@ -35,7 +38,8 @@ static void spawnObstacle(sfs::Scene &scene, Serializer &s, uint64_t id, GameMan
 
 	SpriteSheetLoader loader(spriteSheet);
 	auto *texture = scene.getAssetTexture(loader.getSpritePath());
-	if (texture == nullptr) {
+	if (texture == nullptr)
+	{
 		std::cerr << "Can't load " << spriteSheet << std::endl;
 		return;
 	}
@@ -60,14 +64,26 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 	s >> sprite;
 	s >> weaponType;
 	std::cout << name << " " << stats.life << " " << stats.speed << " " << stats.attack << " "
-		  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
-		  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
-		  << std::endl;
+			  << stats.attackSpeed << " " << stats.armor << " (" << (int)color.r << ", "
+			  << (int)color.g << ", " << (int)color.b << ") " << sprite << " " << weaponType
+			  << std::endl;
 	auto &go = scene.addGameObject<GoPlayer>(id, name, stats, color, sprite,
-						 static_cast<UdpPrctl::weaponType>(weaponType));
-	if (name == manager._character.getName()) {
+											 static_cast<UdpPrctl::weaponType>(weaponType));
+	if (name == manager._character.getName())
+	{
 		manager._self = &go;
 	}
+}
+
+static void spawnEnnemy(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
+{
+	std::string name;
+	std::string sprite;
+
+	s >> name;
+	s >> sprite;
+	std::cout << name << " " << sprite << " " << std::endl;
+	auto &go = scene.addGameObject<GoEnnemy>(id, name, sprite);
 }
 
 static void spawnWeapon(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
@@ -99,9 +115,13 @@ int UdpConnect::spawnHandler(sfs::Scene &scene, GameManager &manager, Serializer
 	s >> type;
 	s >> id;
 	id += 1000;
-	switch (static_cast<UdpPrctl::spawnType>(type)) {
+	switch (static_cast<UdpPrctl::spawnType>(type))
+	{
 	case UdpPrctl::spawnType::PLAYER:
 		spawnPlayer(scene, s, id, _manager);
+		break;
+	case UdpPrctl::spawnType::ENNEMY:
+		spawnEnnemy(scene, s, id, _manager);
 		break;
 	case UdpPrctl::spawnType::OBSTACLE:
 		spawnObstacle(scene, s, id, _manager);
