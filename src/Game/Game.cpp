@@ -12,12 +12,13 @@ Game::Game(sfs::Scene &scene) noexcept
 	scene.getGameObjects<InputHandler>()[0]->changeGameStarted(true);
 
 	auto texture = scene.getAssetTexture("assets/ground.jpg");
-	if (texture != nullptr) {
-		auto floor =
-			&addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/ground.jpg"));
-		floor->setScale(sf::Vector2f(3.07, 2.6));
+	if (texture == nullptr) {
+		std::cerr << "assets ground.jpg not found" << std::endl;
+		destroy();
 		return;
 	}
+	auto floor = &addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/ground.jpg"));
+	floor->setScale(sf::Vector2f(3.07, 2.6));
 	layer(50);
 }
 
