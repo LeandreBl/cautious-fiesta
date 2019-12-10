@@ -31,7 +31,7 @@ void GoPlayer::onDestroy() noexcept
 			break;
 		}
 	}
-	_manager._popup->push("You died", 3);
+	_manager._popup->push("You died!\nScore: " + std::to_string((int)_manager._kills), 3);
 	_manager._popup->push("Press [Enter] to quit", 10);
 }
 

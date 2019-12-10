@@ -40,8 +40,10 @@ void Chat::receiveMessage(Serializer &s) noexcept
 		pos.y += 25;
 		newPos = pos;
 	}
-	_chatMessages.emplace_back(
-		&addComponent<sfs::Text>(*_font, message, sf::Color::White, 20, newPos));
+	sf::Color color = sf::Color::White;
+	if (_gameManager->_gameStarted == true)
+		color = sf::Color::Black;
+	_chatMessages.emplace_back(&addComponent<sfs::Text>(*_font, message, color, 20, newPos));
 	if (_chatMessages.size() > _messageQueu) {
 		_chatMessages.front()->destroy();
 		_chatMessages.erase(_chatMessages.begin());
@@ -53,7 +55,8 @@ void Chat::handleSendMessage(Serializer &s) noexcept
 	bool isOk = 0;
 
 	s >> isOk;
-	_chatBox->toggle(true);
+	if (_gameManager->_gameStarted == false)
+		_chatBox->toggle(true);
 }
 
 void Chat::eraseChat() noexcept
@@ -67,9 +70,11 @@ void Chat::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 {
 	if (event.type == sf::Event::KeyPressed) {
 		if (_chatBox->getSelected() == true)
-			scene.unsubscribe(*scene.getGameObjects<InputHandler>()[0], sf::Event::KeyPressed);
+			scene.unsubscribe(*scene.getGameObjects<InputHandler>()[0],
+					  sf::Event::KeyPressed);
 		else
-			scene.subscribe(*scene.getGameObjects<InputHandler>()[0], sf::Event::KeyPressed);
+			scene.subscribe(*scene.getGameObjects<InputHandler>()[0],
+					sf::Event::KeyPressed);
 		if (event.key.code == sf::Keyboard::Return && _chatBox->getSelected() == true) {
 			_chatBox->toggle(false);
 			_gameManager->_tcp->sendMessage(_chatBox->string());

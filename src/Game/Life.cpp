@@ -47,12 +47,16 @@ void Life::changeLife(float life, uint64_t id) noexcept
 			frame = 1;
 		if (percentage < 60)
 			frame = 2;
-		if (percentage < 40)
+		if (percentage < 40) {
 			frame = 3;
+			_lifeDisplay->setFillColor(sf::Color::White);
+		}
 		if (percentage < 20)
 			frame = 4;
 		if (percentage < 10)
 			frame = 5;
+		if (percentage < 3)
+			destroy();
 		_heart->setTextureRect(_frames[frame]);
 	}
 }

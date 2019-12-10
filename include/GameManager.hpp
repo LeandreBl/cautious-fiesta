@@ -24,6 +24,7 @@ class GameManager : public sfs::GameObject {
 	GoPlayer *_self = nullptr;
 	bool _gameStarted = false;
 	bool _gameFinished = false;
+	float _kills;
 	std::vector<GoPlayer *> _players;
 };
 } // namespace cf
