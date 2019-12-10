@@ -2,24 +2,25 @@
 #include "UdpConnection.hpp"
 #include "Life.hpp"
 
-namespace cf 
+namespace cf
 {
-    int UdpConnect::stateHandler(sfs::Scene &scene, GameManager &manager, Serializer &s)
+int UdpConnect::stateHandler(sfs::Scene &scene, GameManager &manager, Serializer &s)
 {
 	int32_t Type;
-    uint64_t id;
+	uint64_t id;
 	float life;
 
 	s >> Type;
 	s >> id;
-    s >> life;
-	switch (static_cast<UdpPrctl::stateType>(Type)) {
+	s >> life;
+	switch (static_cast<UdpPrctl::stateType>(Type))
+	{
 	case UdpPrctl::stateType::SETLIFE:
 		auto v = scene.getGameObjects<Life>();
-        if (v.empty() == false)
-            v[0]->changeLife(life); //TODO faire avec l'id car sinon la vie des joueurs va etre update
+		if (v.empty() == false)
+			v[0]->changeLife(life, id); //TODO faire avec l'id car sinon la vie des joueurs va etre update
 		break;
 	}
 	return 0;
 }
-}
+} // namespace cf
