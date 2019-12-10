@@ -67,12 +67,21 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 	_playerName->setOffset(sf::Vector2f((pRect.width - tRect.width) / 2 - pRect.width / 2,
 					    -tRect.height - 5 - pRect.height / 2));
 	scene.subscribe(*this, sf::Event::MouseMoved);
+	scene.subscribe(*this, sf::Event::MouseButtonPressed);
+}
+
+void GoPlayer::update(sfs::Scene &) noexcept
+{
+	float angle = sfs::angle(getPosition(), _lastMousePos);
+	_playerSprite->setRotation(angle * 180 / M_PI - 45);
 }
 
 void GoPlayer::onEvent(sfs::Scene &, const sf::Event &event) noexcept
 {
-	float angle = sfs::angle(getPosition(), sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
-	_playerSprite->setRotation(angle * 180 / M_PI - 45);
+	if (event.type == sf::Event::MouseButtonPressed)
+		_lastMousePos = sf::Vector2f(event.mouseButton.x, event.mouseButton.y);
+	else if (event.type == sf::Event::MouseMoved)
+		_lastMousePos = sf::Vector2f(event.mouseMove.x, event.mouseMove.y);
 }
 
 sfs::Sound &GoPlayer::getAttackSound() noexcept

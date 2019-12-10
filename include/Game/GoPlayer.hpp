@@ -21,6 +21,7 @@ class GoPlayer : public UdpGameObject {
 		 UdpPrctl::weaponType weaponType) noexcept;
 	void onDestroy() noexcept;
 	void start(sfs::Scene &scene) noexcept;
+	void update(sfs::Scene &scene) noexcept;
 	void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
 
 	sfs::Sound &getAttackSound() noexcept;
@@ -34,5 +35,6 @@ class GoPlayer : public UdpGameObject {
 	sfs::Text *_playerName;
 	sfs::Velocity &_velocity;
 	sfs::Sound *_sound;
+	sf::Vector2f _lastMousePos;
 };
 } // namespace cf

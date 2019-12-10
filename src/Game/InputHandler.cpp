@@ -40,7 +40,7 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 		return;
 	}
 	auto *go = _manager._self;
-	if (go == nullptr && event.type == sf::Event::KeyPressed
+	if (go == nullptr && _gameIsStarted == true && event.type == sf::Event::KeyPressed
 	    && event.key.code == sf::Keyboard::Return) {
 		scene.clear();
 		auto &manager = scene.addGameObject<cf::GameManager>();

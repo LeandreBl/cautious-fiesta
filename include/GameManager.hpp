@@ -7,12 +7,10 @@
 #include "TcpConnection.hpp"
 #include "UdpConnection.hpp"
 
-namespace cf
-{
+namespace cf {
 class GoPlayer;
-class GameManager : public sfs::GameObject
-{
-public:
+class GameManager : public sfs::GameObject {
+      public:
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &scene) noexcept;
 	void disconnectAndLeaveRoom(Serializer &toread) noexcept;
