@@ -1,4 +1,4 @@
-#include <math.h>
+#include <Vector.hpp>
 
 #include "GoPlayer.hpp"
 
@@ -52,12 +52,8 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 
 void GoPlayer::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 {
-	sf::Vector2f delta(getPosition());
-
-	delta.x -= event.mouseMove.x;
-	delta.y -= event.mouseMove.y;
-	float angle = atan2(delta.y, delta.x);
-	_playerSprite->setRotation(angle * 180 / M_PI + 145);
+	float angle = sfs::angle(getPosition(), sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
+	_playerSprite->setRotation(angle * 180 / M_PI - 45);
 }
 
 sfs::Sound &GoPlayer::getAttackSound() noexcept

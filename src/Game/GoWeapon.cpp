@@ -16,12 +16,10 @@ void GoWeapon::start(sfs::Scene &scene) noexcept
 		destroy();
 		return;
 	}
-	auto pRect = _weaponSprite.getLocalBounds();
 	if (parent() != nullptr) {
 		setPosition(parent()->getPosition());
 		auto v = parent()->getComponents<sfs::Sprite>();
 		if (!v.empty()) {
-			auto rect = v[0]->getGlobalBounds();
 			_weaponSprite.setOrigin(0, 0);
 			_weaponSprite.setScale(1.5, 1.5);
 		}

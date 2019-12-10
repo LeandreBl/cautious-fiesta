@@ -1,4 +1,4 @@
-#include <math.h>
+#include <Vector.hpp>
 
 #include "InputHandler.hpp"
 #include "Udp.hpp"
@@ -66,9 +66,9 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 			const auto kp = _keyStates[type];
 			if (kp == UdpPrctl::inputAction::RELEASED && go != nullptr) {
 				Serializer s;
-				sf::Vector2f pos1(event.mouseButton.x, event.mouseButton.y);
-				sf::Vector2f pos2(_gameManager->_self->getPosition());
-				float angle = atan2(pos2.y - pos1.y, pos2.x - pos1.x);
+				float angle = sfs::angle(
+					sf::Vector2f(event.mouseButton.x, event.mouseButton.y),
+					_gameManager->_self->getPosition());
 				s << static_cast<int32_t>(k);
 				s << static_cast<int32_t>(type);
 				s << angle;
@@ -83,10 +83,9 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 			const auto kp = _keyStates[type];
 			if (kp == UdpPrctl::inputAction::PRESSED) {
 				Serializer s;
-				sf::Vector2f pos(
-					event.mouseButton.x - _gameManager->_self->getPosition().x,
-					event.mouseButton.y - _gameManager->_self->getPosition().y);
-				float angle = atan2(pos.y - pos.x, pos.x + pos.y);
+				float angle = sfs::angle(
+					sf::Vector2f(event.mouseButton.x, event.mouseButton.y),
+					_gameManager->_self->getPosition());
 				s << static_cast<int32_t>(k);
 				s << static_cast<int32_t>(type);
 				s << angle;
