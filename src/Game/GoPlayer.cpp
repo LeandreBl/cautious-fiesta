@@ -16,6 +16,8 @@ GoPlayer::GoPlayer(GameManager &manager, uint64_t id, const std::string &name,
 	, _playerName(nullptr)
 	, _velocity(addComponent<sfs::Velocity>())
 {
+	/* TODO */
+	(void)weaponType;
 	UdpGameObject::name(name);
 }
 
@@ -67,7 +69,7 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 	scene.subscribe(*this, sf::Event::MouseMoved);
 }
 
-void GoPlayer::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
+void GoPlayer::onEvent(sfs::Scene &, const sf::Event &event) noexcept
 {
 	float angle = sfs::angle(getPosition(), sf::Vector2f(event.mouseMove.x, event.mouseMove.y));
 	_playerSprite->setRotation(angle * 180 / M_PI - 45);
