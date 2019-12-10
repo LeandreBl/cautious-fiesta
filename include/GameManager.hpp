@@ -7,14 +7,17 @@
 #include "TcpConnection.hpp"
 #include "UdpConnection.hpp"
 
-namespace cf {
+namespace cf
+{
 class GoPlayer;
-class GameManager : public sfs::GameObject {
-      public:
+class GameManager : public sfs::GameObject
+{
+public:
 	void start(sfs::Scene &scene) noexcept;
 	void update(sfs::Scene &scene) noexcept;
 	void disconnectAndLeaveRoom(Serializer &toread) noexcept;
 	void updateRooms(Serializer &toread) noexcept;
+	GoPlayer *getNearestPlayer(const sf::Vector2f &pos) noexcept;
 	Character _character;
 	std::string _ip = "";
 	TcpConnect *_tcp = nullptr;
@@ -23,5 +26,6 @@ class GameManager : public sfs::GameObject {
 	GoPlayer *_self = nullptr;
 	bool _gameStarted = false;
 	bool _gameFinished = false;
+	std::vector<GoPlayer *> _players;
 };
 } // namespace cf

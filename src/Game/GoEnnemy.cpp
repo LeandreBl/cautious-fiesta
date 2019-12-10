@@ -2,11 +2,13 @@
 
 #include "GoEnnemy.hpp"
 #include "SpriteSheetLoader.hpp"
+#include "Vector.hpp"
+#include "GoPlayer.hpp"
 
 namespace cf
 {
-GoEnnemy::GoEnnemy(uint64_t id, const std::string &name, const std::string &sprite) noexcept
-    : UdpGameObject(id), _spriteSheet(sprite), _ennemySprite(nullptr), _velocity(addComponent<sfs::Velocity>())
+GoEnnemy::GoEnnemy(GameManager &manager, uint64_t id, const std::string &name, const std::string &sprite) noexcept
+    : UdpGameObject(id), _manager(manager), _spriteSheet(sprite), _ennemySprite(nullptr), _velocity(addComponent<sfs::Velocity>())
 {
     UdpGameObject::name(name);
 }
@@ -29,5 +31,10 @@ void GoEnnemy::start(sfs::Scene &scene) noexcept
 
 void GoEnnemy::update(sfs::Scene &scene) noexcept
 {
+    auto *go = _manager.getNearestPlayer(getPosition());
+    if (go == nullptr)
+        return;
+    float angle = sfs::angle(getPosition(), go->getPosition());
+    _ennemySprite->setRotation(angle * 180 / M_PI - 45);
 }
 } // namespace cf
