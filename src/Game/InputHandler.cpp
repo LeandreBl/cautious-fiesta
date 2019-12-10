@@ -3,12 +3,17 @@
 #include "InputHandler.hpp"
 #include "Udp.hpp"
 #include "GoPlayer.hpp"
+#include "MenuManager.hpp"
 
 namespace cf {
 
+InputHandler::InputHandler(GameManager &manager) noexcept
+	: _manager(manager)
+{
+}
+
 void InputHandler::start(sfs::Scene &scene) noexcept
 {
-	_gameManager = scene.getGameObjects<GameManager>()[0];
 	scene.subscribe(*this, sf::Event::KeyPressed);
 	scene.subscribe(*this, sf::Event::KeyReleased);
 	scene.subscribe(*this, sf::Event::MouseButtonPressed);
@@ -34,7 +39,15 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 		resetFocus();
 		return;
 	}
-	auto *go = _gameManager->_self;
+	auto *go = _manager._self;
+	if (go == nullptr && event.type == sf::Event::KeyPressed
+	    && event.key.code == sf::Keyboard::Return) {
+		scene.clear();
+		auto &manager = scene.addGameObject<cf::GameManager>();
+		scene.addGameObject<cf::MenuManager>();
+		scene.addGameObject<cf::InputHandler>(manager);
+		return;
+	}
 	if (_optionIsActive == false && _gameIsStarted == true) {
 		if (event.type == sf::Event::KeyPressed) {
 			const auto k = UdpPrctl::inputAction::PRESSED;
@@ -43,7 +56,7 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
 				return;
 			else if (kp == UdpPrctl::inputAction::RELEASED) {
-				_gameManager->_udp->sendInput(k, type);
+				_manager._udp->sendInput(k, type);
 			}
 			_keyStates[type] = k;
 		}
@@ -54,7 +67,7 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 			if (type == UdpPrctl::inputType::UNKNOWN_KEY || k == kp)
 				return;
 			else if (kp == UdpPrctl::inputAction::PRESSED) {
-				_gameManager->_udp->sendInput(k, type);
+				_manager._udp->sendInput(k, type);
 			}
 			_keyStates[type] = k;
 		}
@@ -68,11 +81,11 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 				Serializer s;
 				float angle = sfs::angle(
 					sf::Vector2f(event.mouseButton.x, event.mouseButton.y),
-					_gameManager->_self->getPosition());
+					go->getPosition());
 				s << static_cast<int32_t>(k);
 				s << static_cast<int32_t>(type);
 				s << angle;
-				_gameManager->_udp->pushPacket(s, UdpPrctl::Type::INPUT);
+				_manager._udp->pushPacket(s, UdpPrctl::Type::INPUT);
 			}
 		}
 		else if (event.type == sf::Event::MouseButtonReleased) {
@@ -85,11 +98,11 @@ void InputHandler::onEvent(sfs::Scene &scene, const sf::Event &event) noexcept
 				Serializer s;
 				float angle = sfs::angle(
 					sf::Vector2f(event.mouseButton.x, event.mouseButton.y),
-					_gameManager->_self->getPosition());
+					go->getPosition());
 				s << static_cast<int32_t>(k);
 				s << static_cast<int32_t>(type);
 				s << angle;
-				_gameManager->_udp->pushPacket(s, UdpPrctl::Type::INPUT);
+				_manager._udp->pushPacket(s, UdpPrctl::Type::INPUT);
 			}
 		}
 	}

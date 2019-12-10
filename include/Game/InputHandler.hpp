@@ -5,6 +5,7 @@
 namespace cf {
 class InputHandler : public sfs::GameObject {
       public:
+	InputHandler(GameManager &manager) noexcept;
 	void start(sfs::Scene &scene) noexcept;
 	void onEvent(sfs::Scene &scene, const sf::Event &event) noexcept;
 	void setDefaultKeys() noexcept;
@@ -31,7 +32,7 @@ class InputHandler : public sfs::GameObject {
 
       protected:
 	void resetFocus() noexcept;
-	GameManager *_gameManager;
+	GameManager &_manager;
 	std::vector<std::vector<enum UdpPrctl::inputType>> _evtsMatrix;
 	std::unordered_map<UdpPrctl::inputType, UdpPrctl::inputAction> _keyStates;
 	UdpPrctl::inputType _tmpType;

@@ -7,11 +7,16 @@ namespace cf {
 void GameManager::start(sfs::Scene &scene) noexcept
 {
 	_tcp = &addChild<TcpConnect>(scene, std::ref(scene));
-	_popup = &addChild<sfs::Popup>(scene,
-				       *scene.getAssetFont("local-assets/fonts/commodore-64.ttf"));
-	_udp = nullptr;
-	_popup->addComponent<PadderR<sfs::Popup>>(-335, *_popup);
-	_popup->addComponent<PadderT<sfs::Popup>>(50, *_popup);
+	auto *font = scene.getAssetFont("local-assets/fonts/commodore-64.ttf");
+	if (font == nullptr) {
+		std::cerr << "No font set" << std::endl;
+		scene.close();
+		destroy();
+		return;
+	}
+	_popup = &addChild<sfs::Popup>(scene, *font);
+	_popup->addComponent<PadderW<sfs::Popup>>(0, *_popup);
+	_popup->addComponent<PadderH<sfs::Popup>>(0, *_popup);
 }
 
 void GameManager::update(sfs::Scene &scene) noexcept

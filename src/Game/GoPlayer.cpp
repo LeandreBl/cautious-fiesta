@@ -1,12 +1,14 @@
 #include <Vector.hpp>
 
 #include "GoPlayer.hpp"
+#include "GameManager.hpp"
 
 namespace cf {
-GoPlayer::GoPlayer(uint64_t id, const std::string &name, const struct stats &stats,
-		   const sf::Color &color, const std::string &sprite,
+GoPlayer::GoPlayer(GameManager &manager, uint64_t id, const std::string &name,
+		   const struct stats &stats, const sf::Color &color, const std::string &sprite,
 		   UdpPrctl::weaponType weaponType) noexcept
 	: UdpGameObject(id)
+	, _manager(manager)
 	, _stats(stats)
 	, _color(color)
 	, _spriteName(sprite)
@@ -15,6 +17,13 @@ GoPlayer::GoPlayer(uint64_t id, const std::string &name, const struct stats &sta
 	, _velocity(addComponent<sfs::Velocity>())
 {
 	UdpGameObject::name(name);
+}
+
+void GoPlayer::onDestroy() noexcept
+{
+	_manager._self = nullptr;
+	_manager._popup->push("You died", 3);
+	_manager._popup->push("Press [Enter] to quit", 10);
 }
 
 void GoPlayer::start(sfs::Scene &scene) noexcept

@@ -7,9 +7,9 @@ int main()
 	sfs::WScene scene("cautious_fiesta", 120);
 
 	scene.vSync(true);
-	scene.addGameObject<cf::GameManager>();
+	auto &manager = scene.addGameObject<cf::GameManager>();
 	scene.addGameObject<cf::MenuManager>();
-	scene.addGameObject<cf::InputHandler>();
+	scene.addGameObject<cf::InputHandler>(manager);
 	scene.run();
 	return 0;
 }

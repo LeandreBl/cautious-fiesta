@@ -2,11 +2,16 @@
 #include "InputHandler.hpp"
 #include "UdpConnection.hpp"
 
-namespace cf
-{
+namespace cf {
 
 UdpConnect::UdpConnect(GameManager &manager) noexcept
-	: _manager(manager), _callbacks(), _socket(), _serializer(), _toWrite(), _queueIndex(0), _connected(false)
+	: _manager(manager)
+	, _callbacks()
+	, _socket()
+	, _serializer()
+	, _toWrite()
+	, _queueIndex(0)
+	, _connected(false)
 {
 	autoBind(UdpPrctl::Type::SPAWN, &UdpConnect::spawnHandler);
 	autoBind(UdpPrctl::Type::POSITION, &UdpConnect::positionHandler);
@@ -53,8 +58,7 @@ void UdpConnect::receiveData(sfs::Scene &scene) noexcept
 	char data[4096];
 	size_t rd;
 
-	do
-	{
+	do {
 		auto ret = _socket.receive(data, sizeof(data), rd);
 		if (ret != sf::Socket::Done)
 			return;
@@ -74,8 +78,7 @@ static sf::Socket::Status sendWrapper(sf::TcpSocket &socket, void *data, size_t 
 {
 	size_t total = 0;
 
-	while (total < size)
-	{
+	while (total < size) {
 		size_t wr;
 		auto status = socket.send((char *)data + total, size - total, wr);
 		if (status == sf::Socket::Disconnected)
@@ -89,16 +92,14 @@ static sf::Socket::Status sendWrapper(sf::TcpSocket &socket, void *data, size_t 
 
 void UdpConnect::sendPackets(sfs::Scene &scene) noexcept
 {
-	while (!_toWrite.empty())
-	{
+	while (!_toWrite.empty()) {
 		auto &p = _toWrite.front();
 		auto status = sendWrapper(_socket, p.getNativeHandle(), p.getSize());
-		if (status == sf::Socket::Disconnected)
-		{
+		if (status == sf::Socket::Disconnected) {
 			scene.clear();
-			scene.addGameObject<cf::GameManager>();
+			auto &manager = scene.addGameObject<cf::GameManager>();
 			scene.addGameObject<cf::MenuManager>();
-			scene.addGameObject<cf::InputHandler>();
+			scene.addGameObject<cf::InputHandler>(manager);
 			return;
 		}
 		_toWrite.pop();
@@ -107,12 +108,10 @@ void UdpConnect::sendPackets(sfs::Scene &scene) noexcept
 
 void UdpConnect::update(sfs::Scene &scene) noexcept
 {
-	while (_serializer.getSize() > sizeof(UdpPrctl))
-	{
+	while (_serializer.getSize() > sizeof(UdpPrctl)) {
 		UdpPrctl header;
 		_serializer >>= header;
-		if (header.isCorrect() == false)
-		{
+		if (header.isCorrect() == false) {
 			_serializer.clear();
 			return;
 		}
