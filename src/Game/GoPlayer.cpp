@@ -52,7 +52,7 @@ void GoPlayer::start(sfs::Scene &scene) noexcept
 		destroy();
 		return;
 	}
-	_playerName = &addComponent<sfs::Text>(*font, name(), sf::Color::White, 20);
+	_playerName = &addComponent<sfs::Text>(*font, name(), sf::Color::Black, 20);
 	auto *sound = scene.getAssetSoundBuffer("local-assets/musics/laser.ogg");
 	if (sound == nullptr) {
 		std::cerr << "laser sound not found" << std::endl;
