@@ -10,7 +10,6 @@ int UdpConnect::destroyHandler(sfs::Scene &scene, GameManager &manager, Serializ
 	s >> type;
 	s >> id;
 	id += 1000;
-	std::cout << "l'ID DESTROY : " << id << std::endl;
 	auto *go = scene.getGameObject(id);
 	if (go == nullptr)
 	{

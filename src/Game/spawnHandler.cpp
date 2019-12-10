@@ -82,8 +82,7 @@ static void spawnEnnemy(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 
 	s >> name;
 	s >> sprite;
-	std::cout << name << " " << sprite << " "
-			  << "ICI l'ID : " << id << std::endl;
+	std::cout << name << " " << sprite << " " << std::endl;
 	auto &go = scene.addGameObject<GoEnnemy>(id, name, sprite);
 }
 
