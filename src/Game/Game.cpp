@@ -15,7 +15,7 @@ Game::Game(sfs::Scene &scene) noexcept
 	if (texture != nullptr) {
 		auto floor =
 			&addComponent<sfs::Sprite>(*scene.getAssetTexture("assets/ground.jpg"));
-		floor->setScale(sf::Vector2f(3.40, 1.92));
+		floor->setScale(sf::Vector2f(3.07, 2.6));
 		return;
 	}
 	layer(50);
