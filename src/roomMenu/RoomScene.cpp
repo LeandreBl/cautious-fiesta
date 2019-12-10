@@ -37,11 +37,19 @@ void roomScene::start(sfs::Scene &scene) noexcept
 		Character character;
 		_gameManager->_character = character;
 		_gameManager->_ip = "";
+		ConnectionError = true;
 	}
 }
 
 void roomScene::update(sfs::Scene &) noexcept
 {
+	if (ConnectionError == true) {
+		auto v2 = _scene.getGameObjects<MenuManager>();
+		if (!v2.empty()) {
+			v2[0]->addChild<MainMenu>(_scene, v2[0]->getScroller());
+		}
+		destroy();
+	}
 	if (_checkAssets == true && _assetsPath.empty() == true) {
 		_gameManager->_tcp->AssetRequirementIsDone();
 		_checkAssets = false;

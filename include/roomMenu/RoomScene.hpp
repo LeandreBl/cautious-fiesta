@@ -25,5 +25,6 @@ namespace cf
             sfs::Scene &_scene;
             std::vector<std::string> _assetsPath;
             bool _checkAssets = false;
+            bool ConnectionError = false;
     };
 }
