@@ -1,6 +1,7 @@
 #include "GameManager.hpp"
 #include "UdpConnection.hpp"
 #include "Life.hpp"
+#include "UiStats.hpp"
 
 namespace cf
 {
@@ -8,17 +9,23 @@ int UdpConnect::stateHandler(sfs::Scene &scene, GameManager &manager, Serializer
 {
 	int32_t Type;
 	uint64_t id;
-	float life;
+	float info;
 
 	s >> Type;
 	s >> id;
-	s >> life;
+	s >> info;
+	auto v = scene.getGameObjects<Life>();
+	auto v2 = scene.getGameObjects<UiStats>();
+
 	switch (static_cast<UdpPrctl::stateType>(Type))
 	{
 	case UdpPrctl::stateType::SETLIFE:
-		auto v = scene.getGameObjects<Life>();
 		if (v.empty() == false)
-			v[0]->changeLife(life, id); //TODO faire avec l'id car sinon la vie des joueurs va etre update
+			v[0]->changeLife(info, id);
+		break;
+	case UdpPrctl::stateType::KILL_NUMBER:
+		if (v2.empty() == false)
+			v2[0]->changeKills(info, id);
 		break;
 	}
 	return 0;

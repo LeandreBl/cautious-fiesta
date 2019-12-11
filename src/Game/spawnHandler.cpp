@@ -76,8 +76,10 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 	}
 	if (name == manager._character.getName()) {
 		auto v = scene.getGameObjects<GameUi>();
-		if (v.empty() == false)
+		if (v.empty() == false) {
+			v[0]->addChild<UiStats>(scene, id);
 			v[0]->addChild<Life>(scene, id);
+		}
 	}
 }
 

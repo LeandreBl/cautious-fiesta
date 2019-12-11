@@ -13,8 +13,6 @@ namespace cf
             GameUi(sfs::Scene &scene) noexcept;
         protected:
             Chat *_chat;
-            Life *_life;
             UiWeapon *_weapon;
-            UiStats *_stats;
     };
 }
