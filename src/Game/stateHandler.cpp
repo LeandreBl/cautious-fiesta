@@ -17,7 +17,7 @@ namespace cf
 	case UdpPrctl::stateType::SETLIFE:
 		auto v = scene.getGameObjects<Life>();
         if (v.empty() == false)
-            v[0]->changeLife(life);
+            v[0]->changeLife(life); //TODO faire avec l'id car sinon la vie des joueurs va etre update
 		break;
 	}
 	return 0;

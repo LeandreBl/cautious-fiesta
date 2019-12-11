@@ -10,7 +10,7 @@ GameUi::GameUi(sfs::Scene &scene) noexcept
 {
 	_stats = &addChild<UiStats>(scene);
 	_chat = &addChild<Chat>(scene, 3);
-	_life = &addChild<Life>(scene);
+	//_life = &addChild<Life>(scene);
 	_weapon = &addChild<UiWeapon>(scene);
 }
 }

@@ -5,11 +5,12 @@
 
 namespace cf
 {
-    Life::Life() noexcept
+    Life::Life(uint64_t id) noexcept
         : sfs::UI(sf::Vector2f(), "GameUi : Life")
         , _maxLife(0)
         , _heart(nullptr)
         , _lifeDisplay(nullptr)
+        , _id(id)
     {
     }
 
@@ -34,21 +35,23 @@ namespace cf
         }
     }
 
-    void Life::changeLife(float life) noexcept
+    void Life::changeLife(float life, uint64_t id) noexcept
     {
-        _lifeDisplay->setString(std::to_string((int)life));
-        auto percentage = (life * 100) / _maxLife;
-        int frame = 0;
-        if (percentage < 80)
-            frame = 1;
-        if (percentage < 60)
-            frame = 2;
-        if (percentage < 40)
-            frame = 3;
-        if (percentage < 20)
-            frame = 4;
-        if (percentage < 10)
-            frame = 5;
-        _heart->setTextureRect(_frames[frame]);
+        if (_id == id) {
+            _lifeDisplay->setString(std::to_string((int)life));
+            auto percentage = (life * 100) / _maxLife;
+            int frame = 0;
+            if (percentage < 80)
+                frame = 1;
+            if (percentage < 60)
+                frame = 2;
+            if (percentage < 40)
+                frame = 3;
+            if (percentage < 20)
+                frame = 4;
+            if (percentage < 10)
+                frame = 5;
+            _heart->setTextureRect(_frames[frame]);
+        }
     }
 }

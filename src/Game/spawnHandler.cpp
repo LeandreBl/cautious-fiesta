@@ -7,6 +7,7 @@
 #include "GoEnnemy.hpp"
 #include "SpriteSheetLoader.hpp"
 #include "UiWeapon.hpp"
+#include "GameUi.hpp"
 
 namespace cf
 {
@@ -73,6 +74,9 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 	{
 		manager._self = &go;
 	}
+	auto v = scene.getGameObjects<GameUi>();
+	if (v.empty() == false)
+		v[0]->addChild<Life>(scene, id);
 }
 
 static void spawnEnnemy(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
