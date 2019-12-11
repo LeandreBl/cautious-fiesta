@@ -74,9 +74,11 @@ static void spawnPlayer(sfs::Scene &scene, Serializer &s, uint64_t id, GameManag
 	{
 		manager._self = &go;
 	}
-	auto v = scene.getGameObjects<GameUi>();
-	if (v.empty() == false)
-		v[0]->addChild<Life>(scene, id);
+	if (name == manager._character.getName()) {
+		auto v = scene.getGameObjects<GameUi>();
+		if (v.empty() == false)
+			v[0]->addChild<Life>(scene, id);
+	}
 }
 
 static void spawnEnnemy(sfs::Scene &scene, Serializer &s, uint64_t id, GameManager &manager)
