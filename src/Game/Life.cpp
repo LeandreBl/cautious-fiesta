@@ -23,7 +23,7 @@ namespace cf
             _maxLife = gameManager[0]->_character.getLife();
             _heart = &addComponent<sfs::Sprite>(*scene.getAssetTexture(loader.getSpritePath()), sf::Vector2f(-500, -500));
             _lifeDisplay = &addComponent<sfs::Text>(*scene.getAssetFont("local-assets/fonts/commodore-64.ttf"),
-                                                    std::to_string((int)_maxLife), sf::Color::Black, 35, sf::Vector2f(-550, -550));
+                                                    std::to_string((int)_maxLife), sf::Color::White, 35, sf::Vector2f(-550, -550));
             _frames = loader.getFrames();
             _heart->setTextureRect(_frames[0]);
             _heart->setScale(sf::Vector2f(10, 10));
@@ -37,7 +37,7 @@ namespace cf
 
     void Life::changeLife(float life, uint64_t id) noexcept
     {
-        if (_id == id) {
+        if (_id == id + 1000) {
             _lifeDisplay->setString(std::to_string((int)life));
             auto percentage = (life * 100) / _maxLife;
             int frame = 0;
