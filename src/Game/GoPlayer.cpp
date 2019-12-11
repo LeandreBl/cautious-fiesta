@@ -23,16 +23,18 @@ GoPlayer::GoPlayer(GameManager &manager, uint64_t id, const std::string &name,
 
 void GoPlayer::onDestroy() noexcept
 {
-	if (_manager._self == this)
+	if (_manager._self == this) {
 		_manager._self = nullptr;
+		_manager._popup->push("You died!\nScore: " + std::to_string((int)_manager._kills),
+				      3);
+		_manager._popup->push("Press [Enter] to quit", 10);
+	}
 	for (auto it = _manager._players.begin(); it != _manager._players.end(); ++it) {
 		if (*it == this) {
 			_manager._players.erase(it);
 			break;
 		}
 	}
-	_manager._popup->push("You died!\nScore: " + std::to_string((int)_manager._kills), 3);
-	_manager._popup->push("Press [Enter] to quit", 10);
 }
 
 void GoPlayer::start(sfs::Scene &scene) noexcept
