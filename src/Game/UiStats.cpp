@@ -29,7 +29,7 @@ namespace cf
             _attack = &addComponent<sfs::Text>(*font, "attack: " + std::to_string((int)_stats.attack), sf::Color::White, 16, sf::Vector2f(20, 100));
             _attackSpeed = &addComponent<sfs::Text>(*font, "att speed: " + std::to_string((int)_stats.attackSpeed), sf::Color::White, 16, sf::Vector2f(350, 50));
             _armor = &addComponent<sfs::Text>(*font, "armor : " + std::to_string((int)_stats.armor), sf::Color::White, 16, sf::Vector2f(350, 100));
-            _kills = &addComponent<sfs::Text>(*font, "kills : 0", sf::Color::White, 16, sf::Vector2f(1110, -820));
+            _kills = &addComponent<sfs::Text>(*font, "kills : 0", sf::Color::Black, 16, sf::Vector2f(1110, -820));
         }
     }
 
