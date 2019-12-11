@@ -27,6 +27,10 @@ int UdpConnect::stateHandler(sfs::Scene &scene, GameManager &manager, Serializer
 		if (v2.empty() == false)
 			v2[0]->changeKills(info, id);
 		break;
+	case UdpPrctl::stateType::STAT_UP:
+		if (v2.empty() == false) {
+			v2[0]->changeStats(scene, info, id);
+		}
 	}
 	return 0;
 }

@@ -2,6 +2,7 @@
 
 #include <UI.hpp>
 #include <BasicShape.hpp>
+#include "Character.hpp"
 
 namespace cf
 {
@@ -11,7 +12,7 @@ namespace cf
             UiStats(uint64_t id) noexcept;
             void start(sfs::Scene &scene) noexcept;
             sf::FloatRect getGlobalBounds() const noexcept {return _box->getGlobalBounds();};
-            void changeStats(sfs::Scene &scene) noexcept;
+            void changeStats(sfs::Scene &scene, float to_add, uint64_t id) noexcept;
             void changeKills(float kills, uint64_t id) noexcept;
         protected:
             sfs::Sprite *_box;
